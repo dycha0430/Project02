@@ -9,14 +9,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:backgroundTint="@color/blue"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:theme="@style/Theme.MadCamp_Project2.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.MadCamp_Project2.PopupOverlay" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,6 +31,10 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:background="@color/gray"
+        android:backgroundTint="@color/gray"
+        android:src="@drawable/ic_baseline_add_24"
+        app:borderWidth="0dp"
+        app:rippleColor="#FFFFFF" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
