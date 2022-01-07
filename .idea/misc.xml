@@ -8,6 +8,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/item_viewpager.xml" value="0.2171875" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/rounded_dialog.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/skyblue_outline.xml" value="0.2203125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/text_cursor.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_detail_trip.xml" value="0.33" />
@@ -31,6 +32,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/nav_header_main.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/plan_recycler_item.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/schedule_recycler_item.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/time_range_picker.xml" value="0.3619791666666667" />
       </map>
     </option>
   </component>

@@ -52,7 +52,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
+import nl.joery.timerangepicker.TimeRangePicker;
 import noman.googleplaces.NRPlaces;
 import noman.googleplaces.Place;
 import noman.googleplaces.PlaceType;
@@ -171,7 +173,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO 장소 정보 TripPlan 데이터 변경
-                Log.d("&&&&&&&%4$$$$$$$$", spinner.getItemAtPosition(i).toString());
                 String countryName = spinner.getItemAtPosition(i).toString();
                 tripPlan.setDestination(new Country(countryName));
                 moveMap(countryName);
@@ -183,6 +184,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
             }
         });
+
+
 
         if (tripPlan.getState() == TripState.BEFORE) { stateTextView.setBackgroundColor(Color.parseColor("#FCBA03")); }
         else if (tripPlan.getState() == TripState.ING) { stateTextView.setBackgroundColor(Color.parseColor("#3842ff")); }
@@ -264,7 +267,21 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
-                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                        double lat = marker.getPosition().latitude;
+                        double lon = marker.getPosition().longitude;
+
+                        Log.d("**************", tripPlan.getSchedules().size() + "");
+
+                        List<Address> addresses = null;
+                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                        try {
+                            addresses = geocoder.getFromLocation(lat, lon, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Address a = addresses.get(0);
+                        // Log.d("@@@@@@@@@@@@@@@@@@2", a.getAddressLine(0) + " " + a.getLocality() + " " + a.getCountryName() + " " + a.getPostalCode() + " " + a.getFeatureName());
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0));
                         bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
                         return true;
                     }

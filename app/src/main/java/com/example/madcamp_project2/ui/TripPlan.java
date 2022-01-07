@@ -18,8 +18,9 @@ public class TripPlan implements Serializable {
         this.title = "제주도";
         this.start_date = "2022-01-01";
         this.end_date = "2022-01-03";
-        this.destination = new Country("서울");
+        this.destination = new Country("제주도");
         this.state = TripState.BEFORE;
+        schedules = new ArrayList<>();
     }
 
     public TripPlan(String title, String start_date, String end_date, Country destination, TripState state, ArrayList<Schedule> schedules) {

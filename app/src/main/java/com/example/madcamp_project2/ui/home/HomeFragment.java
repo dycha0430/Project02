@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<TripPlan> tripPlanList;
+    public static ArrayList<TripPlan> tripPlanList;
     private PlanSummaryAdapter planSummaryAdapter;
     private Context context;
     public View onCreateView(@NonNull LayoutInflater inflater,
