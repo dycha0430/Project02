@@ -4,19 +4,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_project2.R;
+import com.example.madcamp_project2.ui.Schedule;
 
 import java.util.ArrayList;
 
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolderPage> {
-    private ArrayList<DataPage> listData;
 
-    ViewPagerAdapter(ArrayList<DataPage> data) {
-        this.listData = data;
+    Context context;
+    ArrayList<Schedule>[] schedules;
+
+    ViewPagerAdapter(Context context, ArrayList<Schedule>[] schedules) {
+        this.context = context;
+        this.schedules = schedules;
     }
 
 
@@ -30,27 +35,26 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderPage holder, int position) {
-        if (holder instanceof ViewHolderPage) {
-            ViewHolderPage viewHolderPage = (ViewHolderPage) holder;
-            viewHolderPage.onBind(listData.get(position));
-        }
+        ArrayList<Schedule> schedule = schedules[position];
+//        holder.dateTextView.setText();
+//        holder.recyclerView.set
     }
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return schedules.length;
     }
 
     class ViewHolderPage extends RecyclerView.ViewHolder{
 
-        DataPage data;
+        TextView dateTextView;
+        RecyclerView recyclerView;
 
         public ViewHolderPage(@NonNull View itemView) {
             super(itemView);
-        }
 
-        public void onBind(DataPage data) {
-            this.data = data;
+            dateTextView = itemView.findViewById(R.id.schedule_date_text_view);
+            recyclerView = itemView.findViewById(R.id.schedule_recycler_view);
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityDetailTripBinding;
 import com.example.madcamp_project2.ui.Country;
+import com.example.madcamp_project2.ui.CountryEnum;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.github.florent37.materialviewpager.MaterialViewPager;
@@ -54,7 +55,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import nl.joery.timerangepicker.TimeRangePicker;
 import noman.googleplaces.NRPlaces;
 import noman.googleplaces.Place;
 import noman.googleplaces.PlaceType;
@@ -81,6 +81,40 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     Context context;
 
     ViewPager2 viewPager2;
+
+    public static CountryEnum getCountryEnum(String str) {
+            if (str.equals("서울")) {
+                return CountryEnum.SEOUL;
+            } else if (str.equals("인천")) {
+                return CountryEnum.INCHEON;
+            } else if (str.equals("부산")) {
+                return CountryEnum.BUSAN;
+            } else if (str.equals("제주")) {
+                return CountryEnum.JEJU;
+            } else if (str.equals("경기")) {
+                return CountryEnum.GYEONGGI;
+            } else if (str.equals("포항")) {
+                return CountryEnum.POHANG;
+            } else if (str.equals("강릉")) {
+                return CountryEnum.GANGNEUNG;
+            } else if (str.equals("속초")) {
+                return CountryEnum.SOKCHO;
+            } else if (str.equals("대구")) {
+                return CountryEnum.DAEGU;
+            } else if (str.equals("경주")) {
+                return CountryEnum.GYEONGJU;
+            } else if (str.equals("여수")) {
+                return CountryEnum.YEOSU;
+            } else if (str.equals("전주")) {
+                return CountryEnum.JEONJU;
+            } else if (str.equals("춘천")) {
+                return CountryEnum.CHUNCHEON;
+            } else if (str.equals("대전")) {
+                return CountryEnum.DAEJEON;
+            }
+
+            return CountryEnum.SEOUL;
+    }
 
     public String getFromLocation(long latitude, long longitude, int i) {
         List<Address> list = null;
@@ -120,20 +154,20 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     void initCountries() {
-        COUNTRIES[0] = new Country("서울");
-        COUNTRIES[1] = new Country("인천");
-        COUNTRIES[2] = new Country("부산");
-        COUNTRIES[3] = new Country("제주");
-        COUNTRIES[4] = new Country("경기");
-        COUNTRIES[5] = new Country("포항");
-        COUNTRIES[6] = new Country("강릉");
-        COUNTRIES[7] = new Country("속초");
-        COUNTRIES[8] = new Country("대구");
-        COUNTRIES[9] = new Country("경주");
-        COUNTRIES[10] = new Country("여수");
-        COUNTRIES[11] = new Country("전주");
-        COUNTRIES[12] = new Country("춘천");
-        COUNTRIES[13] = new Country("대전");
+        COUNTRIES[0] = new Country(CountryEnum.SEOUL);
+        COUNTRIES[1] = new Country(CountryEnum.INCHEON);
+        COUNTRIES[2] = new Country(CountryEnum.BUSAN);
+        COUNTRIES[3] = new Country(CountryEnum.JEJU);
+        COUNTRIES[4] = new Country(CountryEnum.GYEONGGI);
+        COUNTRIES[5] = new Country(CountryEnum.POHANG);
+        COUNTRIES[6] = new Country(CountryEnum.GANGNEUNG);
+        COUNTRIES[7] = new Country(CountryEnum.SOKCHO);
+        COUNTRIES[8] = new Country(CountryEnum.DAEGU);
+        COUNTRIES[9] = new Country(CountryEnum.GYEONGJU);
+        COUNTRIES[10] = new Country(CountryEnum.YEOSU);
+        COUNTRIES[11] = new Country(CountryEnum.JEONJU);
+        COUNTRIES[12] = new Country(CountryEnum.CHUNCHEON);
+        COUNTRIES[13] = new Country(CountryEnum.DAEJEON);
     }
 
 
@@ -160,23 +194,25 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         viewPager2 = findViewById(R.id.viewPager);
 
         /* TODO Schedule View Pager */
-        ArrayList<DataPage> list = new ArrayList<>();
-        list.add(new DataPage());
-        list.add(new DataPage());
-        list.add(new DataPage());
-        viewPager2.setAdapter(new ViewPagerAdapter(list));
+//        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan.getSchedules(), tripPlan.getStart_date(), tripPlan.getEnd_date()));
 
         SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(COUNTRIES.clone()));
         spinner.setAdapter(adapter);
+
+        int position = 0;
+        for (position = 0; position < COUNTRIES.length; position++) {
+            if (COUNTRIES[position].getCountryEnum().toString().equals(tripPlan.getDestination().getCountryEnum().toString())) break;
+        }
+        spinner.setSelection(position);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO 장소 정보 TripPlan 데이터 변경
-                String countryName = spinner.getItemAtPosition(i).toString();
+                CountryEnum countryName = getCountryEnum(spinner.getItemAtPosition(i).toString());
                 tripPlan.setDestination(new Country(countryName));
-                moveMap(countryName);
-                showPlaceInformation(getFromLocationName(countryName));
+                moveMap(countryName.toString());
+                showPlaceInformation(getFromLocationName(countryName.toString()));
             }
 
             @Override
@@ -270,7 +306,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                         double lat = marker.getPosition().latitude;
                         double lon = marker.getPosition().longitude;
 
-                        Log.d("**************", tripPlan.getSchedules().size() + "");
+                        Log.d("**************", tripPlan.getSchedule(viewPager2.getCurrentItem()).size() + "");
 
                         List<Address> addresses = null;
                         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -281,7 +317,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                         }
                         Address a = addresses.get(0);
                         // Log.d("@@@@@@@@@@@@@@@@@@2", a.getAddressLine(0) + " " + a.getLocality() + " " + a.getCountryName() + " " + a.getPostalCode() + " " + a.getFeatureName());
-                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0));
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0), viewPager2.getCurrentItem());
                         bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
                         return true;
                     }

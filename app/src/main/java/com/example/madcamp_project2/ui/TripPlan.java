@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TripPlan implements Serializable {
@@ -8,28 +9,33 @@ public class TripPlan implements Serializable {
     String title;
     String start_date;
     String end_date;
+    int duration;
     // users 추가 필요
     Country destination;
     TripState state;
-    ArrayList<Schedule> schedules;
+    ArrayList<Schedule>[] schedules;
 
     public TripPlan() {
         super();
         this.title = "제주도";
         this.start_date = "2022-01-01";
         this.end_date = "2022-01-03";
-        this.destination = new Country("제주도");
+        this.destination = new Country(CountryEnum.JEJU);
         this.state = TripState.BEFORE;
-        schedules = new ArrayList<>();
+        schedules = new ArrayList[3];
+
+        duration = 3;
+        for (int i = 0; i < duration; i++) {
+            schedules[i] = new ArrayList<>();
+        }
     }
 
-    public TripPlan(String title, String start_date, String end_date, Country destination, TripState state, ArrayList<Schedule> schedules) {
+    public TripPlan(String title, String start_date, String end_date, Country destination, TripState state) {
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
         this.destination = destination;
         this.state = state;
-        this.schedules = schedules;
     }
 
     public String getTitle() {
@@ -72,11 +78,12 @@ public class TripPlan implements Serializable {
         this.state = state;
     }
 
-    public ArrayList<Schedule> getSchedules() {
-        return schedules;
+    public ArrayList<Schedule> getSchedule(int day) {
+        return schedules[day];
     }
+    public ArrayList<Schedule>[] getSchedules() { return schedules; }
 
-    public void setSchedules(ArrayList<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setSchedules(ArrayList<Schedule> schedules, int day) {
+        this.schedules[day] = schedules;
     }
 }

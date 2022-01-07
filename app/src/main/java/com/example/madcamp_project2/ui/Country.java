@@ -5,15 +5,23 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class Country implements Serializable {
-    String name;
+    CountryEnum countryEnum;
     // Icon Image
 
-    public Country(String name) {
-        this.name = name;
+    public Country(CountryEnum countryEnum) {
+        this.countryEnum = countryEnum;
+    }
+
+    public CountryEnum getCountryEnum() {
+        return countryEnum;
+    }
+
+    public void setCountryEnum(CountryEnum countryEnum) {
+        this.countryEnum = countryEnum;
     }
 
     public String getName() {
-        return name;
+        return countryEnum.toString();
     }
 }
 

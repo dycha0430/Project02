@@ -47,12 +47,14 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     String address;
     TextView addressTextView, titleTextView;
     EditText moneyEditText, memoEditText;
+    int day;
 
-    public BottomSheetDialog(Context context, TripPlan tripPlan, String title, String address) {
+    public BottomSheetDialog(Context context, TripPlan tripPlan, String title, String address, int day) {
         this.context = context;
         this.tripPlan = tripPlan;
         this.title = title;
         this.address = address;
+        this.day = day;
     }
     @Nullable
     @Override
@@ -153,7 +155,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 schedule.setPlace(new Place(title, address));
 
                 // TODO DB에도 추가 필요
-                tripPlan.getSchedules().add(schedule);
+                tripPlan.getSchedule(day).add(schedule);
 
                 dismiss();
             }
