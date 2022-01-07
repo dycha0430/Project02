@@ -1,4 +1,4 @@
-package com.example.madcamp_project2.ui.home;
+package com.example.madcamp_project2.ui.home.detail;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
 
 import java.util.ArrayList;
 

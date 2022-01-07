@@ -1,7 +1,10 @@
-package com.example.madcamp_project2.ui.home;
+package com.example.madcamp_project2.ui.home.detail;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -9,28 +12,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListPopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.util.Pair;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityDetailTripBinding;
@@ -38,31 +31,26 @@ import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.github.florent37.materialviewpager.MaterialViewPager;
-import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.CompositeDateValidator;
-import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 
 import noman.googleplaces.NRPlaces;
@@ -88,6 +76,9 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     public Country[] COUNTRIES = new Country[COUNTRY_NUM];
 
     final Geocoder geoCoder = new Geocoder(this);
+    Context context;
+
+    ViewPager2 viewPager2;
 
     public String getFromLocation(long latitude, long longitude, int i) {
         List<Address> list = null;
@@ -150,6 +141,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         binding = ActivityDetailTripBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        context = this;
         previous_marker = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -163,6 +155,14 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         titleTextView = findViewById(R.id.detailTitleTextView);
         datePickerBtn = findViewById(R.id.datePickerButton);
         spinner = findViewById(R.id.spinner);
+        viewPager2 = findViewById(R.id.viewPager);
+
+        /* TODO Schedule View Pager */
+        ArrayList<DataPage> list = new ArrayList<>();
+        list.add(new DataPage());
+        list.add(new DataPage());
+        list.add(new DataPage());
+        viewPager2.setAdapter(new ViewPagerAdapter(list));
 
         SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(COUNTRIES.clone()));
         spinner.setAdapter(adapter);
@@ -253,12 +253,22 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
+        Context a = this.getBaseContext();
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(getFromLocationName(tripPlan.getDestination().getName())));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
                 showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()));
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(@NonNull Marker marker) {
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                        bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
+                        return true;
+                    }
+                });
             }
         });
 
@@ -276,6 +286,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 .latlng(location.latitude, location.longitude).radius(5000)
                 .type(PlaceType.RESTAURANT).build().execute();
     }
+
 
     @Override
     public void onPlacesFailure(PlacesException e) {
@@ -298,6 +309,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
                     markerOptions.title(place.getName());
+
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.location);
+                    Bitmap b = bitmapDrawable.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
+                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
                     Marker item = mMap.addMarker(markerOptions);
                     previous_marker.add(item);
                 }
