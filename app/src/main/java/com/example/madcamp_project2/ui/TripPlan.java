@@ -9,7 +9,7 @@ public class TripPlan implements Serializable {
     String start_date;
     String end_date;
     // users 추가 필요
-    Place destination;
+    Country destination;
     TripState state;
     ArrayList<Schedule> schedules;
 
@@ -18,11 +18,11 @@ public class TripPlan implements Serializable {
         this.title = "제주도";
         this.start_date = "2022-01-01";
         this.end_date = "2022-01-03";
-        this.destination = new Place();
+        this.destination = new Country("서울");
         this.state = TripState.BEFORE;
     }
 
-    public TripPlan(String title, String start_date, String end_date, Place destination, TripState state, ArrayList<Schedule> schedules) {
+    public TripPlan(String title, String start_date, String end_date, Country destination, TripState state, ArrayList<Schedule> schedules) {
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -55,11 +55,11 @@ public class TripPlan implements Serializable {
         this.end_date = end_date;
     }
 
-    public Place getDestination() {
+    public Country getDestination() {
         return destination;
     }
 
-    public void setDestination(Place destination) {
+    public void setDestination(Country destination) {
         this.destination = destination;
     }
 

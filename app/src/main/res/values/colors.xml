@@ -12,5 +12,6 @@
     <color name="gray">#FFD4D4D4</color>
     <color name="cursorColor">#FF87C1FF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="skyblue">#FFB5D9FF</color>
 
 </resources>
