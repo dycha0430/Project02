@@ -47,6 +47,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -153,6 +154,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         return null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("$$$$$$$$$$$$$$$$$44", "RESUME!!");
+    }
+
     void initCountries() {
         COUNTRIES[0] = new Country(CountryEnum.SEOUL);
         COUNTRIES[1] = new Country(CountryEnum.INCHEON);
@@ -194,7 +201,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         viewPager2 = findViewById(R.id.viewPager);
 
         /* TODO Schedule View Pager */
-//        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan.getSchedules(), tripPlan.getStart_date(), tripPlan.getEnd_date()));
+        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan.getSchedules(), tripPlan.getStart_date(), tripPlan.getEnd_date()));
 
         SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(COUNTRIES.clone()));
         spinner.setAdapter(adapter);
@@ -228,7 +235,11 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         else { stateTextView.setBackgroundColor(Color.parseColor("#909091")); }
         stateTextView.setText(tripPlan.getState().toString());
         titleTextView.setText(tripPlan.getTitle());
-        datePickerBtn.setText(tripPlan.getStart_date() + " ~ " + tripPlan.getEnd_date());
+
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
+        String start_date = df.format(tripPlan.getStart_date());
+        String end_date = df.format(tripPlan.getEnd_date());
+        datePickerBtn.setText(start_date + " ~ " + end_date);
 
         datePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override

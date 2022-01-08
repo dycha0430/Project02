@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Schedule;
 
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
@@ -21,6 +25,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     ArrayList<Schedule> schedules;
     public ScheduleAdapter(Context context, ArrayList<Schedule> schedules) {
         this.context = context;
+        this.schedules = schedules;
+    }
+
+    public void setSchedules(ArrayList<Schedule> schedules) {
         this.schedules = schedules;
     }
 
@@ -35,7 +43,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Schedule schedule = schedules.get(position);
 
+        holder.startTimeTextView.setText(schedule.getStart_time().getHour() + ":" + schedule.getEnd_time().getMinute());
+        holder.endTimeTextView.setText(schedule.getEnd_time().getHour() + ":" + schedule.getEnd_time().getMinute());
     }
 
     @Override
@@ -44,17 +55,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView locImageView, iconImageView;
-        TextView titleTextView, dateTextView, locTextView, withTextView, stateTextView;
+        TextView startTimeTextView, endTimeTextView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            locImageView = (ImageView) itemView.findViewById(R.id.locImageView);
-            iconImageView = (ImageView) itemView.findViewById(R.id.locIcon);
-            titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
-            dateTextView = (TextView) itemView.findViewById(R.id.dateTextView);
-            locTextView = (TextView) itemView.findViewById(R.id.locTextView);
-            withTextView = (TextView) itemView.findViewById(R.id.withTextView);
-            stateTextView = (TextView) itemView.findViewById(R.id.stateTextView);
+            startTimeTextView = (TextView) itemView.findViewById(R.id.start_time_text_view);
+            endTimeTextView = (TextView) itemView.findViewById(R.id.end_time_text_view);
         }
     }
 }

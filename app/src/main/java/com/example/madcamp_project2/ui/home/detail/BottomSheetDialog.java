@@ -155,7 +155,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 schedule.setPlace(new Place(title, address));
 
                 // TODO DB에도 추가 필요
+                // 근데 이거 HomeFragment의 static tripPlan 더미데이터에는 적용안됨.. DetailTripPlanActivity에서 intent로 받은 데이터에만 적용됨 ㅠ
                 tripPlan.getSchedule(day).add(schedule);
+
+                ViewPagerAdapter.scheduleAdapters[day].setSchedules(tripPlan.getSchedule(day));
+                ViewPagerAdapter.scheduleAdapters[day].notifyDataSetChanged();
 
                 dismiss();
             }

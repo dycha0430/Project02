@@ -17,6 +17,8 @@ import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.ViewHolder> {
@@ -45,7 +47,11 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         holder.titleTextView.setText(tripPlan.getTitle());
         holder.stateTextView.setText(tripPlan.getState().toString());
         holder.locTextView.setText(tripPlan.getDestination().getName());
-        holder.dateTextView.setText(tripPlan.getStart_date() + " ~ " + tripPlan.getEnd_date());
+
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
+        String start_date = df.format(tripPlan.getStart_date());
+        String end_date = df.format(tripPlan.getEnd_date());
+        holder.dateTextView.setText(start_date + " ~ " + end_date);
         holder.locImageView.setImageResource(R.drawable.jeju);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
 

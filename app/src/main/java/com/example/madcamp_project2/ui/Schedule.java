@@ -42,10 +42,8 @@ public class Schedule implements Serializable {
     public Schedule() {
         this.money = 0;
         this.memo = "Memo";
-        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int currentminute = Calendar.getInstance().get(Calendar.MINUTE);
-        this.start_time = new TimeFormat(currentHour, currentminute);
-        this.end_time = new TimeFormat(currentHour, currentminute);
+        this.start_time = new TimeFormat(0, 0);
+        this.end_time = new TimeFormat(0, 6);
         this.place = new Place();
     }
 
