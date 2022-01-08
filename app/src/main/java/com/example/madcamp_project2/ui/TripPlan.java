@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,12 +18,11 @@ public class TripPlan implements Serializable {
     String title;
     Date start_date;
     Date end_date;
-    int duration;
     // users 추가 필요
     Country destination;
-    TripState state;
     ArrayList<Schedule>[] schedules;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public TripPlan() {
         super();
         this.title = "제주도";
@@ -33,10 +33,9 @@ public class TripPlan implements Serializable {
         calendar.set(2022, 0, 10);
         this.end_date = calendar.getTime();
         this.destination = new Country(CountryEnum.JEJU);
-        this.state = TripState.BEFORE;
-        schedules = new ArrayList[5];
 
-        duration = 5;
+        int duration = getDuration();
+        schedules = new ArrayList[5];
         for (int i = 0; i < duration; i++) {
             schedules[i] = new ArrayList<>();
         }
@@ -49,19 +48,20 @@ public class TripPlan implements Serializable {
         this.end_date = end_date;
         this.destination = destination;
 
-        long today = System.currentTimeMillis();
+        int duration = getDuration();
+        schedules = new ArrayList[duration];
+        for (int i = 0; i < duration; i++) {
+            schedules[i] = new ArrayList<>();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public int getDuration() {
         LocalDate localStartDate = start_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate localEndDate = end_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate localTodayDate = LocalDate.now();
+        Period period = Period.between(localStartDate, localEndDate);
 
-        if (localTodayDate.isBefore(localStartDate)) {
-            this.state = TripState.BEFORE;
-        } else if (localEndDate.isBefore(localTodayDate)) {
-            this.state = TripState.AFTER;
-        } else {
-            this.state = TripState.ING;
-        }
-        this.state = state;
+        return period.getDays();
     }
 
     public String getTitle() {
@@ -96,12 +96,22 @@ public class TripPlan implements Serializable {
         this.destination = destination;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public TripState getState() {
-        return state;
-    }
+        long today = System.currentTimeMillis();
+        LocalDate localStartDate = start_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localEndDate = end_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localTodayDate = LocalDate.now();
 
-    public void setState(TripState state) {
-        this.state = state;
+        TripState state;
+        if (localTodayDate.isBefore(localStartDate)) {
+            state = TripState.BEFORE;
+        } else if (localEndDate.isBefore(localTodayDate)) {
+            state = TripState.AFTER;
+        } else {
+            state = TripState.ING;
+        }
+        return state;
     }
 
     public ArrayList<Schedule> getSchedule(int day) {

@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
     public static ArrayList<TripPlan> tripPlanList;
     private PlanSummaryAdapter planSummaryAdapter;
     private Context context;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         this.context = getActivity();
@@ -50,28 +51,5 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(planSummaryAdapter);
 
         return rootView;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onResume() {
-        super.onResume();
-        planSummaryAdapter.setTripPlanList(tripPlanList);
-        planSummaryAdapter.notifyDataSetChanged();
-
-        long today = System.currentTimeMillis();
-        for (TripPlan tripPlan : tripPlanList) {
-            LocalDate localStartDate = tripPlan.getStart_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate localEndDate = tripPlan.getEnd_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate localTodayDate = LocalDate.now();
-
-            if (localTodayDate.isBefore(localStartDate)) {
-                tripPlan.setState(TripState.BEFORE);
-            } else if (localEndDate.isBefore(localTodayDate)) {
-                tripPlan.setState(TripState.AFTER);
-            } else {
-                tripPlan.setState(TripState.ING);
-            }
-        }
     }
 }
