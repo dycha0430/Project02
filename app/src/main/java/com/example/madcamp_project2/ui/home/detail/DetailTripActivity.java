@@ -9,12 +9,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +35,7 @@ import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,9 +55,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,18 +75,19 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     TripPlan tripPlan;
     static final int zoom_pm = 15;
 
-    TextView titleTextView, stateTextView;
+    EditText titleTextView;
+    TextView stateTextView;
     Button datePickerBtn;
     private MaterialViewPager mViewPager;
-    private GoogleMap mMap;
+    private static GoogleMap mMap;
     List<Marker> previous_marker = null;
 
     Spinner spinner;
     static final int COUNTRY_NUM = 14;
     public Country[] COUNTRIES = new Country[COUNTRY_NUM];
 
-    final Geocoder geoCoder = new Geocoder(this);
-    Context context;
+    static Geocoder geoCoder;
+    static Context context;
 
     ViewPager2 viewPager2;
 
@@ -136,7 +144,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         return null;
     }
 
-    public LatLng getFromLocationName(String name) {
+    public static LatLng getFromLocationName(String name) {
         List<Address> list = null;
         try {
             list = geoCoder.getFromLocationName(name, 10);
@@ -178,6 +186,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,13 +194,16 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(binding.getRoot());
 
         context = this;
+        geoCoder = new Geocoder(this);
         previous_marker = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         getSupportActionBar().hide();
         Intent intent = getIntent();
-        this.tripPlan = (TripPlan) intent.getSerializableExtra("tripPlan");
+//        this.tripPlan = (TripPlan) intent.getSerializableExtra("tripPlan");
+        int idx = intent.getIntExtra("tripPlan", 0);
+        this.tripPlan = HomeFragment.tripPlanList.get(idx);
         initCountries();
 
         stateTextView = findViewById(R.id.detailStateTextView);
@@ -201,7 +213,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         viewPager2 = findViewById(R.id.viewPager);
 
         /* TODO Schedule View Pager */
-        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan.getSchedules(), tripPlan.getStart_date(), tripPlan.getEnd_date()));
+        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
 
         SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(COUNTRIES.clone()));
         spinner.setAdapter(adapter);
@@ -218,7 +230,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 // TODO 장소 정보 TripPlan 데이터 변경
                 CountryEnum countryName = getCountryEnum(spinner.getItemAtPosition(i).toString());
                 tripPlan.setDestination(new Country(countryName));
-                moveMap(countryName.toString());
+                moveMap(countryName.toString(), countryName.toString());
                 showPlaceInformation(getFromLocationName(countryName.toString()));
             }
 
@@ -230,9 +242,11 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
 
 
-        if (tripPlan.getState() == TripState.BEFORE) { stateTextView.setBackgroundColor(Color.parseColor("#FCBA03")); }
-        else if (tripPlan.getState() == TripState.ING) { stateTextView.setBackgroundColor(Color.parseColor("#3842ff")); }
-        else { stateTextView.setBackgroundColor(Color.parseColor("#909091")); }
+        if (tripPlan.getState() == TripState.BEFORE) { stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
+        else if (tripPlan.getState() == TripState.ING) {
+            stateTextView.setBackgroundColor(context.getResources().getColor(R.color.ing));
+        }
+        else { stateTextView.setBackgroundColor(context.getResources().getColor(R.color.after)); }
         stateTextView.setText(tripPlan.getState().toString());
         titleTextView.setText(tripPlan.getTitle());
 
@@ -241,12 +255,30 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         String end_date = df.format(tripPlan.getEnd_date());
         datePickerBtn.setText(start_date + " ~ " + end_date);
 
-        datePickerBtn.setOnClickListener(new View.OnClickListener() {
+        titleTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                showDatePicker(view);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                tripPlan.setTitle(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
+
+        // 한번 계획 생성하면 날짜 다시 바꿀 수는 없게 해야할 듯 showDatePicker는 생성시 사용
+//        datePickerBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showDatePicker(view);
+//            }
+//        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -255,8 +287,9 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         CalendarConstraints.Builder constraintsBuilderRange = new CalendarConstraints.Builder();
 
         LocalDateTime min = LocalDateTime.now();
+        min.minusDays(1);
 
-        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(System.currentTimeMillis());
+        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(min.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         ArrayList<CalendarConstraints.DateValidator> listValidators =
                 new ArrayList<CalendarConstraints.DateValidator>();
 
@@ -278,6 +311,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
                 // TODO 저장 필요
                 datePickerBtn.setText(dateMessage);
+                tripPlan.setStart_date(new Date(selection.first));
+                tripPlan.setEnd_date(new Date(selection.second));
             }
         });
     }
@@ -293,11 +328,21 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         return formatter.format(calendar.getTime());
     }
 
-    public void moveMap(String name) {
-        LatLng loc = getFromLocationName(name);
+    public static void moveMap(String address, String name) {
+        LatLng loc = getFromLocationName(address);
 
+        if (loc == null) {
+            Toast.makeText(context, "위치를 찾을 수 없습니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(loc);
+        markerOptions.title(name);
+        mMap.addMarker(markerOptions);
+
     }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -326,10 +371,16 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Address a = addresses.get(0);
-                        // Log.d("@@@@@@@@@@@@@@@@@@2", a.getAddressLine(0) + " " + a.getLocality() + " " + a.getCountryName() + " " + a.getPostalCode() + " " + a.getFeatureName());
-                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0), viewPager2.getCurrentItem());
-                        bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
+
+                        if (!addresses.isEmpty()) {
+                            Address a = addresses.get(0);
+                            // Log.d("@@@@@@@@@@@@@@@@@@2", a.getAddressLine(0) + " " + a.getLocality() + " " + a.getCountryName() + " " + a.getPostalCode() + " " + a.getFeatureName());
+                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0), viewPager2.getCurrentItem());
+                            bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
+                        } else {
+                            Toast.makeText(context, "주소 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
                         return true;
                     }
                 });

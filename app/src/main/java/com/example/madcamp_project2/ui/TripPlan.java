@@ -22,9 +22,9 @@ public class TripPlan implements Serializable {
         this.title = "제주도";
         Calendar calendar = Calendar.getInstance();
         // Month에는 4월이면 3이 들어가야 함
-        calendar.set(2022, 2, 29);
+        calendar.set(2022, 0, 5);
         this.start_date = calendar.getTime();
-        calendar.set(2022, 3, 2);
+        calendar.set(2022, 0, 10);
         this.end_date = calendar.getTime();
         this.destination = new Country(CountryEnum.JEJU);
         this.state = TripState.BEFORE;

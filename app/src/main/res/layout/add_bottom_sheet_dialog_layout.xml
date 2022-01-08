@@ -12,21 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/titleTextView"
+        <EditText
+            android:id="@+id/addTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AAAAAAAAAAAAAAAAAAAAAAAAAAaa"
+            android:hint="일정 제목을 입력해주세요"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:maxWidth="300dp"
             app:layout_constraintHorizontal_bias="0"
-            android:paddingRight="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/addRegisterBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/registerBtn"
+            android:id="@+id/addRegisterBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +42,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <TextView
-        android:id="@+id/addressTextView"
+    <EditText
+        android:id="@+id/addAddressTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:hint="주소를 입력해주세요"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,7 +64,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/startTimeSelect"
+            android:id="@+id/addStartTimeSelect"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -80,7 +81,7 @@
             android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/endTimeSelect"
+            android:id="@+id/addEndTimeSelect"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -105,7 +106,7 @@
             />
 
         <EditText
-            android:id="@+id/money"
+            android:id="@+id/addMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="0"
@@ -139,7 +140,7 @@
             />
 
         <EditText
-            android:id="@+id/memo"
+            android:id="@+id/addMemo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="메모를 추가하세요"

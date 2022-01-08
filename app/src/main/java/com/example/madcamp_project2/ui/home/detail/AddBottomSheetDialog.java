@@ -29,33 +29,21 @@ import java.util.Calendar;
 
 import nl.joery.timerangepicker.TimeRangePicker;
 
-public class BottomSheetDialog extends BottomSheetDialogFragment {
+public class AddBottomSheetDialog extends BottomSheetDialogFragment {
 
     TimePicker timePicker;
     TimeRangePicker timeRangePicker;
     TripPlan tripPlan;
     Button startTimeSelect, endTimeSelect, registerBtn;
     Context context;
-    String title;
-    String address;
-    TextView addressTextView, titleTextView;
-    EditText moneyEditText, memoEditText;
-    int day;
-    Schedule editSchedule = null;
 
-    public BottomSheetDialog(Context context, Schedule schedule, int day, TripPlan tripPlan) {
-        this.context = context;
-        this.editSchedule = schedule;
-        this.day = day;
-        this.tripPlan = tripPlan;
-    }
-    public BottomSheetDialog(Context context, TripPlan tripPlan, String title, String address, int day) {
+    EditText moneyEditText, memoEditText, titleEditText, addressEditText;
+    int day;
+
+    public AddBottomSheetDialog(Context context, TripPlan tripPlan, int day) {
         this.context = context;
         this.tripPlan = tripPlan;
-        this.title = title;
-        this.address = address;
         this.day = day;
-        editSchedule = null;
     }
 
     String getTimeString(int hour, int minute) {
@@ -74,38 +62,22 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottom_sheet_dialog_layout, container, false);
+        View view = inflater.inflate(R.layout.add_bottom_sheet_dialog_layout, container, false);
 
         Schedule schedule = new Schedule();
 
-        if (editSchedule != null) {
-            schedule.setMoney(editSchedule.getMoney());
-            schedule.setMemo(editSchedule.getMemo());
-            schedule.setStart_time(editSchedule.getStart_time());
-            schedule.setEnd_time(editSchedule.getEnd_time());
-            schedule.setPlace(editSchedule.getPlace());
-        }
-
-        startTimeSelect = view.findViewById(R.id.startTimeSelect);
-        endTimeSelect = view.findViewById(R.id.endTimeSelect);
-        titleTextView = view.findViewById(R.id.titleTextView);
-        addressTextView = view.findViewById(R.id.addressTextView);
-        moneyEditText = view.findViewById(R.id.money);
-        registerBtn = view.findViewById(R.id.registerBtn);
-        memoEditText = view.findViewById(R.id.memo);
+        startTimeSelect = view.findViewById(R.id.addStartTimeSelect);
+        endTimeSelect = view.findViewById(R.id.addEndTimeSelect);
+        titleEditText = view.findViewById(R.id.addTitleTextView);
+        addressEditText = view.findViewById(R.id.addAddressTextView);
+        moneyEditText = view.findViewById(R.id.addMoney);
+        registerBtn = view.findViewById(R.id.addRegisterBtn);
+        memoEditText = view.findViewById(R.id.addMemo);
 
         String timeString = getTimeString(schedule.getStart_time().getHour(), schedule.getStart_time().getMinute());
         startTimeSelect.setText(timeString);
         timeString = getTimeString(schedule.getEnd_time().getHour(), schedule.getEnd_time().getMinute());
         endTimeSelect.setText(timeString);
-
-        if (editSchedule != null) {
-            addressTextView.setText(schedule.getPlace().getAddress());
-            titleTextView.setText(schedule.getPlace().getName());
-        } else {
-            addressTextView.setText(address);
-            titleTextView.setText(title);
-        }
 
         DecimalFormat df = new DecimalFormat("###,###,####");
         moneyEditText.addTextChangedListener(new NumberTextWatcher(moneyEditText));
@@ -187,25 +159,14 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 String moneyText = moneyEditText.getText().toString();
                 if (moneyText.equals("")) moneyText = "0";
 
-                // money String에서 int 가져오는 코드
-//                int money = 0;
-//                if (moneyText != null && !moneyText.matches("")) {
-//                    money = Integer.parseInt(moneyText.replaceAll(",", ""));
-//                }
+                String title = titleEditText.getText().toString();
+                String address = addressEditText.getText().toString();
 
                 schedule.setMoney(moneyText);
                 schedule.setPlace(new Place(title, address));
 
                 // TODO DB에도 추가 필요
-
-                if (editSchedule == null) {
-                    tripPlan.getSchedule(day).add(schedule);
-                } else {
-                    editSchedule.setMoney(schedule.getMoney());
-                    editSchedule.setMemo(schedule.getMemo());
-                    editSchedule.setStart_time(schedule.getStart_time());
-                    editSchedule.setEnd_time(schedule.getEnd_time());
-                }
+                tripPlan.getSchedule(day).add(schedule);
 
                 ViewPagerAdapter.scheduleAdapters[day].setSchedules(tripPlan.getSchedule(day));
                 ViewPagerAdapter.scheduleAdapters[day].notifyDataSetChanged();

@@ -31,6 +31,10 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         this.tripPlanList = tripPlans;
     }
 
+    public void setTripPlanList(ArrayList<TripPlan> tripPlanList) {
+        this.tripPlanList = tripPlanList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,16 +59,17 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         holder.locImageView.setImageResource(R.drawable.jeju);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
 
-        if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(Color.parseColor("#FCBA03")); }
-        else if (tripPlan.getState() == TripState.ING) { holder.stateTextView.setBackgroundColor(Color.parseColor("#3842ff")); }
-        else { holder.stateTextView.setBackgroundColor(Color.parseColor("#909091")); }
+        if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
+        else if (tripPlan.getState() == TripState.ING) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.ing)); }
+        else { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.after)); }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), DetailTripActivity.class);
                 // intent.putExtra ...
-                intent.putExtra("tripPlan", tripPlan);
+//                intent.putExtra("tripPlan", tripPlan);
+                intent.putExtra("tripPlan", position);
                 context.startActivity(intent);
             }
         });

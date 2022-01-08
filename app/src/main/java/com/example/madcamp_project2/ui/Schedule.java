@@ -1,9 +1,6 @@
 package com.example.madcamp_project2.ui;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Schedule implements Serializable {
 
@@ -33,21 +30,21 @@ public class Schedule implements Serializable {
         }
     }
 
-    int money;
+    String money;
     String memo;
     TimeFormat start_time;
     TimeFormat end_time;
     Place place;
 
     public Schedule() {
-        this.money = 0;
+        this.money = "";
         this.memo = "Memo";
         this.start_time = new TimeFormat(0, 0);
-        this.end_time = new TimeFormat(0, 6);
+        this.end_time = new TimeFormat(12, 0);
         this.place = new Place();
     }
 
-    public Schedule(int money, String memo, TimeFormat start_time, TimeFormat end_time, Place place) {
+    public Schedule(String money, String memo, TimeFormat start_time, TimeFormat end_time, Place place) {
         this.money = money;
         this.memo = memo;
         this.start_time = start_time;
@@ -55,11 +52,11 @@ public class Schedule implements Serializable {
         this.place = place;
     }
 
-    public int getMoney() {
+    public String getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
