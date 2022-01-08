@@ -64,9 +64,9 @@ public class AddExtraActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TripPlan tripPlan = new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country);
-                HomeFragment.tripPlanList.add(tripPlan);
+                // HomeFragment.tripPlanList.add(tripPlan);
 
-                NewTravel newTravel = new NewTravel(tripPlan.getTitle(), tripPlan.getStart_date(), tripPlan.getEnd_date(), tripPlan.getDestination());
+                NewTravel newTravel = new NewTravel(-1, tripPlan.getTitle(), tripPlan.getStart_date(), tripPlan.getEnd_date(), tripPlan.getDestination());
                 MyAPI myapi = LoginActivity.get_MyAPI();
                 String token = "";
 
@@ -91,7 +91,10 @@ public class AddExtraActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<NewTravel> call, Response<NewTravel> response) {
                         if(response.isSuccessful()) {
+                            NewTravel response_travel = response.body();
                             Log.d("NEW TRAVEL", "SUCCESS");
+                            Log.d("NEW TRAVEL Id", String.valueOf(response_travel.getTravel_id()));
+
                         }
                         else {
                             Log.d("NEW TRAVEL", "FAILED");

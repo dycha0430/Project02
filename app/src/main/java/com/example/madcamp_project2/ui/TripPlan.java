@@ -21,10 +21,12 @@ public class TripPlan implements Serializable {
     // users 추가 필요
     Country destination;
     ArrayList<Schedule>[] schedules;
+    private int travel_id;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public TripPlan() {
         super();
+        this.travel_id = -1;
         this.title = "제주도";
         Calendar calendar = Calendar.getInstance();
         // Month에는 4월이면 3이 들어가야 함
@@ -43,6 +45,7 @@ public class TripPlan implements Serializable {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public TripPlan(String title, Date start_date, Date end_date, Country destination) {
+        this.travel_id = -1;
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -121,5 +124,9 @@ public class TripPlan implements Serializable {
 
     public void setSchedules(ArrayList<Schedule> schedules, int day) {
         this.schedules[day] = schedules;
+    }
+
+    public void setTravel_id(int travel_id) {
+        this.travel_id = travel_id;
     }
 }

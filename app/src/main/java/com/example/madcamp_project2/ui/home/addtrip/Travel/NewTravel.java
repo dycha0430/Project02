@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class NewTravel {
+    int travel_id;
     String title;
     String place_name;
     int start_year;
@@ -18,7 +19,8 @@ public class NewTravel {
     int end_month;
     int end_day;
 
-    public NewTravel(String title, Date start_date, Date end_date, Country destination) {
+    public NewTravel(int id, String title, Date start_date, Date end_date, Country destination) {
+        this.travel_id = id;
         this.title = title;
         this.place_name = destination.getName();
 
@@ -32,5 +34,9 @@ public class NewTravel {
         this.end_day = calendar.get(Calendar.DAY_OF_MONTH);
         this.end_month = calendar.get(Calendar.MONTH) + 1;
         this.end_year = calendar.get(Calendar.YEAR);
+    }
+
+    public int getTravel_id() {
+        return travel_id;
     }
 }
