@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.madcamp_project2.Account.AccountInfo;
 import com.example.madcamp_project2.Account.AccountLogin;
 import com.example.madcamp_project2.Account.CheckUserForm;
 import com.kakao.sdk.auth.AuthApiClient;
@@ -46,81 +47,49 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Button login_btn = findViewById(R.id.login_btn);
         intent = new Intent(this, MainActivity.class);
-
-        // getHashKey();
+        initMyAPI();
+/*
+        getHashKey();
         if(login_state_check) Log.e("Initial LOGIN: ","TRUE");
         else Log.e("Initial LOGIN: ","FALSE");
+*/
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                check_if_login();
-
-                if (login_state_check) {
-                    // 이미 로그인 되어 있음
-                    Log.e("LOGIN", "ALREADY SIGNED IN!");
-                    get_user_info(false);
-                    startActivity(intent);
+                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+                    // 카카오톡이 설치되어 있으면 카톡으로 로그인 확인 요청
+                    UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (token, loginError) -> {
+                        if (loginError != null) {
+                            // 로그인 실패
+                            Log.e("LOGIN", "FAILED!");
+                            Toast.makeText(LoginActivity.this, "로그인을 할 수 없습니다.", Toast.LENGTH_LONG).show();
+                        } else {
+                            // 로그인 성공
+                            Log.e("LOGIN", "SUCCESS!");
+                            get_user_info(false);
+                            // 회원가입 필요한 지 확인 --> 회원가입 필요 없으면 바로 activity change
+                            // startActivity(intent);
+                        }
+                        return null;
+                    });
                 } else {
-                    if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                        // 카카오톡이 설치되어 있으면 카톡으로 로그인 확인 요청
-                        UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (token, loginError) -> {
-                            if (loginError != null) {
-                                // 로그인 실패
-                                Log.e("LOGIN", "FAILED!");
-                                Toast.makeText(LoginActivity.this, "로그인을 할 수 없습니다.", Toast.LENGTH_LONG).show();
-                            } else {
-                                // 로그인 성공
-                                Log.e("LOGIN", "SUCCESS!");
-                                get_user_info(false);
-                                startActivity(intent);
-                            }
-                            return null;
-                        });
-                    } else {
-                        UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (token, loginError) -> {
-                            if (loginError != null) {
-                                // 로그인 실패
-                                Log.e("LOGIN", "FAILED!");
-                                Toast.makeText(LoginActivity.this, "로그인을 할 수 없습니다.", Toast.LENGTH_LONG).show();
-                            } else {
-                                // 로그인 성공
-                                Log.e("LOGIN", "SUCCESS!");
-                                get_user_info(false);
-                                startActivity(intent);
-                            }
-                            return null;
-                        });
-                    }
+                    UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (token, loginError) -> {
+                        if (loginError != null) {
+                            // 로그인 실패
+                            Log.e("LOGIN", "FAILED!");
+                            Toast.makeText(LoginActivity.this, "로그인을 할 수 없습니다.", Toast.LENGTH_LONG).show();
+                        } else {
+                            // 로그인 성공
+                            Log.e("LOGIN", "SUCCESS!");
+                            get_user_info(false);
+                        }
+                        return null;
+                    });
                 }
-            }
-        });
-/*
 
-        Button logout_btn = findViewById(R.id.kakao_logout);
-        logout_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserApiClient.getInstance().logout(error -> {
-                    if (error != null) {
-                        Log.e("LOGOUT", "로그아웃 실패, SDK에서 토큰 삭제됨", error);
-                    }else{
-                        Log.e("LOGOUT", "로그아웃 성공, SDK에서 토큰 삭제됨");
-                        kakao_unlink();
-                    }
-                    return null;
-                });
             }
         });
-
-        Button status_btn = findViewById(R.id.check_status);
-        status_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                get_user_info();
-            }
-        });
-*/
     }
 
     public void check_if_login() {
@@ -137,8 +106,13 @@ public class LoginActivity extends AppCompatActivity {
                         "\n닉네임: "+user.getKakaoAccount().getProfile().getNickname() +
                         "\n이메일: "+user.getKakaoAccount().getEmail());
                 if(!check) {
-                    intent.putExtra("email", user.getKakaoAccount().getEmail());
-                    intent.putExtra("username", user.getKakaoAccount().getProfile().getNickname());
+                    String email = user.getKakaoAccount().getEmail();
+                    String username = user.getKakaoAccount().getProfile().getNickname();
+                    long pk = user.getId();
+
+                    intent.putExtra("email", email);
+                    intent.putExtra("username", username);
+                    is_already_SignedUp(email, pk);
                 }
                 login_state_check = true;
             }
@@ -206,8 +180,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public boolean is_already_SignedUp(String email) {
-        Call<CheckUserForm> get_check_user = myapi.get_check_user("Bearer "+token);
+    public void goto_MainActivity() {
+        startActivity(intent);
+    }
+
+    public boolean is_already_SignedUp(String email, long pk) {
+        CheckUserForm checkUserForm = new CheckUserForm(email);
+        Call<CheckUserForm> get_check_user = myapi.get_check_user(checkUserForm);
         get_check_user.enqueue(new Callback<CheckUserForm>() {
            @Override
            public void onResponse(Call<CheckUserForm> call, Response<CheckUserForm> response) {
@@ -215,6 +194,15 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("IS_SIGNEDUP", "SUCCESS");
                     CheckUserForm checkUserForm = response.body();
                     Log.d("UserForm status", checkUserForm.get_status());
+                    String status = checkUserForm.get_status();
+                    if(status.equals("True")) { // 이미 회원 가입
+                        Log.d("Already SingedUp", "True");
+                        Login(email, pk);
+                    }
+                    else if(status.equals("False")) { // 회원 가입 필요
+                        Log.d("Already SingedUp", "False");
+                        SignUp(email, pk);
+                    }
                 } else {
                     Log.d("IS_SIGNEDUP", "FAILED");
                 }
@@ -228,12 +216,30 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
 
-    public void SignUp(String email, int kakao_pk) {
+    public void SignUp(String email, long kakao_pk) {
+        AccountInfo accountInfo = new AccountInfo(email, String.valueOf(kakao_pk));
+        Call<AccountInfo> post_account = myapi.post_account(accountInfo);
+        post_account.enqueue(new Callback<AccountInfo>() {
+            @Override
+            public void onResponse(Call<AccountInfo> call, Response<AccountInfo> response) {
+                if(response.isSuccessful()) {
+                    Log.d("SIGNUP", "SUCCESS");
+                    Login(email, kakao_pk);
+                }
+                else {
+                    Log.d("SIGNUP", "FAILED");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<AccountInfo> call, Throwable t) {
+                Log.d("SIGNUP", "FAILED");
+            }
+        });
     }
 
-    public void Login(String email, int kakao_pk) {
-        // 로그인하고, authentication을 위한 access token 리턴
+    public void Login(String email, long kakao_pk) {
+        // 로그인하고, authentication을 위한 access token GET
         AccountLogin accountLogin = new AccountLogin(email, String.valueOf(kakao_pk));
         Call<AccountLogin> post_login = myapi.post_login(accountLogin);
         post_login.enqueue(new Callback<AccountLogin>() {
@@ -244,6 +250,9 @@ public class LoginActivity extends AppCompatActivity {
                     AccountLogin accountLogin = response.body();
                     Log.e("Token: ", accountLogin.getToken());
                     token = accountLogin.getToken();
+
+                    intent.putExtra("token", token);
+                    goto_MainActivity();
                 }
                 else {
                     Log.d("LOGIN", "FAILED");

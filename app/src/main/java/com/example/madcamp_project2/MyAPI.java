@@ -1,5 +1,6 @@
 package com.example.madcamp_project2;
 
+import com.example.madcamp_project2.Account.AccountInfo;
 import com.example.madcamp_project2.Account.AccountLogin;
 import com.example.madcamp_project2.Account.CheckUserForm;
 
@@ -10,9 +11,12 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface MyAPI {
-    @GET("madcamp/check/")
-    Call<CheckUserForm> get_check_user(@Header("Authorization") String token);
+    @POST("madcamp/check/")
+    Call<CheckUserForm> get_check_user(@Body CheckUserForm checkUserForm);
 
     @POST("madcamp/login/")
     Call<AccountLogin> post_login(@Body AccountLogin accountLogin);
+
+    @POST("madcamp/signup/")
+    Call<AccountInfo> post_account(@Body AccountInfo accountInfo);
 }
