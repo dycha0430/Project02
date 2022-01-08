@@ -31,9 +31,16 @@
 
         <Button
             android:id="@+id/kakao_logout"
-            android:layout_gravity="center"
+            android:layout_gravity="left|center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Logout" />
+
+        <Button
+            android:id="@+id/check_status"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test" />
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

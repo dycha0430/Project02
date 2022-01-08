@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.madcamp_project2.databinding.ActivityMainBinding;
+import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.user.UserApiClient;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private boolean login_state_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +68,39 @@ public class MainActivity extends AppCompatActivity {
 
         getHashKey();
 
+        get_user_info();
+
+        if(login_state_check) Log.e("Initial LOGIN: ","TRUE");
+        else Log.e("Initial LOGIN: ","FALSE");
+
         Button login_btn = findViewById(R.id.kakao_login);
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this,(oAuthToken, error) -> {
-                    if (error != null) {
-                        Log.e("LOGIN", "로그인 실패", error);
-                    } else if (oAuthToken != null) {
-                        get_user_info();
-                        Log.i("LOGIN", "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
-                    }
-                    return null;
-                });
+                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)) {
+                    // 카카오톡이 설치되어 있으면 카톡으로 로그인 확인 요청
+                    UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this, (token, loginError) -> {
+                        if (loginError != null) {
+                            // 로그인 실패
+                        } else {
+                            // 로그인 성공
+                            // 사용자 정보 요청
+                            Log.e("LOGIN", "SUCCESS!");
+                        }
+                        return null;
+                    });
+                } else {
+                    UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this, (token, loginError) -> {
+                        if (loginError != null) {
+                            // 로그인 실패
+                        } else {
+                            // 로그인 성공
+                            // 사용자 정보 요청
+                            Log.e("LOGIN", "SUCCESS!");
+                        }
+                        return null;
+                    });
+                }
             }
         });
 
@@ -91,10 +113,25 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LOGOUT", "로그아웃 실패, SDK에서 토큰 삭제됨", error);
                     }else{
                         Log.e("LOGOUT", "로그아웃 성공, SDK에서 토큰 삭제됨");
+                        kakao_unlink();
                     }
                     return null;
                 });
             }
+        });
+
+        Button status_btn = findViewById(R.id.check_status);
+        status_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                get_user_info();
+            }
+        });
+    }
+
+    public void kakao_unlink() {
+        UserApiClient.getInstance().unlink(error -> {
+            return null;
         });
     }
 
@@ -102,10 +139,43 @@ public class MainActivity extends AppCompatActivity {
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
                 Log.e("USERINFO", "사용자 정보 요청 실패", meError);
+                login_state_check = false;
             } else {
                 Log.i("USERINFO", "사용자 정보 요청 성공" +
-                        "\n회원번호: "+user.getId() +
+                        "\n닉네임: "+user.getKakaoAccount().getProfile().getNickname() +
                         "\n이메일: "+user.getKakaoAccount().getEmail());
+                login_state_check = true;
+            }
+            return null;
+        });
+    }
+
+    public boolean is_login() {
+        if(AuthApiClient.getInstance().hasToken()) {
+            Log.e("asdf","1");
+            check_login_more();
+            if(login_state_check) {
+                Log.e("asdf","2");
+                return true;
+            }
+            else {
+                Log.e("asdf","3");
+                return false;
+            }
+        }
+        else {
+            Log.e("asdf","4");
+            return false;
+        }
+    }
+
+    public void check_login_more() {
+        UserApiClient.getInstance().accessTokenInfo((user, error) -> {
+            if(error != null) {
+                login_state_check = false;
+            }
+            else {
+                login_state_check = true;
             }
             return null;
         });
