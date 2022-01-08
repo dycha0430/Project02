@@ -2,8 +2,10 @@ package com.example.madcamp_project2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
@@ -18,11 +20,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.madcamp_project2.databinding.ActivityMainBinding;
+import com.kakao.sdk.auth.AuthApiClient;
+import com.kakao.sdk.user.UserApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private String token;
+    private String email;
+    private String username;
+    private Intent intent_login;
     static final int COUNTRY_NUM = 14;
     public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
 
@@ -47,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent intent = getIntent();
+        email = intent.getExtras().getString("email");
+        username = intent.getExtras().getString("username");
+        token = intent.getExtras().getString("token");
+        getIntent().getExtras().clear();
+
+        Log.d("MainActivity: email", email);
+        Log.d("MainActivity: username", username);
+        Log.d("MainActivity: token", token);
+
+        intent_login = new Intent(this, LoginActivity.class);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initCountries();
@@ -70,6 +90,26 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        Button logout_btn = headerView.findViewById(R.id.logout);
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                token = "";
+
+                UserApiClient.getInstance().logout(error -> {
+                    if (error != null) {
+                        Log.e("LOGOUT", "로그아웃 실패, SDK에서 토큰 삭제됨", error);
+                    }else{
+                        Log.d("LOGOUT", "로그아웃 성공, SDK에서 토큰 삭제됨");
+                        startActivity(intent_login);
+                    }
+                    return null;
+                });
+            }
+        });
     }
 
     @Override
