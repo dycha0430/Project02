@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,14 +13,27 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityAddExtraBinding;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.HomeFragment;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddExtraActivity extends AppCompatActivity {
     Country country;
@@ -49,12 +63,48 @@ public class AddExtraActivity extends AppCompatActivity {
         completeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HomeFragment.tripPlanList.add(new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country));
+                TripPlan tripPlan = new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country);
+                HomeFragment.tripPlanList.add(tripPlan);
 
+                NewTravel newTravel = new NewTravel(tripPlan.getTitle(), tripPlan.getStart_date(), tripPlan.getEnd_date(), tripPlan.getDestination());
+                MyAPI myapi = LoginActivity.get_MyAPI();
+                String token = "";
 
+                String file_path = MainActivity.get_filepath();
+                JSONParser parser = new JSONParser();
 
-                Intent intent = new Intent(context, HomeFragment.class);
+                try {
+                    FileReader reader = new FileReader(file_path+"/userinfo.json");
+                    Object obj = parser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    reader.close();
 
+                    token = jsonObject.get("token").toString();
+                }
+                catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Call<NewTravel> post_travel = myapi.post_travel("Bearer " + token, newTravel);
+
+                post_travel.enqueue(new Callback<NewTravel>() {
+                    @Override
+                    public void onResponse(Call<NewTravel> call, Response<NewTravel> response) {
+                        if(response.isSuccessful()) {
+                            Log.d("NEW TRAVEL", "SUCCESS");
+                        }
+                        else {
+                            Log.d("NEW TRAVEL", "FAILED");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewTravel> call, Throwable t) {
+                        Log.d("NEW TRAVEL", "FAILED");
+                    }
+                });
+
+                Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
             }
         });

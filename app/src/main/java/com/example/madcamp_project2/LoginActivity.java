@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private Intent intent;
     private String token;
     private String baseUrl = "https://2779-110-76-108-130.ngrok.io/";
-    private MyAPI myapi;
+    private static MyAPI myapi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,12 +267,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void initMyAPI(){
+    private void initMyAPI() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         myapi = retrofit.create(MyAPI.class);
+    }
+
+    public static MyAPI get_MyAPI() {
+        return myapi;
     }
 }
