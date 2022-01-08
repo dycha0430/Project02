@@ -1,7 +1,13 @@
 package com.example.madcamp_project2.ui;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,11 +42,25 @@ public class TripPlan implements Serializable {
         }
     }
 
-    public TripPlan(String title, Date start_date, Date end_date, Country destination, TripState state) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public TripPlan(String title, Date start_date, Date end_date, Country destination) {
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
         this.destination = destination;
+
+        long today = System.currentTimeMillis();
+        LocalDate localStartDate = start_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localEndDate = end_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localTodayDate = LocalDate.now();
+
+        if (localTodayDate.isBefore(localStartDate)) {
+            this.state = TripState.BEFORE;
+        } else if (localEndDate.isBefore(localTodayDate)) {
+            this.state = TripState.AFTER;
+        } else {
+            this.state = TripState.ING;
+        }
         this.state = state;
     }
 

@@ -60,6 +60,4 @@
         <activity android:name=".ui.home.addtrip.AddDateActivity"/>
         <activity android:name=".ui.home.addtrip.AddExtraActivity"/>
     </application>
-        
-    </application>
 </manifest>
