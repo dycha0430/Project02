@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.madcamp_project2.databinding.ActivityMainBinding;
+import com.kakao.sdk.auth.AuthApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
