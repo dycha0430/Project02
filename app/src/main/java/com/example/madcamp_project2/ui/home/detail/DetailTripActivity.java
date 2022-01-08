@@ -29,6 +29,7 @@ import androidx.core.util.Pair;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityDetailTripBinding;
 import com.example.madcamp_project2.ui.Country;
@@ -70,7 +71,6 @@ import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
 public class DetailTripActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, PlacesListener {
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityDetailTripBinding binding;
     TripPlan tripPlan;
     static final int zoom_pm = 15;
@@ -83,8 +83,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     List<Marker> previous_marker = null;
 
     Spinner spinner;
-    static final int COUNTRY_NUM = 14;
-    public Country[] COUNTRIES = new Country[COUNTRY_NUM];
 
     static Geocoder geoCoder;
     static Context context;
@@ -168,22 +166,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         Log.d("$$$$$$$$$$$$$$$$$44", "RESUME!!");
     }
 
-    void initCountries() {
-        COUNTRIES[0] = new Country(CountryEnum.SEOUL);
-        COUNTRIES[1] = new Country(CountryEnum.INCHEON);
-        COUNTRIES[2] = new Country(CountryEnum.BUSAN);
-        COUNTRIES[3] = new Country(CountryEnum.JEJU);
-        COUNTRIES[4] = new Country(CountryEnum.GYEONGGI);
-        COUNTRIES[5] = new Country(CountryEnum.POHANG);
-        COUNTRIES[6] = new Country(CountryEnum.GANGNEUNG);
-        COUNTRIES[7] = new Country(CountryEnum.SOKCHO);
-        COUNTRIES[8] = new Country(CountryEnum.DAEGU);
-        COUNTRIES[9] = new Country(CountryEnum.GYEONGJU);
-        COUNTRIES[10] = new Country(CountryEnum.YEOSU);
-        COUNTRIES[11] = new Country(CountryEnum.JEONJU);
-        COUNTRIES[12] = new Country(CountryEnum.CHUNCHEON);
-        COUNTRIES[13] = new Country(CountryEnum.DAEJEON);
-    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -204,7 +187,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 //        this.tripPlan = (TripPlan) intent.getSerializableExtra("tripPlan");
         int idx = intent.getIntExtra("tripPlan", 0);
         this.tripPlan = HomeFragment.tripPlanList.get(idx);
-        initCountries();
 
         stateTextView = findViewById(R.id.detailStateTextView);
         titleTextView = findViewById(R.id.detailTitleTextView);
@@ -215,12 +197,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         /* TODO Schedule View Pager */
         viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
 
-        SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(COUNTRIES.clone()));
+        SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(MainActivity.COUNTRIES.clone()));
         spinner.setAdapter(adapter);
 
         int position = 0;
-        for (position = 0; position < COUNTRIES.length; position++) {
-            if (COUNTRIES[position].getCountryEnum().toString().equals(tripPlan.getDestination().getCountryEnum().toString())) break;
+        for (position = 0; position < MainActivity.COUNTRIES.length; position++) {
+            if (MainActivity.COUNTRIES[position].getCountryEnum().toString().equals(tripPlan.getDestination().getCountryEnum().toString())) break;
         }
         spinner.setSelection(position);
 
@@ -281,41 +263,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 //        });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void showDatePicker(View view) {
-        MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builderRange = MaterialDatePicker.Builder.dateRangePicker();
-        CalendarConstraints.Builder constraintsBuilderRange = new CalendarConstraints.Builder();
 
-        LocalDateTime min = LocalDateTime.now();
-        min.minusDays(1);
-
-        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(min.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        ArrayList<CalendarConstraints.DateValidator> listValidators =
-                new ArrayList<CalendarConstraints.DateValidator>();
-
-        listValidators.add(dateValidatorMin);
-        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
-        constraintsBuilderRange.setValidator(validators);
-
-        builderRange.setCalendarConstraints(constraintsBuilderRange.build());
-        MaterialDatePicker<Pair<Long, Long>> pickerRange = builderRange.build();
-        pickerRange.show(getSupportFragmentManager(), pickerRange.toString());
-
-        pickerRange.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-            @Override
-            public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                String start_date = getDate(selection.first, "yy/MM/dd");
-
-                String end_date = getDate(selection.second, "yy/MM/dd");
-                String dateMessage = start_date + " ~ " + end_date;
-
-                // TODO 저장 필요
-                datePickerBtn.setText(dateMessage);
-                tripPlan.setStart_date(new Date(selection.first));
-                tripPlan.setEnd_date(new Date(selection.second));
-            }
-        });
-    }
 
     public static String getDate(long milliSeconds, String dateFormat)
     {

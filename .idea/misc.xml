@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/blue_outline.xml" value="0.2203125" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/button_layout.xml" value="0.2203125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.378125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_attach_money_24.xml" value="0.378125" />
@@ -12,6 +13,9 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/rounded_dialog.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/skyblue_outline.xml" value="0.2203125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/text_cursor.xml" value="0.21822916666666667" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_add_date.xml" value="0.203125" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_add_extra.xml" value="0.67" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_add_trip_plan.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_detail_trip.xml" value="0.25" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_main.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/add_bottom_sheet_dialog_layout.xml" value="0.33" />
@@ -27,6 +31,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_recyclerview.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_slideshow.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/header_logo.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_add_place.xml" value="0.33" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_viewpager.xml" value="0.44969199178644764" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/list_item_card_big.xml" value="0.20208333333333334" />

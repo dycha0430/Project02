@@ -29,6 +29,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.home.detail.DetailTripActivity" />
-    </application>
 
+        <activity android:name=".ui.home.addtrip.AddTripPlanActivity"
+            android:label="나의 여행 계획 추가"/>
+
+        <activity android:name=".ui.home.addtrip.AddDateActivity"/>
+        <activity android:name=".ui.home.addtrip.AddExtraActivity"/>
+    </application>
 </manifest>

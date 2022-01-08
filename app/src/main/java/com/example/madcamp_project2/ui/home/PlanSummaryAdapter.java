@@ -56,7 +56,7 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String start_date = df.format(tripPlan.getStart_date());
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
-        holder.locImageView.setImageResource(R.drawable.jeju);
+        holder.locImageView.setImageResource(R.drawable.back3);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
 
         if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
