@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.example.madcamp_project2.ui.Country;
+import com.example.madcamp_project2.ui.CountryEnum;
+import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -29,6 +31,25 @@ public class MainActivity extends AppCompatActivity {
     private String email;
     private String username;
     private Intent intent_login;
+    static final int COUNTRY_NUM = 14;
+    public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
+
+    void initCountries() {
+        COUNTRIES[0] = new Country(CountryEnum.SEOUL);
+        COUNTRIES[1] = new Country(CountryEnum.INCHEON);
+        COUNTRIES[2] = new Country(CountryEnum.BUSAN);
+        COUNTRIES[3] = new Country(CountryEnum.JEJU);
+        COUNTRIES[4] = new Country(CountryEnum.GYEONGGI);
+        COUNTRIES[5] = new Country(CountryEnum.POHANG);
+        COUNTRIES[6] = new Country(CountryEnum.GANGNEUNG);
+        COUNTRIES[7] = new Country(CountryEnum.SOKCHO);
+        COUNTRIES[8] = new Country(CountryEnum.DAEGU);
+        COUNTRIES[9] = new Country(CountryEnum.GYEONGJU);
+        COUNTRIES[10] = new Country(CountryEnum.YEOSU);
+        COUNTRIES[11] = new Country(CountryEnum.JEONJU);
+        COUNTRIES[12] = new Country(CountryEnum.CHUNCHEON);
+        COUNTRIES[13] = new Country(CountryEnum.DAEJEON);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        initCountries();
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), AddTripPlanActivity.class);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;

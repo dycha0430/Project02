@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.ViewHolder> {
@@ -26,6 +29,10 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
     public PlanSummaryAdapter(Context context, ArrayList<TripPlan> tripPlans) {
         this.context = context;
         this.tripPlanList = tripPlans;
+    }
+
+    public void setTripPlanList(ArrayList<TripPlan> tripPlanList) {
+        this.tripPlanList = tripPlanList;
     }
 
     @NonNull
@@ -44,20 +51,25 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         holder.titleTextView.setText(tripPlan.getTitle());
         holder.stateTextView.setText(tripPlan.getState().toString());
         holder.locTextView.setText(tripPlan.getDestination().getName());
-        holder.dateTextView.setText(tripPlan.getStart_date() + " ~ " + tripPlan.getEnd_date());
-        holder.locImageView.setImageResource(R.drawable.jeju);
+
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
+        String start_date = df.format(tripPlan.getStart_date());
+        String end_date = df.format(tripPlan.getEnd_date());
+        holder.dateTextView.setText(start_date + " ~ " + end_date);
+        holder.locImageView.setImageResource(R.drawable.back3);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
 
-        if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(Color.parseColor("#FCBA03")); }
-        else if (tripPlan.getState() == TripState.ING) { holder.stateTextView.setBackgroundColor(Color.parseColor("#3842ff")); }
-        else { holder.stateTextView.setBackgroundColor(Color.parseColor("#909091")); }
+        if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
+        else if (tripPlan.getState() == TripState.ING) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.ing)); }
+        else { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.after)); }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), DetailTripActivity.class);
                 // intent.putExtra ...
-                intent.putExtra("tripPlan", tripPlan);
+//                intent.putExtra("tripPlan", tripPlan);
+                intent.putExtra("tripPlan", position);
                 context.startActivity(intent);
             }
         });

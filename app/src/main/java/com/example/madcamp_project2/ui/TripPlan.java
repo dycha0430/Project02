@@ -1,34 +1,47 @@
 package com.example.madcamp_project2.ui;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TripPlan implements Serializable {
     private static final long serialVersionUID = 1L;
     String title;
-    String start_date;
-    String end_date;
+    Date start_date;
+    Date end_date;
+    int duration;
     // users 추가 필요
-    Place destination;
+    Country destination;
     TripState state;
-    ArrayList<Schedule> schedules;
+    ArrayList<Schedule>[] schedules;
 
     public TripPlan() {
         super();
         this.title = "제주도";
-        this.start_date = "2022-01-01";
-        this.end_date = "2022-01-03";
-        this.destination = new Place();
+        Calendar calendar = Calendar.getInstance();
+        // Month에는 4월이면 3이 들어가야 함
+        calendar.set(2022, 0, 5);
+        this.start_date = calendar.getTime();
+        calendar.set(2022, 0, 10);
+        this.end_date = calendar.getTime();
+        this.destination = new Country(CountryEnum.JEJU);
         this.state = TripState.BEFORE;
+        schedules = new ArrayList[5];
+
+        duration = 5;
+        for (int i = 0; i < duration; i++) {
+            schedules[i] = new ArrayList<>();
+        }
     }
 
-    public TripPlan(String title, String start_date, String end_date, Place destination, TripState state, ArrayList<Schedule> schedules) {
+    public TripPlan(String title, Date start_date, Date end_date, Country destination, TripState state) {
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
         this.destination = destination;
         this.state = state;
-        this.schedules = schedules;
     }
 
     public String getTitle() {
@@ -39,27 +52,27 @@ public class TripPlan implements Serializable {
         this.title = title;
     }
 
-    public String getStart_date() {
+    public Date getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(String start_date) {
+    public void setStart_date(Date start_date) {
         this.start_date = start_date;
     }
 
-    public String getEnd_date() {
+    public Date getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(String end_date) {
+    public void setEnd_date(Date end_date) {
         this.end_date = end_date;
     }
 
-    public Place getDestination() {
+    public Country getDestination() {
         return destination;
     }
 
-    public void setDestination(Place destination) {
+    public void setDestination(Country destination) {
         this.destination = destination;
     }
 
@@ -71,11 +84,12 @@ public class TripPlan implements Serializable {
         this.state = state;
     }
 
-    public ArrayList<Schedule> getSchedules() {
-        return schedules;
+    public ArrayList<Schedule> getSchedule(int day) {
+        return schedules[day];
     }
+    public ArrayList<Schedule>[] getSchedules() { return schedules; }
 
-    public void setSchedules(ArrayList<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setSchedules(ArrayList<Schedule> schedules, int day) {
+        this.schedules[day] = schedules;
     }
 }
