@@ -51,7 +51,7 @@ public class AddExtraActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HomeFragment.tripPlanList.add(new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country));
 
-                
+
 
                 Intent intent = new Intent(context, HomeFragment.class);
 

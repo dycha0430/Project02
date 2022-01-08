@@ -3,6 +3,7 @@ package com.example.madcamp_project2.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_project2.R;
@@ -44,6 +46,7 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final TripPlan tripPlan = tripPlanList.get(position);
@@ -59,8 +62,10 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         holder.locImageView.setImageResource(R.drawable.back3);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
 
-        if (tripPlan.getState() == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
-        else if (tripPlan.getState() == TripState.ING) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.ing)); }
+        TripState state = tripPlan.getState();
+
+        if (state == TripState.BEFORE) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.before)); }
+        else if (state == TripState.ING) { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.ing)); }
         else { holder.stateTextView.setBackgroundColor(context.getResources().getColor(R.color.after)); }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
