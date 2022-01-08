@@ -48,8 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         Button login_btn = findViewById(R.id.login_btn);
         intent = new Intent(this, MainActivity.class);
         initMyAPI();
-/*
+
         getHashKey();
+        /*
         if(login_state_check) Log.e("Initial LOGIN: ","TRUE");
         else Log.e("Initial LOGIN: ","FALSE");
 */
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (token, loginError) -> {
                         if (loginError != null) {
                             // 로그인 실패
-                            Log.e("LOGIN", "FAILED!");
+                            Log.e("LOGIN", "FAILED!" + loginError);
                             Toast.makeText(LoginActivity.this, "로그인을 할 수 없습니다.", Toast.LENGTH_LONG).show();
                         } else {
                             // 로그인 성공
