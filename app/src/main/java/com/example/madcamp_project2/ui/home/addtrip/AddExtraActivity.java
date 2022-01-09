@@ -67,7 +67,7 @@ public class AddExtraActivity extends AppCompatActivity {
                     titleTripEditText.setText("나의");
                 }
 
-                TripPlan tripPlan = new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country);
+                TripPlan tripPlan = new TripPlan(-1, titleTripEditText.getText().toString(), startDate, endDate, country);
                 HomeFragment.tripPlanList.add(tripPlan);
 
                 String token = "";

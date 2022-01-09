@@ -4,6 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -44,8 +46,8 @@ public class TripPlan implements Serializable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public TripPlan(String title, Date start_date, Date end_date, Country destination) {
-        this.travel_id = -1;
+    public TripPlan(int id, String title, Date start_date, Date end_date, Country destination) {
+        this.travel_id = id;
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -57,6 +59,22 @@ public class TripPlan implements Serializable {
             schedules[i] = new ArrayList<>();
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public TripPlan(GetTravel getTravel) {
+        this.travel_id = getTravel.getTravel_id();
+        this.title = getTravel.getTitle();
+        this.start_date = getTravel.getStart_date();
+        this.end_date = getTravel.getEnd_date();
+        this.destination = new Country(getTravel.getPlace_name());
+
+        // TODO: set schedules
+        int duration = getDuration();
+        schedules = new ArrayList[getDuration()];
+        for (int i = 0; i < duration; i++) {
+            schedules[i] = new ArrayList<>();
+        }
+     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public int getDuration() {

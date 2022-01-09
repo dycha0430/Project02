@@ -195,7 +195,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         spinner = findViewById(R.id.spinner);
         viewPager2 = findViewById(R.id.viewPager);
 
-        for (ArrayList<Schedule>schedules : tripPlan.getSchedules()) {
+        for (ArrayList<Schedule> schedules : tripPlan.getSchedules()) {
             Collections.sort(schedules, new ScheduleComparator());
         }
 
