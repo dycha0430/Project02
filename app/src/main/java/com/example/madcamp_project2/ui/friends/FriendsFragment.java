@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -17,15 +18,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogBehavior;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.main.DialogLayout;
+import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentFriendsBinding;
+import com.example.madcamp_project2.ui.User;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class FriendsFragment extends Fragment {
 
@@ -33,6 +39,7 @@ public class FriendsFragment extends Fragment {
     RecyclerView recyclerView;
     private FriendsAdapter friendsAdapter;
     String input_text;
+    Button selectCompleteBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +48,11 @@ public class FriendsFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView = root.findViewById(R.id.friend_recycler_view);
-        //friendsAdapter = new FriendsAdapter(getActivity(), 나의 친구 목록 어레이리스트);
-        //recyclerView.setAdapter(friendsAdapter);
+        friendsAdapter = new FriendsAdapter(getActivity(), MainActivity.thisUser.getFriends());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(friendsAdapter);
 
+        selectCompleteBtn.setVisibility(View.INVISIBLE);
         FloatingActionButton fab = root.findViewById(R.id.fab_friend);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,9 +61,6 @@ public class FriendsFragment extends Fragment {
 
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
                 builder.setTitle("추가할 아이디를 입력해주세요");
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("추가할 아이디를 입력해주세요");
-
 
 // Set up the input
                 final EditText input = new EditText(getActivity());

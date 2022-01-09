@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui.friends;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public int getItemCount() {
+        Log.d("############", friends.size() + "");
         return friends.size();
     }
 

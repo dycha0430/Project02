@@ -86,11 +86,15 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     List<Marker> previous_marker = null;
 
     Spinner spinner;
+    Spinner placeSpinner;
 
     static Geocoder geoCoder;
     static Context context;
 
     ViewPager2 viewPager2;
+    private static int placeTypeIndex = 0;
+
+    private String[] placeTypes = {"레스토랑", "카페", "베이커리", "숙소", "주점"};
 
     public static CountryEnum getCountryEnum(String str) {
             if (str.equals("서울")) {
@@ -193,9 +197,10 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         titleTextView = findViewById(R.id.detailTitleTextView);
         datePickerBtn = findViewById(R.id.datePickerButton);
         spinner = findViewById(R.id.spinner);
+        placeSpinner = findViewById(R.id.place_spinner);
         viewPager2 = findViewById(R.id.viewPager);
 
-        for (ArrayList<Schedule>schedules : tripPlan.getSchedules()) {
+        for (ArrayList<Schedule> schedules : tripPlan.getSchedules()) {
             Collections.sort(schedules, new ScheduleComparator());
         }
 
@@ -218,7 +223,24 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 CountryEnum countryName = getCountryEnum(spinner.getItemAtPosition(i).toString());
                 tripPlan.setDestination(new Country(countryName));
                 moveMap(countryName.toString(), countryName.toString());
-                showPlaceInformation(getFromLocationName(countryName.toString()));
+                showPlaceInformation(getFromLocationName(countryName.toString()), placeTypeIndex);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        PlaceSpinnerAdapter adapter1 = new PlaceSpinnerAdapter(this, placeTypes);
+        placeSpinner.setAdapter(adapter1);
+
+        placeSpinner.setSelection(0);
+        placeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), i);
+                placeTypeIndex = i;
             }
 
             @Override
@@ -307,7 +329,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             public void onMapLoaded() {
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(getFromLocationName(tripPlan.getDestination().getName())));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
-                showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()));
+                showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), placeTypeIndex);
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
@@ -342,7 +364,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    public void showPlaceInformation(LatLng location) {
+    public void showPlaceInformation(LatLng location, int placeType) {
         mMap.clear();
         if (previous_marker != null) {
             previous_marker.clear();
@@ -350,9 +372,26 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
 
         // TODO 여기서 type 선택하면 뜨는 장소 종류 바꿀 수 있음!!! 레스토랑, 카페, 베이커리...
+        String place = PlaceType.RESTAURANT;
+        switch (placeType) {
+            case 0:
+                place = PlaceType.RESTAURANT;
+                break;
+            case 1:
+                place = PlaceType.CAFE;
+                break;
+            case 2:
+                place = PlaceType.BAKERY;
+                break;
+            case 3:
+                place = PlaceType.LODGING;
+                break;
+            case 4:
+                place = PlaceType.BAR;
+        }
         new NRPlaces.Builder().listener(DetailTripActivity.this).key("AIzaSyCxJ6k5-LEXvvUQiHz0P5NNlv_WPbnx6iI")
                 .latlng(location.latitude, location.longitude).radius(5000)
-                .type(PlaceType.RESTAURANT).build().execute();
+                .type(place).build().execute();
     }
 
 

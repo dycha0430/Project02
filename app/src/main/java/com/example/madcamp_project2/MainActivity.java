@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
             bundle.clear();
         }
 
+        thisUser.getFriends().add(new User());
+        thisUser.getFriends().add(new User());
+        thisUser.getFriends().add(new User());
+
         print_json(); // TODO json test
 
         intent_login = new Intent(this, LoginActivity.class);
