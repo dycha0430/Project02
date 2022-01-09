@@ -28,6 +28,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/content_main.xml" value="0.23641304347826086" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/detail_header.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/detail_recycler_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_friends.xml" value="0.290625" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_gallery.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_home.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_recyclerview.xml" value="0.20208333333333334" />
@@ -35,6 +36,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/header_logo.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_add_place.xml" value="0.33" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_firend.xml" value="0.1" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_friend.xml" value="0.33" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_viewpager.xml" value="0.44969199178644764" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/list_item_card_big.xml" value="0.20208333333333334" />

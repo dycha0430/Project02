@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentHomeBinding;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -33,6 +36,14 @@ public class HomeFragment extends Fragment {
     public static ArrayList<TripPlan> tripPlanList;
     private PlanSummaryAdapter planSummaryAdapter;
     private Context context;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        planSummaryAdapter.setTripPlanList(tripPlanList);
+        planSummaryAdapter.notifyDataSetChanged();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +53,15 @@ public class HomeFragment extends Fragment {
         if (tripPlanList == null) {
             tripPlanList = new ArrayList<>();
         }
+
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddTripPlanActivity.class);
+                startActivity(intent);
+            }
+        });
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.homeRecyclerView);
         planSummaryAdapter = new PlanSummaryAdapter(context, tripPlanList);

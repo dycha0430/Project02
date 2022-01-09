@@ -6,10 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
+import com.example.madcamp_project2.ui.User;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -44,9 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private static String file_path;
     static final int COUNTRY_NUM = 14;
     public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
-    private static String username = "";
-    private static String email = "";
-    private static String profile_image = "";
+
+    public static User thisUser = new User();
 
     void initCountries() {
         COUNTRIES[0] = new Country(CountryEnum.SEOUL);
@@ -76,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
         if(intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
             if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("profile_image") != null && bundle.getString("token") != null) {
-                email = intent.getExtras().getString("email");
-                username = intent.getExtras().getString("username");
-                profile_image = intent.getExtras().getString("profile_image");
+                thisUser.setEmail(intent.getExtras().getString("email"));
+                thisUser.setName(intent.getExtras().getString("username"));
+                thisUser.setProfile(intent.getExtras().getString("profile_image"));
               
                 String token = intent.getExtras().getString("token");
                 getIntent().getExtras().clear();
@@ -88,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("MainActivity: token", token);
 
                 JSONObject obj = new JSONObject();
-                obj.put("email", email);
-                obj.put("username", username);
-                obj.put("profile_image", profile_image);
+                obj.put("email", thisUser.getEmail());
+                obj.put("username", thisUser.getName());
+                obj.put("profile_image", thisUser.getProfile());
                 obj.put("token", token);
 
                 try {
@@ -115,13 +117,7 @@ public class MainActivity extends AppCompatActivity {
         initCountries();
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddTripPlanActivity.class);
-                startActivity(intent);
-            }
-        });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -154,9 +150,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView nameTextView = headerView.findViewById(R.id.nameTextView);
-        nameTextView.setText(username);
+        nameTextView.setText(thisUser.getName());
         TextView emailTextView = headerView.findViewById(R.id.emailTextView);
-        emailTextView.setText(email);
+        emailTextView.setText(thisUser.getEmail());
+        ImageView profileImageView = headerView.findViewById(R.id.profileImageView);
+        Glide.with(this).load(thisUser.getProfile()).into(profileImageView);
     }
 
     @Override
