@@ -22,15 +22,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.madcamp_project2.databinding.ActivityMainBinding;
 import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.user.UserApiClient;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private String token;
-    private String email;
-    private String username;
     private Intent intent_login;
+    private static String file_path;
     static final int COUNTRY_NUM = 14;
     public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
 
@@ -54,16 +59,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        file_path = getFilesDir().getAbsolutePath().toString();
+        Log.e("file_path: ", file_path);
         Intent intent = getIntent();
-        email = intent.getExtras().getString("email");
-        username = intent.getExtras().getString("username");
-        token = intent.getExtras().getString("token");
-        getIntent().getExtras().clear();
 
-        Log.d("MainActivity: email", email);
-        Log.d("MainActivity: username", username);
-        Log.d("MainActivity: token", token);
+        if(intent != null && intent.getExtras() != null) {
+            Bundle bundle = intent.getExtras();
+            if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("token") != null) {
+                String email = intent.getExtras().getString("email");
+                String username = intent.getExtras().getString("username");
+                String token = intent.getExtras().getString("token");
+                getIntent().getExtras().clear();
+
+//                Log.d("MainActivity: email", email);
+//                Log.d("MainActivity: username", username);
+//                Log.d("MainActivity: token", token);
+
+                JSONObject obj = new JSONObject();
+                obj.put("email", email);
+                obj.put("username", username);
+                obj.put("token", token);
+                try {
+                    FileWriter file = new FileWriter(file_path + "/userinfo.json", false);
+                    file.write(obj.toJSONString());
+                    file.flush();
+                    file.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            bundle.clear();
+        }
+
+        print_json(); //json test
 
         intent_login = new Intent(this, LoginActivity.class);
 
@@ -97,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                token = "";
-
                 UserApiClient.getInstance().logout(error -> {
                     if (error != null) {
                         Log.e("LOGOUT", "로그아웃 실패, SDK에서 토큰 삭제됨", error);
@@ -124,5 +151,26 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public static String get_filepath() {
+        return file_path;
+    }
+
+    public void print_json() {
+        JSONParser parser = new JSONParser();
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+            Log.d("Json Object:", jsonObject.toJSONString());
+            Log.d("Json Object:",jsonObject.get("email").toString());
+            Log.d("Json Object:",jsonObject.get("username").toString());
+            Log.d("Json Object:",jsonObject.get("token").toString());
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
