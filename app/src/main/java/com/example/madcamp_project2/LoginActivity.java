@@ -189,8 +189,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean is_already_SignedUp(String email, long pk, String username, String profile_image) {
-        CheckUserForm checkUserForm = new CheckUserForm(email);
-        Call<CheckUserForm> get_check_user = myapi.get_check_user(checkUserForm);
+        Call<CheckUserForm> get_check_user = myapi.get_check_user(email);
         get_check_user.enqueue(new Callback<CheckUserForm>() {
            @Override
            public void onResponse(Call<CheckUserForm> call, Response<CheckUserForm> response) {
