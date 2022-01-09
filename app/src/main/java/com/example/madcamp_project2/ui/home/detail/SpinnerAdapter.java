@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui.home.detail;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,9 @@ public class SpinnerAdapter extends BaseAdapter {
             String text = data.get(i).getName();
             ((TextView) view.findViewById(R.id.spinner_item_tv)).setText(text);
             // TODO 알맞는 아이콘으로 바꾸기.
-            ((ImageView) view.findViewById(R.id.img_spinner)).setImageResource(R.drawable.tangerine);
+            String iconName = "icon" + data.get(i).getCountryEnum().ordinal();
+            Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(iconName, "drawable", context.getPackageName()));
+            ((ImageView) view.findViewById(R.id.img_spinner)).setImageDrawable(drawable);
         }
         return view;
     }

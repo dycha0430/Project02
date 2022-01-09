@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -63,12 +62,14 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
 
-        holder.locImageView.setImageResource(R.drawable.back3);
-        holder.iconImageView.setImageResource(R.drawable.tangerine);
-
         String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();
         Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(backName, "drawable", context.getPackageName()));
         holder.locImageView.setImageDrawable(drawable);
+
+        String iconName = "icon" + tripPlan.getDestination().getCountryEnum().ordinal();
+        Drawable drawable1 = context.getResources().getDrawable(context.getResources().getIdentifier(iconName, "drawable", context.getPackageName()));
+        holder.iconImageView.setImageDrawable(drawable1);
+
 
         TripState state = tripPlan.getState();
 
