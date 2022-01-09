@@ -14,8 +14,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface MyAPI {
-    @POST("madcamp/check/")
-    Call<CheckUserForm> get_check_user(@Body CheckUserForm checkUserForm);
+    @GET("madcamp/check/")
+    Call<CheckUserForm> get_check_user(@Query("params1") String email);
 
     @POST("madcamp/login/")
     Call<AccountLogin> post_login(@Body AccountLogin accountLogin);
