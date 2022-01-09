@@ -12,6 +12,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
@@ -20,6 +22,8 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityAddExtraBinding;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.TripPlan;
+import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.FriendAddAdapter;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 
@@ -29,6 +33,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -39,8 +44,12 @@ public class AddExtraActivity extends AppCompatActivity {
     Country country;
     Date startDate, endDate;
     EditText titleTripEditText;
-    Button completeBtn;
+    Button completeBtn, addFriendBtn;
+
     Context context;
+    RecyclerView recyclerView;
+    public static ArrayList<User> selectedFriends;
+    public static int spinnerNum = 3;
     private ActivityAddExtraBinding binding;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -52,8 +61,24 @@ public class AddExtraActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        selectedFriends = new ArrayList<>();
+        spinnerNum = 0;
         titleTripEditText = findViewById(R.id.tripTitleEditText);
         completeBtn = findViewById(R.id.completeBtn);
+        addFriendBtn = findViewById(R.id.addFriendBtn);
+        recyclerView = findViewById(R.id.selected_friend_recycler_view);
+
+        FriendAddAdapter friendAddAdapter = new FriendAddAdapter(context);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(friendAddAdapter);
+
+        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinnerNum++;
+                friendAddAdapter.notifyDataSetChanged();
+            }
+        });
 
         Intent intent = getIntent();
         country = (Country) intent.getSerializableExtra("place");
@@ -119,5 +144,6 @@ public class AddExtraActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }

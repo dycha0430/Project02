@@ -185,6 +185,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 Schedule.TimeFormat end = schedule.getEnd_time();
 
                 for (Schedule s : tripPlan.getSchedule(day)) {
+                    if (s.equals(editSchedule)) continue;
                     Schedule.TimeFormat s_start = s.getStart_time();
                     Schedule.TimeFormat s_end = s.getEnd_time();
 

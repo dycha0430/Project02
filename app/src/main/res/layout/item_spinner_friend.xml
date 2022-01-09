@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <Spinner
+        android:id="@+id/add_friend_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:spinnerMode="dropdown"
+        android:background="@drawable/button_layout"
+        android:popupBackground="@drawable/button_layout"
+        tools:listitem="@layout/item_friend"/>
+</LinearLayout>
