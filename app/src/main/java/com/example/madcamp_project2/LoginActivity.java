@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean login_state_check;
     private Intent intent;
     private String token;
-    private String baseUrl = "https://2779-110-76-108-130.ngrok.io/";
+    private String baseUrl = "http://192.249.18.170/";
     private static MyAPI myapi;
 
     @Override
@@ -109,11 +109,13 @@ public class LoginActivity extends AppCompatActivity {
                 if(!check) {
                     String email = user.getKakaoAccount().getEmail();
                     String username = user.getKakaoAccount().getProfile().getNickname();
+                    String profile_image = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
                     long pk = user.getId();
 
                     intent.putExtra("email", email);
                     intent.putExtra("username", username);
-                    is_already_SignedUp(email, pk);
+                    intent.putExtra("profile_image", profile_image);
+                    is_already_SignedUp(email, pk, username, profile_image);
                 }
                 login_state_check = true;
             }
@@ -185,13 +187,17 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public boolean is_already_SignedUp(String email, long pk) {
+    public boolean is_already_SignedUp(String email, long pk, String username, String profile_image) {
         CheckUserForm checkUserForm = new CheckUserForm(email);
         Call<CheckUserForm> get_check_user = myapi.get_check_user(checkUserForm);
         get_check_user.enqueue(new Callback<CheckUserForm>() {
            @Override
            public void onResponse(Call<CheckUserForm> call, Response<CheckUserForm> response) {
-                if(response.isSuccessful()) {
+               System.out.println(response.body());
+               System.out.println(response.headers());
+               System.out.println(response);
+
+               if(response.isSuccessful()) {
                     Log.d("IS_SIGNEDUP", "SUCCESS");
                     CheckUserForm checkUserForm = response.body();
                     Log.d("UserForm status", checkUserForm.get_status());
@@ -202,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(status.equals("False")) { // 회원 가입 필요
                         Log.d("Already SingedUp", "False");
-                        SignUp(email, pk);
+                        SignUp(email, pk, username, profile_image);
                     }
                 } else {
                     Log.d("IS_SIGNEDUP", "FAILED");
@@ -211,14 +217,15 @@ public class LoginActivity extends AppCompatActivity {
 
            @Override
            public void onFailure(Call<CheckUserForm> call, Throwable t) {
+               System.out.println(t);
                Log.d("IS_SIGNEDUP", "FAILED");
            }
         });
         return false;
     }
 
-    public void SignUp(String email, long kakao_pk) {
-        AccountInfo accountInfo = new AccountInfo(email, String.valueOf(kakao_pk));
+    public void SignUp(String email, long kakao_pk, String username, String profile_image) {
+        AccountInfo accountInfo = new AccountInfo(email, String.valueOf(kakao_pk), username, profile_image);
         Call<AccountInfo> post_account = myapi.post_account(accountInfo);
         post_account.enqueue(new Callback<AccountInfo>() {
             @Override

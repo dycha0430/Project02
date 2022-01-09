@@ -66,9 +66,8 @@ public class AddExtraActivity extends AppCompatActivity {
                 TripPlan tripPlan = new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country);
                 // HomeFragment.tripPlanList.add(tripPlan);
 
-                NewTravel newTravel = new NewTravel(-1, tripPlan.getTitle(), tripPlan.getStart_date(), tripPlan.getEnd_date(), tripPlan.getDestination());
-                MyAPI myapi = LoginActivity.get_MyAPI();
                 String token = "";
+                String email = "";
 
                 String file_path = MainActivity.get_filepath();
                 JSONParser parser = new JSONParser();
@@ -80,10 +79,14 @@ public class AddExtraActivity extends AppCompatActivity {
                     reader.close();
 
                     token = jsonObject.get("token").toString();
+                    email = jsonObject.get("email").toString();
                 }
                 catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
+
+                NewTravel newTravel = new NewTravel(-1, tripPlan.getTitle(), tripPlan.getStart_date(), tripPlan.getEnd_date(), tripPlan.getDestination(), email);
+                MyAPI myapi = LoginActivity.get_MyAPI();
 
                 Call<NewTravel> post_travel = myapi.post_travel("Bearer " + token, newTravel);
 

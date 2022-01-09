@@ -65,9 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
-            if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("token") != null) {
+            if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("profile_image") != null && bundle.getString("token") != null) {
                 String email = intent.getExtras().getString("email");
                 String username = intent.getExtras().getString("username");
+                String profile_image = intent.getExtras().getString("profile_image");
                 String token = intent.getExtras().getString("token");
                 getIntent().getExtras().clear();
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject obj = new JSONObject();
                 obj.put("email", email);
                 obj.put("username", username);
+                obj.put("profile_image", profile_image);
                 obj.put("token", token);
                 try {
                     FileWriter file = new FileWriter(file_path + "/userinfo.json", false);
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Json Object:", jsonObject.toJSONString());
             Log.d("Json Object:",jsonObject.get("email").toString());
             Log.d("Json Object:",jsonObject.get("username").toString());
+            Log.d("Json Object:",jsonObject.get("profile_image").toString());
             Log.d("Json Object:",jsonObject.get("token").toString());
         }
         catch (IOException | ParseException e) {
