@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class Schedule implements Serializable {
 
@@ -11,6 +12,17 @@ public class Schedule implements Serializable {
         public TimeFormat(int hour, int minute) {
             this.hour = hour;
             this.minute = minute;
+        }
+
+        public static boolean isBefore(TimeFormat a, TimeFormat b) {
+            if (a.hour < b.hour) return true;
+            else if (a.hour == b.hour && a.minute < b.minute) return true;
+
+            return false;
+        }
+
+        public static boolean isSame(TimeFormat a, TimeFormat b) {
+            return a.hour == b.hour && a.minute == b.minute;
         }
 
         public int getHour() {

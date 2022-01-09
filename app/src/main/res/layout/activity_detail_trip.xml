@@ -58,6 +58,7 @@
                     android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/text_cursor"
                     android:textSize="30sp"
+                    android:fontFamily="@font/font_custom"
                     android:textStyle="bold" />
                 <TextView
                     android:layout_width="wrap_content"

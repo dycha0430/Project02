@@ -63,8 +63,12 @@ public class AddExtraActivity extends AppCompatActivity {
         completeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (titleTripEditText.getText().toString().equals("")) {
+                    titleTripEditText.setText("나의");
+                }
+
                 TripPlan tripPlan = new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country);
-                // HomeFragment.tripPlanList.add(tripPlan);
+                HomeFragment.tripPlanList.add(tripPlan);
 
                 String token = "";
                 String email = "";
@@ -109,6 +113,7 @@ public class AddExtraActivity extends AppCompatActivity {
                         Log.d("NEW TRAVEL", "FAILED");
                     }
                 });
+
 
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);

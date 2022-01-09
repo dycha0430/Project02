@@ -26,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import nl.joery.timerangepicker.TimeRangePicker;
 
@@ -152,9 +153,22 @@ public class AddBottomSheetDialog extends BottomSheetDialogFragment {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (memoEditText.getText().toString().equals("")) {
-                    memoEditText.setText("메모가 없습니다");
+
+                Schedule.TimeFormat start = schedule.getStart_time();
+                Schedule.TimeFormat end = schedule.getEnd_time();
+
+                for (Schedule s : tripPlan.getSchedule(day)) {
+                    Schedule.TimeFormat s_start = s.getStart_time();
+                    Schedule.TimeFormat s_end = s.getEnd_time();
+
+                    if (((Schedule.TimeFormat.isBefore(s_start, start) || Schedule.TimeFormat.isSame(s_start, start)) && Schedule.TimeFormat.isBefore(start, s_end))
+                        || (Schedule.TimeFormat.isBefore(s_start, end) && (Schedule.TimeFormat.isBefore(end, s_end) || Schedule.TimeFormat.isSame(end, s_end)))
+                        || (Schedule.TimeFormat.isBefore(start, s_start) && Schedule.TimeFormat.isBefore(s_end, end))) {
+                        Toast.makeText(context, "다른 일정과 시간이 겹칩니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
+
                 schedule.setMemo(memoEditText.getText().toString());
                 String moneyText = moneyEditText.getText().toString();
                 if (moneyText.equals("")) moneyText = "0";

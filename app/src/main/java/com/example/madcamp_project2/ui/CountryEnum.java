@@ -9,6 +9,7 @@ public enum CountryEnum {
         public String toString() {
             return "서울";
         }
+
     },
     INCHEON {
         @NonNull
@@ -16,6 +17,7 @@ public enum CountryEnum {
         public String toString() {
             return "인천";
         }
+        int position = 1;
     },
     BUSAN {
         @NonNull

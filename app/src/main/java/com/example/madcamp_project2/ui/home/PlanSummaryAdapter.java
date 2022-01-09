@@ -1,8 +1,11 @@
 package com.example.madcamp_project2.ui.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +62,13 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String start_date = df.format(tripPlan.getStart_date());
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
+
         holder.locImageView.setImageResource(R.drawable.back3);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
+
+        String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();
+        Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(backName, "drawable", context.getPackageName()));
+        holder.locImageView.setImageDrawable(drawable);
 
         TripState state = tripPlan.getState();
 
@@ -78,6 +86,38 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
                 context.startActivity(intent);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setMessage("해당 여행을 삭제하시겠습니까?");
+                dialog.setCancelable(true);
+                dialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeTrip(position);
+                    }
+                });
+
+                dialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.show();
+                return false;
+            }
+        });
+    }
+
+    private void removeTrip(int position) {
+        // TODO DB에서 Travel 삭제
+        tripPlanList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, tripPlanList.size());
     }
 
     @Override

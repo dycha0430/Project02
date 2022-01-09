@@ -1,6 +1,8 @@
 package com.example.madcamp_project2.ui.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,9 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
 
@@ -32,12 +37,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     ArrayList<Schedule> schedules;
     int day;
     TripPlan tripPlan;
+    ScheduleAdapter thisContext;
 
     public ScheduleAdapter(Context context, ArrayList<Schedule> schedules, int day, TripPlan tripPlan) {
         this.context = context;
         this.schedules = schedules;
         this.day = day;
         this.tripPlan = tripPlan;
+        thisContext = this;
     }
 
     public void setSchedules(ArrayList<Schedule> schedules) {
@@ -83,7 +90,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         holder.placeTextView.setText(schedule.getPlace().getName());
         holder.addressTextView.setText(schedule.getPlace().getAddress());
         holder.moneyTextView.setText(schedule.getMoney());
-        holder.memoTextView.setText(schedule.getMemo());
+
+        if (schedule.getMemo().equals("")) {
+            holder.memoTextView.setText("메모가 없습니다");
+        } else {
+            holder.memoTextView.setText(schedule.getMemo());
+        }
 
         holder.memoTextView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -101,6 +113,38 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 bottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setMessage("해당 일정을 삭제하시겠습니까?");
+                dialog.setCancelable(true);
+                dialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeSchedule(position);
+                    }
+                });
+
+                dialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.show();
+                return false;
+            }
+        });
+    }
+
+    private void removeSchedule(int position) {
+        // TODO DB에서 스케줄 삭제
+        schedules.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, schedules.size());
     }
 
     @Override

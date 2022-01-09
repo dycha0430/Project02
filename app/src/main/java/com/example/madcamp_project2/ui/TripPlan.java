@@ -64,7 +64,7 @@ public class TripPlan implements Serializable {
         LocalDate localEndDate = end_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Period period = Period.between(localStartDate, localEndDate);
 
-        return period.getDays();
+        return period.getDays() + 1;
     }
 
     public String getTitle() {
