@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,14 +39,14 @@ public class LoginActivity extends AppCompatActivity {
     private boolean login_state_check;
     private Intent intent;
     private String token;
-    private String baseUrl = "https://2779-110-76-108-130.ngrok.io/";
-    private MyAPI myapi;
+    private String baseUrl = "http://192.249.18.170/";
+    private static MyAPI myapi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button login_btn = findViewById(R.id.login_btn);
+        ImageButton login_btn = findViewById(R.id.login_btn);
         intent = new Intent(this, MainActivity.class);
         initMyAPI();
 
@@ -267,12 +268,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void initMyAPI(){
+    private void initMyAPI() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         myapi = retrofit.create(MyAPI.class);
+    }
+
+    public static MyAPI get_MyAPI() {
+        return myapi;
     }
 }

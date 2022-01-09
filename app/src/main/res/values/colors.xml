@@ -16,5 +16,6 @@
     <color name="before">#FFFCBA03</color>
     <color name="ing">#FF6E94EB</color>
     <color name="after">#FF909091</color>
+    <color name="light_gray">#99D6D6D6</color>
 
 </resources>

@@ -34,9 +34,11 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityDetailTripBinding;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
+import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.example.madcamp_project2.ui.home.HomeFragment;
+import com.example.madcamp_project2.ui.home.ScheduleComparator;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,6 +62,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -167,8 +170,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,6 +194,10 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         datePickerBtn = findViewById(R.id.datePickerButton);
         spinner = findViewById(R.id.spinner);
         viewPager2 = findViewById(R.id.viewPager);
+
+        for (ArrayList<Schedule>schedules : tripPlan.getSchedules()) {
+            Collections.sort(schedules, new ScheduleComparator());
+        }
 
         /* TODO Schedule View Pager */
         viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));

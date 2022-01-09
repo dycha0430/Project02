@@ -13,11 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.ScheduleAdapter;
+import com.example.madcamp_project2.ui.home.ScheduleComparator;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -42,19 +45,12 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         this.context = context;
 
         ArrayList<Schedule>[] schedules =tripPlan.getSchedules();
-        Date start = tripPlan.getStart_date();
-        Date end = tripPlan.getEnd_date();
         this.schedules = schedules;
 
-        LocalDate localStartDate = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate localEndDate = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Period period = Period.between(localStartDate, localEndDate);
-
-        days = period.getDays();
-        start_date = start;
+        days = tripPlan.getDuration();
+        start_date = tripPlan.getStart_date();
         this.tripPlan = tripPlan;
 
-        Log.d("******", days + "");
         scheduleAdapters = new ScheduleAdapter[days];
         for (int i = 0; i < days; i++) {
             scheduleAdapters[i] = new ScheduleAdapter(context, schedules[i], i, tripPlan);
@@ -89,6 +85,17 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 addBottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
             }
         });
+
+        holder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO 데이터베이스에서 새로 스케줄 받아오는 것도 해야함
+                Collections.sort(schedule, new ScheduleComparator());
+                scheduleAdapters[position].setSchedules(schedule);
+                scheduleAdapters[position].notifyDataSetChanged();
+                holder.swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -101,6 +108,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         TextView dateTextView;
         RecyclerView recyclerView;
         Button addScheduleBtn;
+        SwipeRefreshLayout swipeRefreshLayout;
 
         public ViewHolderPage(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +116,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
             dateTextView = itemView.findViewById(R.id.schedule_date_text_view);
             recyclerView = itemView.findViewById(R.id.schedule_recycler_view);
             addScheduleBtn = itemView.findViewById(R.id.schedule_add_btn);
+            swipeRefreshLayout = itemView.findViewById(R.id.swipe_layout);
         }
     }
 }
