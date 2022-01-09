@@ -32,4 +32,7 @@ public interface MyAPI {
 
     @POST("madcamp/schedules/")
     Call<NewSchedule> post_schedule(@Header("Authorization") String token, @Body NewSchedule newSchedule);
+
+    @POST("madcamp/schedules/delete/")
+    Call<Integer> post_del_schedule(@Header("Authorization") String token, @Body Integer remove_id);
 }
