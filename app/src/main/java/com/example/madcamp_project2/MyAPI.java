@@ -3,6 +3,7 @@ package com.example.madcamp_project2;
 import com.example.madcamp_project2.Account.AccountInfo;
 import com.example.madcamp_project2.Account.AccountLogin;
 import com.example.madcamp_project2.Account.CheckUserForm;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 
@@ -28,4 +29,7 @@ public interface MyAPI {
 
     @GET("madcamp/travels/get/")
     Call<userTravel> get_userTravel(@Header("Authorization") String token, @Query("params1") String email);
+
+    @POST("madcamp/schedules/")
+    Call<NewSchedule> post_schedule(@Header("Authorization") String token, @Body NewSchedule newSchedule);
 }

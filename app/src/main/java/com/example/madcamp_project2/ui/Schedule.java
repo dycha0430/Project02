@@ -47,6 +47,7 @@ public class Schedule implements Serializable {
     TimeFormat start_time;
     TimeFormat end_time;
     Place place;
+    int schedule_id;
 
     public Schedule() {
         this.money = "";
@@ -54,6 +55,7 @@ public class Schedule implements Serializable {
         this.start_time = new TimeFormat(0, 0);
         this.end_time = new TimeFormat(12, 0);
         this.place = new Place();
+        this.schedule_id = -1;
     }
 
     public Schedule(String money, String memo, TimeFormat start_time, TimeFormat end_time, Place place) {
@@ -62,6 +64,7 @@ public class Schedule implements Serializable {
         this.start_time = start_time;
         this.end_time = end_time;
         this.place = place;
+        this.schedule_id = -1;
     }
 
     public String getMoney() {
@@ -103,4 +106,8 @@ public class Schedule implements Serializable {
     public void setPlace(Place place) {
         this.place = place;
     }
+
+    public void setSchedule_id(int id) { this.schedule_id = id; }
+
+    public int getSchedule_id() { return this.schedule_id; }
 }

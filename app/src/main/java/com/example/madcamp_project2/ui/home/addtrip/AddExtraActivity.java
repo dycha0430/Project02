@@ -101,7 +101,7 @@ public class AddExtraActivity extends AppCompatActivity {
                             NewTravel response_travel = response.body();
                             Log.d("NEW TRAVEL", "SUCCESS");
                             Log.d("NEW TRAVEL Id", String.valueOf(response_travel.getTravel_id()));
-
+                            tripPlan.setTravel_id(response_travel.getTravel_id());
                         }
                         else {
                             Log.d("NEW TRAVEL", "FAILED");

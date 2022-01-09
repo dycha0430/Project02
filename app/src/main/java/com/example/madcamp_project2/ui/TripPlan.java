@@ -147,4 +147,7 @@ public class TripPlan implements Serializable {
     public void setTravel_id(int travel_id) {
         this.travel_id = travel_id;
     }
+    public int getTravel_id() {
+        return travel_id;
+    }
 }

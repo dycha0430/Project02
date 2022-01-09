@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +19,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.example.madcamp_project2.LoginActivity;
+import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Place;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import nl.joery.timerangepicker.TimeRangePicker;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddBottomSheetDialog extends BottomSheetDialogFragment {
 
@@ -177,10 +193,55 @@ public class AddBottomSheetDialog extends BottomSheetDialogFragment {
                 String address = addressEditText.getText().toString();
 
                 schedule.setMoney(moneyText);
+                Log.e("Money? ", moneyText);
+                Log.e("Money formatted", moneyText.replace(",", ""));
+
                 schedule.setPlace(new Place(title, address));
 
                 // TODO DB에도 추가 필요
                 tripPlan.getSchedule(day).add(schedule);
+
+                String token = "";
+
+                String file_path = MainActivity.get_filepath();
+                JSONParser parser = new JSONParser();
+
+                try {
+                    FileReader reader = new FileReader(file_path+"/userinfo.json");
+                    Object obj = parser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    reader.close();
+
+                    token = jsonObject.get("token").toString();
+                }
+                catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                NewSchedule newSchedule = new NewSchedule(schedule, tripPlan.getTravel_id(), day);
+
+                MyAPI myapi = LoginActivity.get_MyAPI();
+                Call<NewSchedule> post_schedule = myapi.post_schedule("Bearer " + token, newSchedule);
+
+                post_schedule.enqueue(new Callback<NewSchedule>() {
+                    @Override
+                    public void onResponse(Call<NewSchedule> call, Response<NewSchedule> response) {
+                        if(response.isSuccessful()) {
+                            NewSchedule responseSchedule = response.body();
+                            Log.d("POST NEW SCHEDULE", "SUCCESS");
+                            Log.d("POST NEW SCHEDULE", String.valueOf(responseSchedule.getSchedule_id()));
+                            schedule.setSchedule_id(responseSchedule.getSchedule_id());
+                        }
+                        else {
+                            Log.d("POST NEW SCHEDULE", "FAILED");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewSchedule> call, Throwable t) {
+                        Log.d("POST NEW SCHEDULE", "FAILED");
+                    }
+                });
 
                 ViewPagerAdapter.scheduleAdapters[day].setSchedules(tripPlan.getSchedule(day));
                 ViewPagerAdapter.scheduleAdapters[day].notifyDataSetChanged();
