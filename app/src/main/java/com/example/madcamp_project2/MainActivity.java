@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
     private static String username = "";
     private static String email = "";
+    private static String profile_image = "";
 
     void initCountries() {
         COUNTRIES[0] = new Country(CountryEnum.SEOUL);
@@ -74,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
-            if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("token") != null) {
+            if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("profile_image") != null && bundle.getString("token") != null) {
                 email = intent.getExtras().getString("email");
                 username = intent.getExtras().getString("username");
+                profile_image = intent.getExtras().getString("profile_image");
+              
                 String token = intent.getExtras().getString("token");
                 getIntent().getExtras().clear();
 
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject obj = new JSONObject();
                 obj.put("email", email);
                 obj.put("username", username);
+                obj.put("profile_image", profile_image);
                 obj.put("token", token);
 
                 try {
@@ -183,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Json Object:", jsonObject.toString()); //TODO
             Log.d("Json Object:",jsonObject.get("email").toString());
             Log.d("Json Object:",jsonObject.get("username").toString());
+            Log.d("Json Object:",jsonObject.get("profile_image").toString());
             Log.d("Json Object:",jsonObject.get("token").toString());
         }
         catch (IOException | ParseException e) {
