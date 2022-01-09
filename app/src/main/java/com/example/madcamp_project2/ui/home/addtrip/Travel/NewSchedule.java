@@ -33,4 +33,40 @@ public class NewSchedule {
     public int getSchedule_id() {
         return schedule_id;
     }
+
+    public int getDay() {
+        return day;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public String getMoney() {
+        return String.valueOf(money);
+    }
+
+    public int getStart_hour() {
+        return start_hour;
+    }
+
+    public int getStart_minute() {
+        return start_minute;
+    }
+
+    public int getEnd_hour() {
+        return end_hour;
+    }
+
+    public int getEnd_minute() {
+        return end_minute;
+    }
+
+    public String getPlace_name() {
+        return place_name;
+    }
+
+    public String getPlace_address() {
+        return place_address;
+    }
 }

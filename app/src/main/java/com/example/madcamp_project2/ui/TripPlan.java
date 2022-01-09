@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -73,6 +74,11 @@ public class TripPlan implements Serializable {
         schedules = new ArrayList[getDuration()];
         for (int i = 0; i < duration; i++) {
             schedules[i] = new ArrayList<>();
+        }
+
+        ArrayList<NewSchedule> schedule_list = getTravel.getSchedule_list();
+        for (NewSchedule schedule : schedule_list) {
+            schedules[schedule.getDay()].add(new Schedule(schedule));
         }
      }
 
