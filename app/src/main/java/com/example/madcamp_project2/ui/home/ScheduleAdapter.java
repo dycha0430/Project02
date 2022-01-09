@@ -25,6 +25,9 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
 
@@ -32,12 +35,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     ArrayList<Schedule> schedules;
     int day;
     TripPlan tripPlan;
+    ScheduleAdapter thisContext;
 
     public ScheduleAdapter(Context context, ArrayList<Schedule> schedules, int day, TripPlan tripPlan) {
         this.context = context;
         this.schedules = schedules;
         this.day = day;
         this.tripPlan = tripPlan;
+        thisContext = this;
     }
 
     public void setSchedules(ArrayList<Schedule> schedules) {
@@ -83,7 +88,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         holder.placeTextView.setText(schedule.getPlace().getName());
         holder.addressTextView.setText(schedule.getPlace().getAddress());
         holder.moneyTextView.setText(schedule.getMoney());
-        holder.memoTextView.setText(schedule.getMemo());
+
+        if (schedule.getMemo().equals("")) {
+            holder.memoTextView.setText("메모가 없습니다");
+        } else {
+            holder.memoTextView.setText(schedule.getMemo());
+        }
 
         holder.memoTextView.setMovementMethod(new ScrollingMovementMethod());
 

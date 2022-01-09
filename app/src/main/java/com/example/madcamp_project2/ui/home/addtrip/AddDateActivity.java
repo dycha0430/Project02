@@ -64,9 +64,6 @@ public class AddDateActivity extends AppCompatActivity {
         pickerRange.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
             @Override
             public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                // TODO 저장 필요
-//                tripPlan.setStart_date(new Date(selection.first));
-//                tripPlan.setEnd_date(new Date(selection.second));
 
                 Intent intent = new Intent(context, AddExtraActivity.class);
                 intent.putExtra("place", country);

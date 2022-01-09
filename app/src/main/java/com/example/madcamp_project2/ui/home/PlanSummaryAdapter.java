@@ -3,6 +3,7 @@ package com.example.madcamp_project2.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +60,13 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String start_date = df.format(tripPlan.getStart_date());
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
+
         holder.locImageView.setImageResource(R.drawable.back3);
         holder.iconImageView.setImageResource(R.drawable.tangerine);
+
+        String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();
+        Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(backName, "drawable", context.getPackageName()));
+        holder.locImageView.setImageDrawable(drawable);
 
         TripState state = tripPlan.getState();
 

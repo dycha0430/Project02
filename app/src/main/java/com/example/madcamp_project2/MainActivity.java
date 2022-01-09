@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
+import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -22,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.madcamp_project2.databinding.ActivityMainBinding;
 import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.user.UserApiClient;
+
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,6 +33,8 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private static String file_path;
     static final int COUNTRY_NUM = 14;
     public static Country[] COUNTRIES = new Country[COUNTRY_NUM];
+    private static String username = "";
+    private static String email = "";
 
     void initCountries() {
         COUNTRIES[0] = new Country(CountryEnum.SEOUL);
@@ -59,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         file_path = getFilesDir().getAbsolutePath().toString();
         Log.e("file_path: ", file_path);
         Intent intent = getIntent();
@@ -66,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         if(intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
             if(bundle.getString("email") != null && bundle.getString("username") != null && bundle.getString("token") != null) {
-                String email = intent.getExtras().getString("email");
-                String username = intent.getExtras().getString("username");
+                email = intent.getExtras().getString("email");
+                username = intent.getExtras().getString("username");
                 String token = intent.getExtras().getString("token");
                 getIntent().getExtras().clear();
 
@@ -79,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 obj.put("email", email);
                 obj.put("username", username);
                 obj.put("token", token);
+
                 try {
                     FileWriter file = new FileWriter(file_path + "/userinfo.json", false);
-                    file.write(obj.toJSONString());
+                    file.write(obj.toString());
                     file.flush();
                     file.close();
                 }
@@ -92,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             bundle.clear();
         }
 
-        print_json(); //json test
+        print_json(); // TODO json test
 
         intent_login = new Intent(this, LoginActivity.class);
 
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -137,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        TextView nameTextView = headerView.findViewById(R.id.nameTextView);
+        nameTextView.setText(username);
+        TextView emailTextView = headerView.findViewById(R.id.emailTextView);
+        emailTextView.setText(email);
     }
 
     @Override
@@ -164,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             Object obj = parser.parse(reader);
             JSONObject jsonObject = (JSONObject) obj;
             reader.close();
-            Log.d("Json Object:", jsonObject.toJSONString());
+            Log.d("Json Object:", jsonObject.toString()); //TODO
             Log.d("Json Object:",jsonObject.get("email").toString());
             Log.d("Json Object:",jsonObject.get("username").toString());
             Log.d("Json Object:",jsonObject.get("token").toString());
