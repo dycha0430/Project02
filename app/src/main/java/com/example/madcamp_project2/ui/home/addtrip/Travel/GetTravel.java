@@ -5,20 +5,22 @@ import android.util.Log;
 
 import com.example.madcamp_project2.ui.Country;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class GetTravel {
-    int travel_id;
-    String title;
-    String place_name;
-    int start_year;
-    int start_month;
-    int start_day;
-    int end_year;
-    int end_month;
-    int end_day;
+    private int travel_id;
+    private String title;
+    private String place_name;
+    private int start_year;
+    private int start_month;
+    private int start_day;
+    private int end_year;
+    private int end_month;
+    private int end_day;
+    private ArrayList<NewSchedule> schedule_list;
 
     public GetTravel(int id, String title, Date start_date, Date end_date, Country destination) {
         this.travel_id = id;
@@ -35,6 +37,8 @@ public class GetTravel {
         this.end_day = calendar.get(Calendar.DAY_OF_MONTH);
         this.end_month = calendar.get(Calendar.MONTH) + 1;
         this.end_year = calendar.get(Calendar.YEAR);
+
+        this.schedule_list = new ArrayList<>();
     }
 
     public int getTravel_id() {
@@ -57,5 +61,9 @@ public class GetTravel {
     public Date getEnd_date() {
         GregorianCalendar calendar = new GregorianCalendar(end_year, end_month, end_day);
         return calendar.getTime();
+    }
+
+    public ArrayList<NewSchedule> getSchedule_list() {
+        return schedule_list;
     }
 }

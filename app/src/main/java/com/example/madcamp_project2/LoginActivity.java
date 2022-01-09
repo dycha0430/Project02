@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public boolean is_login() {
+    public boolean is_login() { //might be redundant
         if(AuthApiClient.getInstance().hasToken()) {
             Log.e("asdf","1");
             check_login_more();
@@ -193,10 +193,6 @@ public class LoginActivity extends AppCompatActivity {
         get_check_user.enqueue(new Callback<CheckUserForm>() {
            @Override
            public void onResponse(Call<CheckUserForm> call, Response<CheckUserForm> response) {
-               System.out.println(response.body());
-               System.out.println(response.headers());
-               System.out.println(response);
-
                if(response.isSuccessful()) {
                     Log.d("IS_SIGNEDUP", "SUCCESS");
                     CheckUserForm checkUserForm = response.body();

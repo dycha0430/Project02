@@ -1,5 +1,7 @@
 package com.example.madcamp_project2.ui;
 
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
+
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -47,6 +49,7 @@ public class Schedule implements Serializable {
     TimeFormat start_time;
     TimeFormat end_time;
     Place place;
+    int schedule_id;
 
     public Schedule() {
         this.money = "";
@@ -54,6 +57,7 @@ public class Schedule implements Serializable {
         this.start_time = new TimeFormat(0, 0);
         this.end_time = new TimeFormat(12, 0);
         this.place = new Place();
+        this.schedule_id = -1;
     }
 
     public Schedule(String money, String memo, TimeFormat start_time, TimeFormat end_time, Place place) {
@@ -62,6 +66,16 @@ public class Schedule implements Serializable {
         this.start_time = start_time;
         this.end_time = end_time;
         this.place = place;
+        this.schedule_id = -1;
+    }
+
+    public Schedule(NewSchedule newSchedule) {
+        this.money = toCurrencyFormat(newSchedule.getMoney());
+        this.memo = newSchedule.getMemo();
+        this.start_time = new TimeFormat(newSchedule.getStart_hour(), newSchedule.getStart_minute());
+        this.end_time = new TimeFormat(newSchedule.getEnd_hour(), newSchedule.getEnd_minute());
+        this.place = new Place(newSchedule.getPlace_name(), newSchedule.getPlace_address());
+        this.schedule_id = newSchedule.getSchedule_id();
     }
 
     public String getMoney() {
@@ -102,5 +116,21 @@ public class Schedule implements Serializable {
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public void setSchedule_id(int id) { this.schedule_id = id; }
+
+    public int getSchedule_id() { return this.schedule_id; }
+
+    public String toCurrencyFormat(String money) {
+        String money_formatted = "";
+        for(int i = 0; i < money.length(); i++){
+            if((money.length() - i - 1) % 3 == 0 && i != money.length() - 1){
+                money_formatted += Character.toString(money.charAt(i)) + ",";
+            }else{
+                money_formatted += Character.toString(money.charAt(i));
+            }
+        }
+        return money_formatted;
     }
 }
