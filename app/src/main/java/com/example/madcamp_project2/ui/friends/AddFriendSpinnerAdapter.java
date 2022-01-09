@@ -45,14 +45,14 @@ public class AddFriendSpinnerAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = inflater.inflate(R.layout.item_spinner_friend, viewGroup, false);
+            view = inflater.inflate(R.layout.item_friend_small, viewGroup, false);
         }
 
         ArrayList<User> friends = MainActivity.thisUser.getFriends();
         if (friends != null) {
-            ((TextView) view.findViewById(R.id.friend_name_text_view)).setText(friends.get(i).getName());
-            ((TextView) view.findViewById(R.id.friend_email_text_view)).setText(friends.get(i).getEmail());
-            // ((ImageView) view.findViewById(R.id.friend_profile)).setImageDrawable();
+            ((TextView) view.findViewById(R.id.friend_name_text_view_spinner)).setText(friends.get(i).getName());
+            ((TextView) view.findViewById(R.id.friend_email_text_view_spinner)).setText(friends.get(i).getEmail());
+            // ((ImageView) view.findViewById(R.id.friend_profile_spinner)).setImageDrawable();
         }
         return view;
     }

@@ -39,7 +39,6 @@ public class FriendsFragment extends Fragment {
     RecyclerView recyclerView;
     private FriendsAdapter friendsAdapter;
     String input_text;
-    Button selectCompleteBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class FriendsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(friendsAdapter);
 
-        selectCompleteBtn.setVisibility(View.INVISIBLE);
         FloatingActionButton fab = root.findViewById(R.id.fab_friend);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

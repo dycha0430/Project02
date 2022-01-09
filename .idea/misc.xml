@@ -15,6 +15,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/rounded_dialog.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/side_nav_bar.xml" value="0.228125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/skyblue_outline.xml" value="0.2203125" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/spinner_layout.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/text_cursor.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/font/font_custom.xml" value="0.23385416666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/activity_add_date.xml" value="0.203125" />
@@ -36,10 +37,12 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_home.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_recyclerview.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/fragment_slideshow.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/friend_item_small.xml" value="0.1984375" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/header_logo.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_add_place.xml" value="0.33" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_firend.xml" value="0.1" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_friend.xml" value="0.33" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_friend_small.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner_friend.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_viewpager.xml" value="0.33" />
@@ -54,7 +57,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

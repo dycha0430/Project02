@@ -49,7 +49,7 @@ public class AddExtraActivity extends AppCompatActivity {
     Context context;
     RecyclerView recyclerView;
     public static ArrayList<User> selectedFriends;
-    public static int spinnerNum = 3;
+    public static int spinnerNum = 1;
     private ActivityAddExtraBinding binding;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -59,10 +59,11 @@ public class AddExtraActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         context = this;
 
-        getSupportActionBar().hide();
-
         selectedFriends = new ArrayList<>();
-        spinnerNum = 0;
+        spinnerNum = 1;
+        selectedFriends.add(new User());
+
+        getSupportActionBar().hide();
         titleTripEditText = findViewById(R.id.tripTitleEditText);
         completeBtn = findViewById(R.id.completeBtn);
         addFriendBtn = findViewById(R.id.addFriendBtn);
@@ -75,7 +76,7 @@ public class AddExtraActivity extends AppCompatActivity {
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spinnerNum++;
+                selectedFriends.add(new User());
                 friendAddAdapter.notifyDataSetChanged();
             }
         });

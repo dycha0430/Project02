@@ -22,11 +22,20 @@ public class User {
 
     public User() {
         this.id = global_id++;
-        this.name = "";
-        this.email = "";
+        this.name = "Test name";
+        this.email = "Test email";
         this.profile = "";
         friends = new ArrayList<>();
         myTrips = new ArrayList<>();
+    }
+
+    public void setUser(User user) {
+        this.id = user.id;
+        this.name = user.name;
+        this.email = user.email;
+        this.profile = user.profile;
+        this.friends = user.friends;
+        this.myTrips = user.myTrips;
     }
 
     public String getEmail() {

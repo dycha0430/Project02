@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui.friends;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.home.addtrip.AddExtraActivity;
 
@@ -34,12 +36,12 @@ public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AddFriendSpinnerAdapter adapter = new AddFriendSpinnerAdapter(context, position);
         holder.spinner.setAdapter(adapter);
-        holder.itemView.setBackgroundResource(R.drawable.blue_outline);
-/*
+
         holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                AddExtraActivity.selectedFriends.get(position).setUser(MainActivity.thisUser.getFriends().get(i));
+                AddExtraActivity.selectedFriends.add(MainActivity.thisUser.getFriends().get(i));
             }
 
             @Override
@@ -47,11 +49,13 @@ public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.View
 
             }
         });
- */
+
     }
+
 
     @Override
     public int getItemCount() {
+        Log.d("$$$$$$$$$$$$$$4", AddExtraActivity.spinnerNum + "");
         return AddExtraActivity.spinnerNum;
     }
 
