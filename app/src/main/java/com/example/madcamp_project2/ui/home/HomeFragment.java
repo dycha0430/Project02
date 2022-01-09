@@ -39,10 +39,8 @@ public class HomeFragment extends Fragment {
         this.context = getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
-        tripPlanList = new ArrayList<>();
-        /* Test Data Setting */
-        for (int i = 0; i < 10; i++) {
-            tripPlanList.add(new TripPlan());
+        if (tripPlanList == null) {
+            tripPlanList = new ArrayList<>();
         }
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.homeRecyclerView);

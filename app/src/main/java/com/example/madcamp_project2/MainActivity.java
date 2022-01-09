@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
+import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -55,17 +56,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        email = intent.getExtras().getString("email");
-        username = intent.getExtras().getString("username");
-        token = intent.getExtras().getString("token");
-        getIntent().getExtras().clear();
+        if (COUNTRIES[0] == null) {
 
-        Log.d("MainActivity: email", email);
-        Log.d("MainActivity: username", username);
-        Log.d("MainActivity: token", token);
-
-        intent_login = new Intent(this, LoginActivity.class);
+            // TODO 로그인 되면 Manifest에 login activity 첫화면으로 하고 주석 풀기
+//            Intent intent = getIntent();
+//            email = intent.getExtras().getString("email");
+//            username = intent.getExtras().getString("username");
+//            token = intent.getExtras().getString("token");
+//            getIntent().getExtras().clear();
+//
+//            Log.d("MainActivity: email", email);
+//            Log.d("MainActivity: username", username);
+//            Log.d("MainActivity: token", token);
+//            intent_login = new Intent(this, LoginActivity.class);
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

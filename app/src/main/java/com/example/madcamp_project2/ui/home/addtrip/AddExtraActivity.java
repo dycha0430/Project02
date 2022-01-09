@@ -11,6 +11,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
@@ -21,7 +22,7 @@ import com.example.madcamp_project2.ui.home.HomeFragment;
 
 import java.util.Date;
 
-public class AddExtraActivity extends AppCompatActivity {
+public class AddExtraActivity extends FragmentActivity {
     Country country;
     Date startDate, endDate;
     EditText titleTripEditText;
@@ -36,7 +37,7 @@ public class AddExtraActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         context = this;
 
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
 
         titleTripEditText = findViewById(R.id.tripTitleEditText);
         completeBtn = findViewById(R.id.completeBtn);
@@ -49,11 +50,15 @@ public class AddExtraActivity extends AppCompatActivity {
         completeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (titleTripEditText.getText().toString().equals("")) {
+                    titleTripEditText.setText("나의");
+                }
                 HomeFragment.tripPlanList.add(new TripPlan(titleTripEditText.getText().toString(), startDate, endDate, country));
 
+                Intent intent = new Intent(context, MainActivity.class);
 
-
-                Intent intent = new Intent(context, HomeFragment.class);
+//                HomeFragment homeFragment = new HomeFragment();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
 
                 startActivity(intent);
             }
