@@ -12,5 +12,9 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_baseline_people_24"
             android:title="Friends" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_baseline_emoji_people_24"
+            android:title="Friend Requests" />
     </group>
 </menu>

@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.CompositeDateValidator;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -96,19 +97,20 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     TextView stateTextView;
     Button datePickerBtn;
     private MaterialViewPager mViewPager;
-    private static GoogleMap mMap;
-    List<Marker> previous_marker = null;
+    public static GoogleMap mMap;
+    static List<Marker> previous_marker = null;
+    static DetailTripActivity listener;
 
     Spinner spinner;
     Spinner placeSpinner;
 
     static Geocoder geoCoder;
     static Context context;
-    static List<Polyline>[] polylines;
+    public static List<Polyline> polylines;
     static Marker mCurrentMarker;
 
     ViewPager2 viewPager2;
-    private static int placeTypeIndex = 0;
+    public static int placeTypeIndex = 0;
 
     private String[] placeTypes = {"레스토랑", "카페", "베이커리", "숙소", "주점"};
 
@@ -220,10 +222,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             Collections.sort(schedules, new ScheduleComparator());
         }
 
-        polylines = new ArrayList[tripPlan.getSchedules().length];
-        for (int i = 0; i < tripPlan.getSchedules().length; i++) {
-            polylines[i] = new ArrayList<>();
-        }
+        listener = DetailTripActivity.this;
+        polylines = new ArrayList<>();
+//        polylines = new ArrayList[tripPlan.getSchedules().length];
+//        for (int i = 0; i < tripPlan.getSchedules().length; i++) {
+//            polylines[i] = new ArrayList<>();
+//        }
 
         /* TODO Schedule View Pager */
         viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
@@ -432,6 +436,29 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
                 showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), placeTypeIndex);
 
+                ArrayList<Schedule> schedules = tripPlan.getSchedules()[0];
+                int startIdx = 0;
+                for (startIdx = 0; startIdx < schedules.size(); startIdx++) {
+                    Schedule thisSchedule = schedules.get(startIdx);
+                    LatLng latLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                    if (latLng != null) break;
+                }
+
+                Log.d("@@@@@@@@@@@@@2", schedules.size() + " " + startIdx);
+
+                if (schedules.size() > startIdx) {
+                    Schedule beforeSchedule = schedules.get(startIdx);
+                    for (int i = startIdx + 1; i < schedules.size(); i++) {
+                        Schedule thisSchedule = schedules.get(i);
+                        LatLng startLatLng = DetailTripActivity.getFromLocationName(beforeSchedule.getPlace().getAddress());
+                        LatLng endLatLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                        if (endLatLng != null) {
+                            drawPath(startLatLng, endLatLng);
+                            beforeSchedule = thisSchedule;
+                        }
+                    }
+                }
+
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
@@ -465,7 +492,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    public void showPlaceInformation(LatLng location, int placeType) {
+    public static void showPlaceInformation(LatLng location, int placeType) {
         mMap.clear();
         if (previous_marker != null) {
             previous_marker.clear();
@@ -489,14 +516,14 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 place = PlaceType.BAR;
         }
       
-        new NRPlaces.Builder().listener(DetailTripActivity.this).key("AIzaSyCxJ6k5-LEXvvUQiHz0P5NNlv_WPbnx6iI")
+        new NRPlaces.Builder().listener(listener).key("AIzaSyCxJ6k5-LEXvvUQiHz0P5NNlv_WPbnx6iI")
                 .latlng(location.latitude, location.longitude).radius(5000)
                 .type(place).build().execute();
     }
 
-    public static void drawPath(LatLng startLatLng, LatLng endLatLng, int day){        //polyline을 그려주는 메소드
-        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(15).color(Color.RED).geodesic(true);
-        polylines[day].add(mMap.addPolyline(options));
+    public static void drawPath(LatLng startLatLng, LatLng endLatLng){        //polyline을 그려주는 메소드
+        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(8).color(Color.RED).geodesic(true).endCap(new RoundCap()).startCap(new RoundCap());
+        polylines.add(mMap.addPolyline(options));
     }
 
 

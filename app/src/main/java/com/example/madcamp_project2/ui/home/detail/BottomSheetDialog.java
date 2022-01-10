@@ -26,6 +26,7 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Place;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
+import com.example.madcamp_project2.ui.home.ScheduleComparator;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -37,6 +38,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Collections;
 
 import nl.joery.timerangepicker.TimeRangePicker;
 import retrofit2.Call;
@@ -269,6 +271,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                             Log.d("POST NEW SCHEDULE", "SUCCESS");
                             Log.d("POST NEW SCHEDULE", String.valueOf(responseSchedule.getSchedule_id()));
                             schedule_to_post.setSchedule_id(responseSchedule.getSchedule_id());
+
+                            Collections.sort(tripPlan.getSchedule(day), new ScheduleComparator());
+                            ViewPagerAdapter.scheduleAdapters[day].setSchedules(tripPlan.getSchedule(day));
+                            ViewPagerAdapter.scheduleAdapters[day].notifyDataSetChanged();
                         }
                         else {
                             Log.d("POST NEW SCHEDULE", "FAILED");

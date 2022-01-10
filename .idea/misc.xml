@@ -11,6 +11,8 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.378125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_attach_money_24.xml" value="0.378125" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_baseline_check_circle_24.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/item_viewpager.xml" value="0.2171875" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/drawable/rounded_dialog.xml" value="0.21822916666666667" />
@@ -44,6 +46,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_firend.xml" value="0.1" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_friend.xml" value="0.33" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_friend_small.xml" value="0.5" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_request.xml" value="0.203125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_spinner_friend.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/Project02/app/src/main/res/layout/item_viewpager.xml" value="0.33" />
