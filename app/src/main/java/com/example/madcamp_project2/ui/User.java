@@ -8,6 +8,7 @@ public class User {
     String name;
     String email;
     ArrayList<User> friends;
+    ArrayList<User> pending_requests;
     ArrayList<TripPlan> myTrips;
     String profile;
 

@@ -1,5 +1,7 @@
 package com.example.madcamp_project2.ui.home;
 
+import static com.example.madcamp_project2.ui.home.detail.DetailTripActivity.polylines;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +27,7 @@ import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.example.madcamp_project2.ui.home.detail.BottomSheetDialog;
 import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -59,6 +62,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         this.tripPlan = tripPlan;
         thisContext = this;
     }
+
 
     public void setSchedules(ArrayList<Schedule> schedules) {
         this.schedules = schedules;
@@ -153,10 +157,37 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         });
     }
 
+    public void updateMap() {
+        polylines.clear();
+
+        DetailTripActivity.showPlaceInformation(DetailTripActivity.getFromLocationName(tripPlan.getDestination().getName()), DetailTripActivity.placeTypeIndex);
+        int startIdx = 0;
+        for (startIdx = 0; startIdx < schedules.size(); startIdx++) {
+            Schedule thisSchedule = schedules.get(startIdx);
+            LatLng latLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+            if (latLng != null) break;
+        }
+
+        Log.d("@@@@@@@@@@@@@2", schedules.size() + " " + startIdx);
+
+        if (schedules.size() > startIdx) {
+            Schedule beforeSchedule = schedules.get(startIdx);
+            for (int i = startIdx + 1; i < schedules.size(); i++) {
+                Schedule thisSchedule = schedules.get(i);
+                LatLng startLatLng = DetailTripActivity.getFromLocationName(beforeSchedule.getPlace().getAddress());
+                LatLng endLatLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                if (endLatLng != null) {
+                    DetailTripActivity.drawPath(startLatLng, endLatLng);
+                    beforeSchedule = thisSchedule;
+                }
+            }
+        }
+    }
+
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        Log.d("!!!!!!!!!!!!!!!!!!1", "HIHIHI");
+        Log.d("<<<<<<<<<<<<<<<<<<<<<", "HA,,,");
     }
 
     private void removeSchedule(int position) {

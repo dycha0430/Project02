@@ -1,5 +1,7 @@
 package com.example.madcamp_project2.ui.home.detail;
 
+import static com.example.madcamp_project2.ui.home.detail.DetailTripActivity.polylines;
+
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
@@ -67,6 +69,14 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolderPage holder) {
+        super.onViewAttachedToWindow(holder);
+        Log.d("%%%%%%%%%%%%%%%%", "PLEASE");
+
+        ((ScheduleAdapter)holder.recyclerView.getAdapter()).updateMap();
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ViewHolderPage holder, int position) {
         ArrayList<Schedule> schedule = schedules[position];
 
@@ -74,36 +84,10 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         cal.setTime(start_date);
         cal.add(Calendar.DATE, position);
 
-        Log.d("%%%****", position + " ");
-
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd (E)");
         holder.dateTextView.setText(sdf.format(cal.getTime()));
         holder.recyclerView.setAdapter(scheduleAdapters[position]);
         Collections.sort(schedule, new ScheduleComparator());
-
-
-        int startIdx = 0;
-        for (startIdx = 0; startIdx < schedule.size(); startIdx++) {
-            Schedule thisSchedule = schedule.get(startIdx);
-            LatLng latLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
-            if (latLng != null) break;
-        }
-
-        Log.d("@@@@@@@@@@@@@2", schedule.size() + " " + startIdx);
-
-        if (schedule.size() > startIdx) {
-            Schedule beforeSchedule = schedule.get(startIdx);
-            for (int i = startIdx + 1; i < schedule.size(); i++) {
-                Schedule thisSchedule = schedule.get(i);
-                LatLng startLatLng = DetailTripActivity.getFromLocationName(beforeSchedule.getPlace().getAddress());
-                LatLng endLatLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
-                if (endLatLng != null) {
-                    DetailTripActivity.drawPath(startLatLng, endLatLng, position);
-                    beforeSchedule = thisSchedule;
-                }
-            }
-        }
-
 
         holder.addScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override

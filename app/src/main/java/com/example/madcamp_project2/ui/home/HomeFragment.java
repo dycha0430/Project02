@@ -59,11 +59,14 @@ public class HomeFragment extends Fragment {
         super.onResume();
         planSummaryAdapter.setTripPlanList(tripPlanList);
         planSummaryAdapter.notifyDataSetChanged();
+
+        Log.d("######", "On Resume");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Log.d("######", "On Create");
         this.context = getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -123,6 +126,10 @@ public class HomeFragment extends Fragment {
                         tripPlanList.add(new TripPlan(travel));
                     }
                     Log.d("GET USER TRAVEL", "SUCCESS");
+
+                    planSummaryAdapter.setTripPlanList(tripPlanList);
+                    planSummaryAdapter.notifyDataSetChanged();
+
                 }
                 else {
                     Log.d("GET USER TRAVEL", "FAILED");
