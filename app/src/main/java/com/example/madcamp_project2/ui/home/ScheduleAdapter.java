@@ -182,9 +182,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if(response.isSuccessful()) {
                     Log.d("SCHEDULE REMOVE", "SUCCESS");
-                    schedules.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, schedules.size());
                 }
                 else {
                     Log.d("SCHEDULE REMOVE", "FAILED");
@@ -196,6 +193,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 Log.d("SCHEDULE REMOVE", "FAILED");
             }
         });
+
+        schedules.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, schedules.size());
     }
 
     @Override
