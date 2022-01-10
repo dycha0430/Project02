@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_project2.LoginActivity;
+import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
+import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.ViewHolder> {
 
@@ -116,6 +131,45 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
 
     private void removeTrip(int position) {
         // TODO DB에서 Travel 삭제
+        TripPlan travel_to_remove = tripPlanList.get(position);
+
+        String token = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        Call<Integer> post_del_travel= myapi.post_del_travel("Bearer " + token, travel_to_remove.getTravel_id());
+
+        post_del_travel.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if(response.isSuccessful()) {
+                    Log.d("TRAVEL REMOVE", "SUCCESS");
+                }
+                else {
+                    Log.d("TRAVEL REMOVE", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Log.d("TRAVEL REMOVE", "FAILED");
+            }
+        });
+
         tripPlanList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, tripPlanList.size());

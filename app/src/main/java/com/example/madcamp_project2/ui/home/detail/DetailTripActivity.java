@@ -29,7 +29,9 @@ import androidx.core.util.Pair;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityDetailTripBinding;
 import com.example.madcamp_project2.ui.Country;
@@ -39,6 +41,8 @@ import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.ScheduleComparator;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.UpdateTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,6 +60,11 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,6 +83,9 @@ import noman.googleplaces.Place;
 import noman.googleplaces.PlaceType;
 import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailTripActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, PlacesListener {
     private ActivityDetailTripBinding binding;
@@ -231,6 +243,45 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 // TODO 장소 정보 TripPlan 데이터 변경
                 CountryEnum countryName = getCountryEnum(spinner.getItemAtPosition(i).toString());
                 tripPlan.setDestination(new Country(countryName));
+
+                UpdateTravel updateTravel = new UpdateTravel(tripPlan.getTravel_id(), tripPlan.getTitle(), countryName.toString());
+                String token = "";
+
+                String file_path = MainActivity.get_filepath();
+                JSONParser parser = new JSONParser();
+
+                try {
+                    FileReader reader = new FileReader(file_path+"/userinfo.json");
+                    Object obj = parser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    reader.close();
+
+                    token = jsonObject.get("token").toString();
+                }
+                catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                MyAPI myapi = LoginActivity.get_MyAPI();
+                Call<UpdateTravel> post_updateTravel = myapi.post_updateTravel("Bearer " + token, updateTravel);
+
+                post_updateTravel.enqueue(new Callback<UpdateTravel>() {
+                    @Override
+                    public void onResponse(Call<UpdateTravel> call, Response<UpdateTravel> response) {
+                        if(response.isSuccessful()) {
+                            Log.d("Update Travel", "SUCCESS");
+                        }
+                        else {
+                            Log.d("Update Travel", "FAILED");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UpdateTravel> call, Throwable t) {
+                        Log.d("Update Travel", "FAILED");
+                    }
+                });
+
                 moveMap(countryName.toString(), countryName.toString());
                 showPlaceInformation(getFromLocationName(countryName.toString()), placeTypeIndex);
             }
@@ -281,7 +332,47 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // TODO Travel title update on DB
                 tripPlan.setTitle(charSequence.toString());
+
+                UpdateTravel updateTravel = new UpdateTravel(tripPlan.getTravel_id(), charSequence.toString(), tripPlan.getDestination().getName());
+                String token = "";
+
+                String file_path = MainActivity.get_filepath();
+                JSONParser parser = new JSONParser();
+
+                try {
+                    FileReader reader = new FileReader(file_path+"/userinfo.json");
+                    Object obj = parser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    reader.close();
+
+                    token = jsonObject.get("token").toString();
+                }
+                catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                MyAPI myapi = LoginActivity.get_MyAPI();
+                Call<UpdateTravel> post_updateTravel = myapi.post_updateTravel("Bearer " + token, updateTravel);
+
+                post_updateTravel.enqueue(new Callback<UpdateTravel>() {
+                    @Override
+                    public void onResponse(Call<UpdateTravel> call, Response<UpdateTravel> response) {
+                        if(response.isSuccessful()) {
+                            Log.d("Update Travel", "SUCCESS");
+                        }
+                        else {
+                            Log.d("Update Travel", "FAILED");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UpdateTravel> call, Throwable t) {
+                        Log.d("Update Travel", "FAILED");
+                    }
+                });
+
             }
 
             @Override
@@ -397,6 +488,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             case 4:
                 place = PlaceType.BAR;
         }
+      
         new NRPlaces.Builder().listener(DetailTripActivity.this).key("AIzaSyCxJ6k5-LEXvvUQiHz0P5NNlv_WPbnx6iI")
                 .latlng(location.latitude, location.longitude).radius(5000)
                 .type(place).build().execute();

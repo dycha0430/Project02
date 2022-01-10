@@ -16,20 +16,33 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_project2.LoginActivity;
+import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.example.madcamp_project2.ui.home.detail.BottomSheetDialog;
 import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Text;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
 
@@ -148,6 +161,45 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     private void removeSchedule(int position) {
         // TODO DB에서 스케줄 삭제
+        Schedule schedule_to_remove = schedules.get(position);
+
+        String token = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        Call<Integer> post_del_schedule = myapi.post_del_schedule("Bearer " + token, schedule_to_remove.getSchedule_id());
+
+        post_del_schedule.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if(response.isSuccessful()) {
+                    Log.d("SCHEDULE REMOVE", "SUCCESS");
+                }
+                else {
+                    Log.d("SCHEDULE REMOVE", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Log.d("SCHEDULE REMOVE", "FAILED");
+            }
+        });
+
         schedules.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, schedules.size());

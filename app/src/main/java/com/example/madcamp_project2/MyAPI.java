@@ -5,6 +5,7 @@ import com.example.madcamp_project2.Account.AccountLogin;
 import com.example.madcamp_project2.Account.CheckUserForm;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.UpdateTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 
 import retrofit2.Call;
@@ -30,6 +31,15 @@ public interface MyAPI {
     @GET("madcamp/travels/get/")
     Call<userTravel> get_userTravel(@Header("Authorization") String token, @Query("params1") String email);
 
+    @POST("madcamp/travels/update/")
+    Call<UpdateTravel> post_updateTravel(@Header("Authorization") String token, @Body UpdateTravel updateTravel);
+
+    @POST("madcamp/travels/delete/")
+    Call<Integer> post_del_travel(@Header("Authorization") String token, @Body Integer remove_id);
+
     @POST("madcamp/schedules/")
     Call<NewSchedule> post_schedule(@Header("Authorization") String token, @Body NewSchedule newSchedule);
+
+    @POST("madcamp/schedules/delete/")
+    Call<Integer> post_del_schedule(@Header("Authorization") String token, @Body Integer remove_id);
 }

@@ -67,9 +67,7 @@ public class HomeFragment extends Fragment {
         this.context = getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
-        if (tripPlanList == null) {
-            tripPlanList = new ArrayList<>();
-        }
+        tripPlanList = new ArrayList<>();
 
         FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +108,7 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        userTravel usertravel = new userTravel(email);
+        // userTravel usertravel = new userTravel(email);
         MyAPI myapi = LoginActivity.get_MyAPI();
         Call<userTravel> get_userTravel = myapi.get_userTravel("Bearer " + token, email);
 
