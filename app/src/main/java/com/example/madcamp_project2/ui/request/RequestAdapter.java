@@ -32,7 +32,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        RequestAdapter.ViewHolder viewHolder = new RequestAdapter.ViewHolder(view);
 
         return viewHolder;
     }
@@ -40,7 +40,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User friend = friends.get(position);
-
+        Log.e("asdfasdfasdf", holder.toString());
         holder.nameTextView.setText(friend.getName());
         holder.emailTextView.setText(friend.getEmail());
         // TODO profile 도 설정

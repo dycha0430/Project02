@@ -50,4 +50,7 @@ public interface MyAPI {
 
     @POST("madcamp/friends/request/")
     Call<FriendRequest> post_friend_request(@Header("Authorization") String token, @Body FriendRequest friendRequest);
+
+    @GET("madcamp/friends/request/get/")
+    Call<GetFriend> get_friend_requests(@Header("Authorization") String token, @Query("params1") String email);
 }

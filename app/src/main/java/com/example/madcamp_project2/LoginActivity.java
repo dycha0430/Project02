@@ -41,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
     private String token;
     private String baseUrl = "http://192.249.18.170/";
     private static MyAPI myapi;
+    private boolean debug = true;
+    private String debug_email = "kmg1902@postech.ac.kr";
+    private String debug_username = "admin";
+    private String debug_password = "asdf1234";
+    private String debug_url = "https://k.kakaocdn.net/dn/bF2Jxi/btroTcEb4Jg/woKoneWhBsqIz9Y5SWdPLK/img_110x110.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,9 @@ public class LoginActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+                if(debug == true){
+                    Login(debug_email, 1234);
+                } else if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
                     // 카카오톡이 설치되어 있으면 카톡으로 로그인 확인 요청
                     UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (token, loginError) -> {
                         if (loginError != null) {
@@ -247,12 +254,20 @@ public class LoginActivity extends AppCompatActivity {
 
     public void Login(String email, long kakao_pk) {
         // 로그인하고, authentication을 위한 access token GET
-        AccountLogin accountLogin = new AccountLogin(email, String.valueOf(kakao_pk));
+        AccountLogin accountLogin;
+        if(debug) accountLogin = new AccountLogin(debug_email, debug_password);
+        else accountLogin = new AccountLogin(email, String.valueOf(kakao_pk));
         Call<AccountLogin> post_login = myapi.post_login(accountLogin);
         post_login.enqueue(new Callback<AccountLogin>() {
             @Override
             public void onResponse(Call<AccountLogin> call, Response<AccountLogin> response) {
                 if(response.isSuccessful()) {
+                    if(debug) {
+                        intent.putExtra("email", debug_email);
+                        intent.putExtra("username", debug_username);
+                        intent.putExtra("profile_image", debug_url);
+                    }
+
                     Log.d("LOGIN", "SUCCESS");
                     AccountLogin accountLogin = response.body();
                     Log.e("Token: ", accountLogin.getToken());

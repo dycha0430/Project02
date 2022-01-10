@@ -160,6 +160,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Call<GetFriend> get_friend_requests = myapi.get_friend_requests("Bearer " + token, email);
+        get_friend_requests.enqueue(new Callback<GetFriend>() {
+            @Override
+            public void onResponse(Call<GetFriend> call, Response<GetFriend> response) {
+                if(response.isSuccessful()) {
+                    Log.d("GET FRIEND REQUESTS", "SUCCESS");
+                    GetFriend getFriend = response.body();
+
+                    thisUser.getPending_requests().clear();
+                    for(Friend friend : getFriend.getFriend_list()) {
+                        Log.d("GET FRIEND REQUESTS", "check here!");
+                        Log.d("GET FRIEND REQUESTS", friend.getUsername());
+                        Log.d("GET FRIEND REQUESTS", friend.getEmail());
+                        Log.d("GET FRIEND REQUESTS", friend.getPhoto());
+                        thisUser.getPending_requests().add(new User(friend.getUsername(), friend.getEmail(), friend.getPhoto()));
+                    }
+                }
+                else {
+                    Log.d("GET FRIEND REQUESTS", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFriend> call, Throwable t) {
+                Log.d("GET FRIEND REQUESTS", "FAILED");
+            }
+        });
+
         print_json(); // TODO json test
 
         intent_login = new Intent(this, LoginActivity.class);
