@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.User;
 
@@ -47,6 +48,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                friends.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, friends.size());
                 // TODO pending 목록에서 해당 요청 그냥 삭제
             }
         });
@@ -54,7 +58,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO pending 목록에서 해당 요청 삭제하고 서로의 친구목록에 추가
+                friends.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, friends.size());
+                // TODO Front) 서로의 친구목록에 추가
+                // TODO DB) pending 목록에서 해당 요청 삭제하고 서로의 친구목록에 추가
             }
         });
     }
