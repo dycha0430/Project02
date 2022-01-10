@@ -20,6 +20,7 @@ import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.ScheduleAdapter;
 import com.example.madcamp_project2.ui.home.ScheduleComparator;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -77,6 +79,31 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd (E)");
         holder.dateTextView.setText(sdf.format(cal.getTime()));
         holder.recyclerView.setAdapter(scheduleAdapters[position]);
+        Collections.sort(schedule, new ScheduleComparator());
+
+
+        int startIdx = 0;
+        for (startIdx = 0; startIdx < schedule.size(); startIdx++) {
+            Schedule thisSchedule = schedule.get(startIdx);
+            LatLng latLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+            if (latLng != null) break;
+        }
+
+        Log.d("@@@@@@@@@@@@@2", schedule.size() + " " + startIdx);
+
+        if (schedule.size() > startIdx) {
+            Schedule beforeSchedule = schedule.get(startIdx);
+            for (int i = startIdx + 1; i < schedule.size(); i++) {
+                Schedule thisSchedule = schedule.get(i);
+                LatLng startLatLng = DetailTripActivity.getFromLocationName(beforeSchedule.getPlace().getAddress());
+                LatLng endLatLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                if (endLatLng != null) {
+                    DetailTripActivity.drawPath(startLatLng, endLatLng, position);
+                    beforeSchedule = thisSchedule;
+                }
+            }
+        }
+
 
         holder.addScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override

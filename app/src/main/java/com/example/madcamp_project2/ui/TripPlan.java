@@ -8,6 +8,7 @@ import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -21,7 +22,7 @@ public class TripPlan implements Serializable {
     String title;
     Date start_date;
     Date end_date;
-    // users 추가 필요
+    ArrayList<User> participants;
     Country destination;
     ArrayList<Schedule>[] schedules;
     private int travel_id;
@@ -44,6 +45,8 @@ public class TripPlan implements Serializable {
         for (int i = 0; i < duration; i++) {
             schedules[i] = new ArrayList<>();
         }
+
+        this.participants = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -59,6 +62,7 @@ public class TripPlan implements Serializable {
         for (int i = 0; i < duration; i++) {
             schedules[i] = new ArrayList<>();
         }
+        this.participants = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -121,6 +125,14 @@ public class TripPlan implements Serializable {
 
     public void setDestination(Country destination) {
         this.destination = destination;
+    }
+
+    public ArrayList<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<User> participants) {
+        this.participants = participants;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
