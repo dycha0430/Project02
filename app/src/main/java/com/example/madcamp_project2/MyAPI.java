@@ -53,4 +53,7 @@ public interface MyAPI {
 
     @GET("madcamp/friends/request/get/")
     Call<GetFriend> get_friend_requests(@Header("Authorization") String token, @Query("params1") String email);
+
+    @POST("madcamp/friends/request/handle/")
+    Call<FriendRequest> post_friend_request_ignore(@Header("Authorization") String token, @Body FriendRequest friendRequest);
 }

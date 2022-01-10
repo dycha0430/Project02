@@ -74,7 +74,7 @@ public class FriendsFragment extends Fragment {
                 // 친구 추가 창 띄우기
 
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
-                builder.setTitle("추가할 아이디를 입력해주세요");
+                builder.setTitle("추가할 이메일을 입력해주세요");
 
 // Set up the input
                 final EditText input = new EditText(getActivity());
