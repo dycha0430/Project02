@@ -40,7 +40,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         holder.nameTextView.setText(friend.getName());
         holder.emailTextView.setText(friend.getEmail());
-        // profile 도 설정
+        // TODO profile 도 설정
     }
 
     @Override

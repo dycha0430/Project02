@@ -48,6 +48,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.CompositeDateValidator;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -90,6 +92,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
     static Geocoder geoCoder;
     static Context context;
+    static List<Polyline>[] polylines;
+    static Marker mCurrentMarker;
 
     ViewPager2 viewPager2;
     private static int placeTypeIndex = 0;
@@ -204,6 +208,11 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             Collections.sort(schedules, new ScheduleComparator());
         }
 
+        polylines = new ArrayList[tripPlan.getSchedules().length];
+        for (int i = 0; i < tripPlan.getSchedules().length; i++) {
+            polylines[i] = new ArrayList<>();
+        }
+
         /* TODO Schedule View Pager */
         viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
 
@@ -313,10 +322,11 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
 
+        if (mCurrentMarker != null) mCurrentMarker.remove();
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(loc);
         markerOptions.title(name);
-        mMap.addMarker(markerOptions);
+        mCurrentMarker = mMap.addMarker(markerOptions);
 
     }
     @Override
@@ -370,8 +380,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             previous_marker.clear();
         }
 
-
-        // TODO 여기서 type 선택하면 뜨는 장소 종류 바꿀 수 있음!!! 레스토랑, 카페, 베이커리...
         String place = PlaceType.RESTAURANT;
         switch (placeType) {
             case 0:
@@ -393,6 +401,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 .latlng(location.latitude, location.longitude).radius(5000)
                 .type(place).build().execute();
     }
+
+    public static void drawPath(LatLng startLatLng, LatLng endLatLng, int day){        //polyline을 그려주는 메소드
+        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(15).color(Color.RED).geodesic(true);
+        polylines[day].add(mMap.addPolyline(options));
+    }
+
 
 
     @Override
