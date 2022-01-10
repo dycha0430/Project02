@@ -30,6 +30,14 @@ public class User {
         myTrips = new ArrayList<>();
     }
 
+    public ArrayList<User> getPending_requests() {
+        return pending_requests;
+    }
+
+    public void setPending_requests(ArrayList<User> pending_requests) {
+        this.pending_requests = pending_requests;
+    }
+
     public void setUser(User user) {
         this.id = user.id;
         this.name = user.name;

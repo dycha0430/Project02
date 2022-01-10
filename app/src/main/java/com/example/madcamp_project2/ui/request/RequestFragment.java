@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentRequestBinding;
 
@@ -25,8 +27,9 @@ public class RequestFragment extends Fragment {
         recyclerView = root.findViewById(R.id.request_recycler_view);
 
         // TODO thisUser의 pending 된 친구요청목록 가져오기
-//        RequestAdapter requestAdapter = new RequestAdapter(getActivity(), pending된 친구목록);
-//        recyclerView.setAdapter(requestAdapter);
+        RequestAdapter requestAdapter = new RequestAdapter(getActivity(), MainActivity.thisUser.getPending_requests());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(requestAdapter);
         return root;
     }
 
