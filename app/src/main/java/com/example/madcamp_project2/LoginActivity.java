@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private String token;
     private String baseUrl = "http://192.249.18.170/";
     private static MyAPI myapi;
-    private boolean debug = true;
+    private boolean debug = false;
     private String debug_email = "kmg1902@postech.ac.kr";
     private String debug_username = "admin";
     private String debug_password = "asdf1234";
