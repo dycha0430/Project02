@@ -1,12 +1,42 @@
 package com.example.madcamp_project2.ui;
 
+import java.util.ArrayList;
+
 public class User {
+    static int global_id = 0;
     int id; //type 이 맞나?
     String name;
     String email;
-    User[] friends;
-    TripPlan myTrips;
+    ArrayList<User> friends;
+    ArrayList<TripPlan> myTrips;
     String profile;
+
+    public User(String name, String email, String profile) {
+        this.id = global_id++;
+        this.name = name;
+        this.email = email;
+        this.profile = profile;
+        friends = new ArrayList<>();
+        myTrips = new ArrayList<>();
+    }
+
+    public User() {
+        this.id = global_id++;
+        this.name = "Test name";
+        this.email = "Test email";
+        this.profile = "";
+        friends = new ArrayList<>();
+        myTrips = new ArrayList<>();
+    }
+
+    public void setUser(User user) {
+        this.id = user.id;
+        this.name = user.name;
+        this.email = user.email;
+        this.profile = user.profile;
+        this.friends = user.friends;
+        this.myTrips = user.myTrips;
+    }
 
     public String getEmail() {
         return email;
@@ -32,19 +62,19 @@ public class User {
         this.name = name;
     }
 
-    public User[] getFriends() {
+    public ArrayList<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(User[] friends) {
+    public void setFriends(ArrayList<User> friends) {
         this.friends = friends;
     }
 
-    public TripPlan getMyTrips() {
+    public ArrayList<TripPlan> getMyTrips() {
         return myTrips;
     }
 
-    public void setMyTrips(TripPlan myTrips) {
+    public void setMyTrips(ArrayList<TripPlan> myTrips) {
         this.myTrips = myTrips;
     }
 

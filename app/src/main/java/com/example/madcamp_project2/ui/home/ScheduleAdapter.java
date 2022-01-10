@@ -153,6 +153,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         });
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        Log.d("!!!!!!!!!!!!!!!!!!1", "HIHIHI");
+    }
+
     private void removeSchedule(int position) {
         // TODO DB에서 스케줄 삭제
         Schedule schedule_to_remove = schedules.get(position);

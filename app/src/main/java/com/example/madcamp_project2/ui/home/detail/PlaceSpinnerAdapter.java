@@ -14,25 +14,24 @@ import com.example.madcamp_project2.ui.Country;
 
 import java.util.List;
 
-public class SpinnerAdapter extends BaseAdapter {
-
+public class PlaceSpinnerAdapter extends BaseAdapter {
     Context context;
-    List<Country> data;
+    String[] places;
     LayoutInflater inflater;
-    public SpinnerAdapter(Context context, List<Country> data) {
+    public PlaceSpinnerAdapter(Context context, String[] places) {
         this.context = context;
-        this.data = data;
+        this.places = places;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return places.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return data.get(i).getName();
+        return places[i];
     }
 
     @Override
@@ -46,13 +45,28 @@ public class SpinnerAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_spinner, viewGroup, false);
         }
 
-        if (data != null) {
-            String text = data.get(i).getName();
+        ImageView icon = view.findViewById(R.id.img_spinner);
+
+        if (places != null) {
+            String text = places[i];
             ((TextView) view.findViewById(R.id.spinner_item_tv)).setText(text);
-            // TODO 알맞는 아이콘으로 바꾸기.
-            String iconName = "icon" + data.get(i).getCountryEnum().ordinal();
-            Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(iconName, "drawable", context.getPackageName()));
-            ((ImageView) view.findViewById(R.id.img_spinner)).setImageDrawable(drawable);
+
+            switch (i) {
+                case 0:
+                    icon.setImageResource(R.drawable.restaurant);
+                    break;
+                case 1:
+                    icon.setImageResource(R.drawable.cafe);
+                    break;
+                case 2:
+                    icon.setImageResource(R.drawable.bakery);
+                    break;
+                case 3:
+                    icon.setImageResource(R.drawable.hotel);
+                    break;
+                case 4:
+                    icon.setImageResource(R.drawable.bar);
+            }
         }
         return view;
     }

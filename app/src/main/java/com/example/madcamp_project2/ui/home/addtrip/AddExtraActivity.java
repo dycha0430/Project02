@@ -12,6 +12,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
@@ -20,6 +22,8 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.ActivityAddExtraBinding;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.TripPlan;
+import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.FriendAddAdapter;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 
@@ -29,6 +33,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -39,8 +44,12 @@ public class AddExtraActivity extends AppCompatActivity {
     Country country;
     Date startDate, endDate;
     EditText titleTripEditText;
-    Button completeBtn;
+    Button completeBtn, addFriendBtn;
+
     Context context;
+    RecyclerView recyclerView;
+    public static ArrayList<User> selectedFriends;
+    public static int spinnerNum = 1;
     private ActivityAddExtraBinding binding;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -50,10 +59,28 @@ public class AddExtraActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         context = this;
 
-        getSupportActionBar().hide();
+        selectedFriends = new ArrayList<>();
+        spinnerNum = 1;
+        selectedFriends.add(new User());
 
+        getSupportActionBar().hide();
         titleTripEditText = findViewById(R.id.tripTitleEditText);
         completeBtn = findViewById(R.id.completeBtn);
+        addFriendBtn = findViewById(R.id.addFriendBtn);
+        recyclerView = findViewById(R.id.selected_friend_recycler_view);
+
+        FriendAddAdapter friendAddAdapter = new FriendAddAdapter(context);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(friendAddAdapter);
+
+        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedFriends.add(new User());
+                spinnerNum++;
+                friendAddAdapter.notifyDataSetChanged();
+            }
+        });
 
         Intent intent = getIntent();
         country = (Country) intent.getSerializableExtra("place");
@@ -69,6 +96,11 @@ public class AddExtraActivity extends AppCompatActivity {
 
                 TripPlan tripPlan = new TripPlan(-1, titleTripEditText.getText().toString(), startDate, endDate, country);
                 HomeFragment.tripPlanList.add(tripPlan);
+
+                // TODO 비동기 알림 보낼지 말지 설정
+                // 안보내고 다 추가할거면 아래꺼하구 유저들의 tripPlanList에도 이 tripPlan 추가
+                // 보낼거면 현재 유저만/에만 추가
+//                tripPlan.setParticipants(selectedFriends);
 
                 String token = "";
                 String email = "";
@@ -119,5 +151,6 @@ public class AddExtraActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }

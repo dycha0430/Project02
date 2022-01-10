@@ -1,6 +1,7 @@
 package com.example.madcamp_project2.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
@@ -25,6 +27,8 @@ import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentHomeBinding;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
@@ -49,6 +53,14 @@ public class HomeFragment extends Fragment {
     public static ArrayList<TripPlan> tripPlanList;
     private PlanSummaryAdapter planSummaryAdapter;
     private Context context;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        planSummaryAdapter.setTripPlanList(tripPlanList);
+        planSummaryAdapter.notifyDataSetChanged();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +68,26 @@ public class HomeFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
         tripPlanList = new ArrayList<>();
+
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddTripPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.homeSwipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO DB에서 tripPlanList 받아오기
+                planSummaryAdapter.setTripPlanList(tripPlanList);
+                planSummaryAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         String token = "";
         String email = "";
