@@ -54,12 +54,12 @@ public class GetTravel {
     }
 
     public Date getStart_date() {
-        GregorianCalendar calendar = new GregorianCalendar(start_year, start_month, start_day);
+        GregorianCalendar calendar = new GregorianCalendar(start_year, start_month - 1, start_day);
         return calendar.getTime();
     }
 
     public Date getEnd_date() {
-        GregorianCalendar calendar = new GregorianCalendar(end_year, end_month, end_day);
+        GregorianCalendar calendar = new GregorianCalendar(end_year, end_month - 1, end_day);
         return calendar.getTime();
     }
 

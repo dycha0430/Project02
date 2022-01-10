@@ -13,8 +13,12 @@ import com.bumptech.glide.Glide;
 import com.example.madcamp_project2.ui.Country;
 import com.example.madcamp_project2.ui.CountryEnum;
 import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.Friend.Friend;
+import com.example.madcamp_project2.ui.friends.Friend.GetFriend;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.AddTripPlanActivity;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -36,7 +40,11 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity {
@@ -108,9 +116,49 @@ public class MainActivity extends AppCompatActivity {
             bundle.clear();
         }
 
-        thisUser.getFriends().add(new User());
-        thisUser.getFriends().add(new User());
-        thisUser.getFriends().add(new User());
+        String token = "";
+        String email = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+            email = jsonObject.get("email").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        Call<GetFriend> get_friends = myapi.get_friends("Bearer " + token, email);
+        get_friends.enqueue(new Callback<GetFriend>() {
+            @Override
+            public void onResponse(Call<GetFriend> call, Response<GetFriend> response) {
+                if(response.isSuccessful()) {
+                    Log.d("GET FRIENDS", "SUCCESS");
+                    GetFriend getFriend = response.body();
+
+                    thisUser.getFriends().clear();
+                    for(Friend friend : getFriend.getFriend_list()) {
+                        thisUser.getFriends().add(new User(friend.getUsername(), friend.getEmail(), friend.getPhoto()));
+                    }
+                }
+                else {
+                    Log.d("GET FRIENDS", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFriend> call, Throwable t) {
+                Log.d("GET FRIENDS", "FAILED");
+            }
+        });
 
         print_json(); // TODO json test
 
