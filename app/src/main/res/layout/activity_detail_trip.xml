@@ -126,26 +126,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="10dp">
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/map"
-                tools:context=".ui.home.detail.DetailTripActivity"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

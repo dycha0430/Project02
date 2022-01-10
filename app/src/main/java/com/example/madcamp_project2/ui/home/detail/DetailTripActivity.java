@@ -75,17 +75,14 @@ import noman.googleplaces.PlaceType;
 import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
-public class DetailTripActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, PlacesListener {
+public class DetailTripActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private ActivityDetailTripBinding binding;
     TripPlan tripPlan;
-    static final int zoom_pm = 15;
 
     EditText titleTextView;
     TextView stateTextView;
     Button datePickerBtn;
     private MaterialViewPager mViewPager;
-    private static GoogleMap mMap;
-    List<Marker> previous_marker = null;
 
     Spinner spinner;
     Spinner placeSpinner;
@@ -96,7 +93,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
     static Marker mCurrentMarker;
 
     ViewPager2 viewPager2;
-    private static int placeTypeIndex = 0;
+    public static int placeTypeIndex = 0;
 
     private String[] placeTypes = {"레스토랑", "카페", "베이커리", "숙소", "주점"};
 
@@ -171,6 +168,32 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         return null;
     }
 
+    public static class ServiceHandler {
+        public void run() {
+            DetailTripActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (noman.googleplaces.Place place : places) {
+                        LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title(place.getName());
+
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.location);
+                        Bitmap b = bitmapDrawable.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                        Marker item = mMap.addMarker(markerOptions);
+                        previous_marker.add(item);
+                    }
+                }
+
+            });
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -187,9 +210,6 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
         context = this;
         geoCoder = new Geocoder(this);
-        previous_marker = new ArrayList<>();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         getSupportActionBar().hide();
         Intent intent = getIntent();
@@ -214,7 +234,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         /* TODO Schedule View Pager */
-        viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context, tripPlan);
+        viewPager2.setAdapter(viewPagerAdapter);
 
         SpinnerAdapter adapter = new SpinnerAdapter(this, Arrays.asList(MainActivity.COUNTRIES.clone()));
         spinner.setAdapter(adapter);
@@ -231,8 +252,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
                 // TODO 장소 정보 TripPlan 데이터 변경
                 CountryEnum countryName = getCountryEnum(spinner.getItemAtPosition(i).toString());
                 tripPlan.setDestination(new Country(countryName));
-                moveMap(countryName.toString(), countryName.toString());
-                showPlaceInformation(getFromLocationName(countryName.toString()), placeTypeIndex);
+                viewPagerAdapter.setTripPlan(tripPlan);
+                viewPagerAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -248,8 +269,8 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         placeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), i);
                 placeTypeIndex = i;
+                viewPagerAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -312,140 +333,5 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         return formatter.format(calendar.getTime());
     }
 
-    public static void moveMap(String address, String name) {
-        LatLng loc = getFromLocationName(address);
 
-        if (loc == null) {
-            Toast.makeText(context, "위치를 찾을 수 없습니다", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
-
-        if (mCurrentMarker != null) mCurrentMarker.remove();
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(loc);
-        markerOptions.title(name);
-        mCurrentMarker = mMap.addMarker(markerOptions);
-
-    }
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-
-        Context a = this.getBaseContext();
-        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(getFromLocationName(tripPlan.getDestination().getName())));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_pm));
-                showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), placeTypeIndex);
-
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull Marker marker) {
-                        double lat = marker.getPosition().latitude;
-                        double lon = marker.getPosition().longitude;
-
-                        Log.d("**************", tripPlan.getSchedule(viewPager2.getCurrentItem()).size() + "");
-
-                        List<Address> addresses = null;
-                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                        try {
-                            addresses = geocoder.getFromLocation(lat, lon, 1);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (!addresses.isEmpty()) {
-                            Address a = addresses.get(0);
-                            // Log.d("@@@@@@@@@@@@@@@@@@2", a.getAddressLine(0) + " " + a.getLocality() + " " + a.getCountryName() + " " + a.getPostalCode() + " " + a.getFeatureName());
-                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context, tripPlan, marker.getTitle(), a.getAddressLine(0), viewPager2.getCurrentItem());
-                            bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
-                        } else {
-                            Toast.makeText(context, "주소 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
-
-                        return true;
-                    }
-                });
-            }
-        });
-
-    }
-
-    public void showPlaceInformation(LatLng location, int placeType) {
-        mMap.clear();
-        if (previous_marker != null) {
-            previous_marker.clear();
-        }
-
-        String place = PlaceType.RESTAURANT;
-        switch (placeType) {
-            case 0:
-                place = PlaceType.RESTAURANT;
-                break;
-            case 1:
-                place = PlaceType.CAFE;
-                break;
-            case 2:
-                place = PlaceType.BAKERY;
-                break;
-            case 3:
-                place = PlaceType.LODGING;
-                break;
-            case 4:
-                place = PlaceType.BAR;
-        }
-        new NRPlaces.Builder().listener(DetailTripActivity.this).key("AIzaSyCxJ6k5-LEXvvUQiHz0P5NNlv_WPbnx6iI")
-                .latlng(location.latitude, location.longitude).radius(5000)
-                .type(place).build().execute();
-    }
-
-    public static void drawPath(LatLng startLatLng, LatLng endLatLng, int day){        //polyline을 그려주는 메소드
-        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(15).color(Color.RED).geodesic(true);
-        polylines[day].add(mMap.addPolyline(options));
-    }
-
-
-
-    @Override
-    public void onPlacesFailure(PlacesException e) {
-
-    }
-
-    @Override
-    public void onPlacesStart() {
-
-    }
-
-    @Override
-    public void onPlacesSuccess(final List<Place> places) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (noman.googleplaces.Place place : places) {
-                    LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title(place.getName());
-
-                    BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.location);
-                    Bitmap b = bitmapDrawable.getBitmap();
-                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
-                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-                    Marker item = mMap.addMarker(markerOptions);
-                    previous_marker.add(item);
-                }
-            }
-
-        });
-    }
-
-    @Override
-    public void onPlacesFinished() {
-
-    }
 }

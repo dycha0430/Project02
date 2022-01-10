@@ -21,6 +21,7 @@ import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.detail.BottomSheetDialog;
 import com.example.madcamp_project2.ui.home.detail.DetailTripActivity;
+import com.example.madcamp_project2.ui.home.detail.ViewPagerAdapter;
 
 import org.w3c.dom.Text;
 
@@ -102,7 +103,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         holder.locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DetailTripActivity.moveMap(schedule.getPlace().getAddress(), schedule.getPlace().getName());
+                ViewPagerAdapter.ViewHolderPage.moveMap(schedule.getPlace().getAddress(), schedule.getPlace().getName());
             }
         });
 
