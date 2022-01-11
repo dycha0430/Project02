@@ -98,14 +98,6 @@ public class RequestFragment extends Fragment {
             }
         });
 
-        RequestAdapter requestAdapter = new RequestAdapter(getActivity(), thisUser.getPending_requests());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(requestAdapter);
-
-        RequestTravelAdapter requestTravelAdapter = new RequestTravelAdapter(getActivity(), thisUser.getPending_trips());
-        travelRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        travelRecyclerView.setAdapter(requestTravelAdapter);
-
         return root;
     }
 
@@ -161,6 +153,14 @@ public class RequestFragment extends Fragment {
                     for(GetTravel getTravel : userTravel.getTravel_list()) {
                         thisUser.getPending_trips().add(new TripPlan(getTravel));
                     }
+
+                    RequestAdapter requestAdapter = new RequestAdapter(getActivity(), thisUser.getPending_requests());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recyclerView.setAdapter(requestAdapter);
+
+                    RequestTravelAdapter requestTravelAdapter = new RequestTravelAdapter(getActivity(), thisUser.getPending_trips());
+                    travelRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    travelRecyclerView.setAdapter(requestTravelAdapter);
                 }
                 else {
                     Log.d("GET TRAVEL REQUESTS", "FAILED");
