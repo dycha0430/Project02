@@ -10,6 +10,7 @@ public class User {
     ArrayList<User> friends;
     ArrayList<User> pending_requests;
     ArrayList<TripPlan> myTrips;
+    ArrayList<TripPlan> pending_trips;
     String profile;
 
     public User(String name, String email, String profile) {
@@ -20,6 +21,7 @@ public class User {
         friends = new ArrayList<>();
         pending_requests = new ArrayList<>();
         myTrips = new ArrayList<>();
+        pending_trips = new ArrayList<>();
     }
 
     public User() {
@@ -30,6 +32,8 @@ public class User {
         friends = new ArrayList<>();
         pending_requests = new ArrayList<>();
         myTrips = new ArrayList<>();
+        pending_requests = new ArrayList<>();
+        pending_trips = new ArrayList<>();
     }
 
     public ArrayList<User> getPending_requests() {
@@ -38,6 +42,15 @@ public class User {
 
     public void setPending_requests(ArrayList<User> pending_requests) {
         this.pending_requests = pending_requests;
+    }
+
+
+    public ArrayList<TripPlan> getPending_trips() {
+        return pending_trips;
+    }
+
+    public void setPending_trips(ArrayList<TripPlan> pending_trips) {
+        this.pending_trips = pending_trips;
     }
 
     public void setUser(User user) {

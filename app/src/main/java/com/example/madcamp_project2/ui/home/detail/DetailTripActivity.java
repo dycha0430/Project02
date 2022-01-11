@@ -209,7 +209,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         Intent intent = getIntent();
 //        this.tripPlan = (TripPlan) intent.getSerializableExtra("tripPlan");
         int idx = intent.getIntExtra("tripPlan", 0);
-        this.tripPlan = HomeFragment.tripPlanList.get(idx);
+        this.tripPlan = MainActivity.thisUser.getMyTrips().get(idx);
 
         stateTextView = findViewById(R.id.detailStateTextView);
         titleTextView = findViewById(R.id.detailTitleTextView);

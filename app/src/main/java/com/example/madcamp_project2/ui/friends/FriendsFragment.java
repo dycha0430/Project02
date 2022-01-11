@@ -22,6 +22,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.afollestad.materialdialogs.DialogBehavior;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +44,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Ref;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -56,11 +58,21 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter friendsAdapter;
     String input_text;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.friendsSwipe);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO 친구 목록 가져오기..? 바로 가져와지는지 아닌지 보고 하기
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         recyclerView = root.findViewById(R.id.friend_recycler_view);
         friendsAdapter = new FriendsAdapter(getActivity(), MainActivity.thisUser.getFriends());

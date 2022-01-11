@@ -47,6 +47,7 @@ public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (position == 0) return;
                 FriendBottomSheetDialog bottomSheetDialog = new FriendBottomSheetDialog(context, position);
                 bottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
             }

@@ -8,8 +8,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="10dp"
         app:cardCornerRadius="100dp"
         app:cardElevation="0dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/locImageView"
+            android:id="@+id/locImageView_invite"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -29,7 +29,7 @@
 
 
     <ImageView
-        android:id="@+id/locIcon"
+        android:id="@+id/locIcon_invite"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintStart_toEndOf="@+id/cardView"
@@ -39,7 +39,7 @@
         android:layout_marginTop="10dp" />
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/titleTextView_invite"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:gravity="center"
@@ -48,7 +48,7 @@
         android:layout_marginTop="15dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/locIcon"
+        app:layout_constraintStart_toEndOf="@+id/locIcon_invite"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:layout_width="wrap_content"
@@ -58,11 +58,11 @@
         android:layout_marginTop="15dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/titleTextView"
+        app:layout_constraintStart_toEndOf="@+id/titleTextView_invite"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/locTextView"
+        android:id="@+id/locTextView_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="제주도"
@@ -70,48 +70,53 @@
         android:layout_marginTop="10dp"
         android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/locIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/locIcon_invite" />
 
     <TextView
-        android:id="@+id/dateTextView"
+        android:id="@+id/dateTextView_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="22/01/03~22/01/08"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toEndOf="@+id/locTextView"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintStart_toEndOf="@+id/locTextView_invite"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView_invite" />
+
 
     <TextView
-        android:id="@+id/stateTextView"
-        android:background="@color/yellow"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:id="@+id/inviteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:text="다윤님의 초대입니다"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/locTextView"
-        android:textSize="10sp"
-        android:text="여행중"/>
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView_invite" />
 
-    <TextView
-        android:id="@+id/withTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다윤님 외 3명"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+    <ImageButton
+        android:id="@+id/cancelBtn_invite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_baseline_cancel_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/stateTextView"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/acceptBtn_invite"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/acceptBtn_invite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_baseline_check_circle_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dateTextView_invite"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
