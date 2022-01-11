@@ -9,15 +9,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.madcamp_project2.LoginActivity;
+import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.Friend.FriendRequest;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
@@ -73,6 +88,47 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     private void removeFriend(int position) {
         User friend = friends.get(position);
+
+        String token = "";
+        String email = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+            email = jsonObject.get("email").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        FriendRequest friendRequest = new FriendRequest(email, friend.getEmail());
+        MyAPI myapi = LoginActivity.get_MyAPI();
+
+        Call<FriendRequest> post_friend_delete = myapi.post_friend_delete("Bearer " + token, friendRequest);
+
+        post_friend_delete.enqueue(new Callback<FriendRequest>() {
+            @Override
+            public void onResponse(Call<FriendRequest> call, Response<FriendRequest> response) {
+                if(response.isSuccessful()) {
+                    Log.d("REMOVE FRIEND", "SUCCESS");
+                }
+                else {
+                    Log.d("REMOVE FRIEND", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FriendRequest> call, Throwable t) {
+                Log.d("REMOVE FRIEND", "FAILED");
+            }
+        });
 
         friends.remove(position);
         notifyItemRemoved(position);

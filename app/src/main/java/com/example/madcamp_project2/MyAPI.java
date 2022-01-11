@@ -56,4 +56,7 @@ public interface MyAPI {
 
     @POST("madcamp/friends/request/handle/")
     Call<FriendRequest> post_friend_request_ignore(@Header("Authorization") String token, @Body FriendRequest friendRequest);
+
+    @POST("madcamp/friends/delete/")
+    Call<FriendRequest> post_friend_delete(@Header("Authorization") String token, @Body FriendRequest friendRequest);
 }
