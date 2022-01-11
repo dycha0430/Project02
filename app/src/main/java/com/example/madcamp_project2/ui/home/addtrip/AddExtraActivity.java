@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -70,12 +71,15 @@ public class AddExtraActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.selected_friend_recycler_view);
 
         FriendAddAdapter friendAddAdapter = new FriendAddAdapter(context);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(friendAddAdapter);
 
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (spinnerNum >= MainActivity.thisUser.getFriends().size()) {
+                    Toast.makeText(context, "더 이상 친구를 초대할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
                 selectedFriends.add(new User());
                 spinnerNum++;
                 friendAddAdapter.notifyDataSetChanged();

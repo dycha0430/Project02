@@ -5,18 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/back_extra">
+    android:background="@drawable/back_extra2"
+    >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="이제 마지막 단계입니다!"
             android:textAlignment="center"
             android:padding="30dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="30sp"/>
         <TextView
@@ -24,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="여행 이름을 정해주세요"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20sp"/>
         <LinearLayout
@@ -42,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:hint="나의"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textColorHint="@color/light_gray"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
                 android:textColorHighlight="@color/white"
-                android:textColorLink="@color/white"
-                android:backgroundTint="@color/white"
+                android:textColorLink="@color/black"
+                android:backgroundTint="@color/gray"
                 android:fontFamily="@font/font_custom"
                 android:textSize="25sp" />
             <TextView
@@ -54,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:text="여행"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="25sp"/>
         </LinearLayout>
 
@@ -63,7 +66,7 @@
             android:layout_height="wrap_content"
             android:text="같이 여행 갈 친구를 선택해주세요"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:paddingBottom="10dp"
             android:textSize="20sp"/>
@@ -84,9 +87,9 @@
                 android:id="@+id/addFriendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_layout2"
+                android:background="@drawable/button_layout"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginRight="30dp"
                 android:textSize="18sp"
                 android:text="추가"/>
@@ -95,9 +98,9 @@
                 android:id="@+id/completeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_layout2"
+                android:background="@drawable/button_layout"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:text="완료"/>
         </LinearLayout>
