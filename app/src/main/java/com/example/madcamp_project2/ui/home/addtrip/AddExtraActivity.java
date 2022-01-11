@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -47,7 +48,8 @@ public class AddExtraActivity extends AppCompatActivity {
     Country country;
     Date startDate, endDate;
     EditText titleTripEditText;
-    Button completeBtn, addFriendBtn;
+    Button completeBtn;
+    Button addFriendBtn;
 
     public static FriendAddAdapter friendAddAdapter;
     Context context;

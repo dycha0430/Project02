@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -39,8 +40,11 @@ import com.example.madcamp_project2.ui.CountryEnum;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.TripState;
+import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.Friend.FriendBottomSheetDialog;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.ScheduleComparator;
+import com.example.madcamp_project2.ui.home.addtrip.AddExtraActivity;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.UpdateTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 import com.github.florent37.materialviewpager.MaterialViewPager;
@@ -95,7 +99,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
     EditText titleTextView;
     TextView stateTextView;
-    Button datePickerBtn;
+    Button datePickerBtn, inviteFriendBtn;
     private MaterialViewPager mViewPager;
     public static GoogleMap mMap;
     static List<Marker> previous_marker = null;
@@ -217,6 +221,7 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         spinner = findViewById(R.id.spinner);
         placeSpinner = findViewById(R.id.place_spinner);
         viewPager2 = findViewById(R.id.viewPager);
+        inviteFriendBtn = findViewById(R.id.inviteFriendButton);
 
         for (ArrayList<Schedule> schedules : tripPlan.getSchedules()) {
             Collections.sort(schedules, new ScheduleComparator());
@@ -224,10 +229,19 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
 
         listener = DetailTripActivity.this;
         polylines = new ArrayList<>();
-//        polylines = new ArrayList[tripPlan.getSchedules().length];
-//        for (int i = 0; i < tripPlan.getSchedules().length; i++) {
-//            polylines[i] = new ArrayList<>();
-//        }
+
+        inviteFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddExtraActivity.unSelectedFriends = MainActivity.thisUser.getFriends();
+                for (User friend : tripPlan.getParticipants()) {
+                    AddExtraActivity.unSelectedFriends.remove(friend);
+                }
+
+                FriendBottomSheetDialog friendBottomSheetDialog = new FriendBottomSheetDialog(context);
+                friendBottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
+            }
+        });
 
         /* TODO Schedule View Pager */
         viewPager2.setAdapter(new ViewPagerAdapter(context, tripPlan));
