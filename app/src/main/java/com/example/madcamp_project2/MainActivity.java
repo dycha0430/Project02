@@ -118,6 +118,50 @@ public class MainActivity extends AppCompatActivity {
 
         print_json(); // TODO json test
 
+        String token = "";
+        String email = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+            email = jsonObject.get("email").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        Call<GetFriend> get_friends = myapi.get_friends("Bearer " + token, email);
+        get_friends.enqueue(new Callback<GetFriend>() {
+            @Override
+            public void onResponse(Call<GetFriend> call, Response<GetFriend> response) {
+                if(response.isSuccessful()) {
+                    Log.d("GET FRIENDS", "SUCCESS");
+                    GetFriend getFriend = response.body();
+
+                    thisUser.getFriends().clear();
+                    for(Friend friend : getFriend.getFriend_list()) {
+                        thisUser.getFriends().add(new User(friend.getUsername(), friend.getEmail(), friend.getPhoto()));
+                    }
+                }
+                else {
+                    Log.d("GET FRIENDS", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFriend> call, Throwable t) {
+                Log.d("GET FRIENDS", "FAILED");
+            }
+        });
+
         intent_login = new Intent(this, LoginActivity.class);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
