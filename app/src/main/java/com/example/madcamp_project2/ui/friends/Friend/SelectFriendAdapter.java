@@ -45,7 +45,7 @@ public class SelectFriendAdapter extends RecyclerView.Adapter<SelectFriendAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddExtraActivity.selectedFriends.get(position).setUser(user);
+                AddExtraActivity.selectedFriends.get(selected_position).setUser(user);
                 AddExtraActivity.unSelectedFriends.remove(user);
 
                 AddExtraActivity.friendAddAdapter.notifyDataSetChanged();

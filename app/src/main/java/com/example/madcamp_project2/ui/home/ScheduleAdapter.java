@@ -80,6 +80,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Schedule schedule = schedules.get(position);
+        Log.d("##################3", "ON BIND VIEW HLDEr");
 
         int start_hour = schedule.getStart_time().getHour();
         int start_minute = schedule.getStart_time().getMinute();
