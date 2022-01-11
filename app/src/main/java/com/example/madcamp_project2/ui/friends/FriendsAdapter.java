@@ -1,6 +1,8 @@
 package com.example.madcamp_project2.ui.friends;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.User;
 
@@ -40,7 +43,40 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         holder.nameTextView.setText(friend.getName());
         holder.emailTextView.setText(friend.getEmail());
-        // TODO profile 도 설정
+        Glide.with(context).load(friend.getProfile()).into(holder.friendProfile);
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setMessage("해당 친구를 삭제하시겠습니까?");
+                dialog.setCancelable(true);
+                dialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeFriend(position);
+                    }
+                });
+
+                dialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.show();
+                return false;
+            }
+        });
+    }
+
+    private void removeFriend(int position) {
+        User friend = friends.get(position);
+
+        friends.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, friends.size());
     }
 
     @Override
