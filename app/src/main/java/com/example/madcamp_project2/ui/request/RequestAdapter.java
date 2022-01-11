@@ -64,6 +64,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 // TODO Front) 서로의 친구목록에 추가
                 // TODO DB) pending 목록에서 해당 요청 삭제하고 서로의 친구목록에 추가
             }
+
         });
     }
 
