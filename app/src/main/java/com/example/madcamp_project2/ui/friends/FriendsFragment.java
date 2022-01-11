@@ -141,6 +141,9 @@ public class FriendsFragment extends Fragment {
                                     if (bodyRequest.getStatus().equals("Self")) {
                                         Toast.makeText(root.getContext(), "본인에게 요청을 보낼 수 없습니다.", Toast.LENGTH_SHORT).show();
                                     }
+                                    if (bodyRequest.getStatus().equals("Onrequest")) {
+                                        Toast.makeText(root.getContext(), "이미 친구 요청이 온 사용자입니다.", Toast.LENGTH_SHORT).show();
+                                    }
                                     if (bodyRequest.getStatus().equals("Duplicated")) {
                                         Toast.makeText(root.getContext(), "처리 중인 요청입니다.", Toast.LENGTH_SHORT).show();
                                     }
