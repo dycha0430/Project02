@@ -93,19 +93,22 @@ public class FriendsFragment extends Fragment {
         SwipeRefreshLayout refreshLayout = root.findViewById(R.id.friendsSwipe);
         String finalEmail = email;
         String finalToken = token;
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // TODO 친구 목록 가져오기..? 바로 가져와지는지 아닌지 보고 하기
-                get_friends(finalEmail, finalToken);
-                refreshLayout.setRefreshing(false);
-            }
-        });
 
         recyclerView = root.findViewById(R.id.friend_recycler_view);
         friendsAdapter = new FriendsAdapter(getActivity(), thisUser.getFriends());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(friendsAdapter);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO 친구 목록 가져오기..? 바로 가져와지는지 아닌지 보고 하기
+                get_friends(finalEmail, finalToken);
+                friendsAdapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+            }
+        });
+
+
 
         FloatingActionButton fab = root.findViewById(R.id.fab_friend);
         fab.setOnClickListener(new View.OnClickListener() {
