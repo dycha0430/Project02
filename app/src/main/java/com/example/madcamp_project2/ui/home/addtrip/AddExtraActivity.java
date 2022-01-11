@@ -35,6 +35,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -120,7 +121,12 @@ public class AddExtraActivity extends AppCompatActivity {
                         selectedFriends.remove(friend);
                     }
                 }
-                tripPlan.setParticipants(selectedFriends);
+
+                ArrayList<User> participants = new ArrayList<>();
+                participants.add(MainActivity.thisUser);
+                tripPlan.setParticipants(participants);
+
+                selectedFriends.remove(0);
 
                 String token = "";
                 String email = "";
@@ -180,7 +186,7 @@ public class AddExtraActivity extends AppCompatActivity {
 
     public void request_friends_ToJoin(TripPlan tripPlan, String token, String email) {
         MyAPI myapi = LoginActivity.get_MyAPI();
-        TravelRequestSend travelRequestSend = new TravelRequestSend(email, tripPlan.getParticipants(), tripPlan.getTravel_id());
+        TravelRequestSend travelRequestSend = new TravelRequestSend(email, selectedFriends, tripPlan.getTravel_id());
 
         Call<TravelRequestSend> post_travel_request = myapi.post_travel_request("Bearer " + token, travelRequestSend);
         post_travel_request.enqueue(new Callback<TravelRequestSend>() {

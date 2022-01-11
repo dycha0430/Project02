@@ -1,5 +1,6 @@
 package com.example.madcamp_project2.ui.request;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentRequestBinding;
+import com.example.madcamp_project2.ui.TripPlan;
 
 public class RequestFragment extends Fragment {
 
@@ -22,6 +25,7 @@ public class RequestFragment extends Fragment {
     RecyclerView recyclerView, travelRecyclerView;
     SwipeRefreshLayout requestSwipe, inviteSwipe;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
