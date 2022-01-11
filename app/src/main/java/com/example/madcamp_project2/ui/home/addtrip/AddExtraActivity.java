@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -46,10 +47,12 @@ public class AddExtraActivity extends AppCompatActivity {
     EditText titleTripEditText;
     Button completeBtn, addFriendBtn;
 
+    public static FriendAddAdapter friendAddAdapter;
     Context context;
     RecyclerView recyclerView;
+    public static ArrayList<User> unSelectedFriends;
     public static ArrayList<User> selectedFriends;
-    public static int spinnerNum = 1;
+    public static int selectedFriendNum = 1;
     private ActivityAddExtraBinding binding;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,8 +63,16 @@ public class AddExtraActivity extends AppCompatActivity {
         context = this;
 
         selectedFriends = new ArrayList<>();
-        spinnerNum = 1;
-        selectedFriends.add(new User());
+        selectedFriendNum = 1;
+        User newUser = new User();
+        newUser.setProfile("https://user-images.githubusercontent.com/68413811/148871066-6f08d53e-25b7-4f0d-bffb-098fe260213b.png");
+        newUser.setName("선택하기");
+        selectedFriends.add(newUser);
+
+        unSelectedFriends = new ArrayList<>();
+        for (User user : MainActivity.thisUser.getFriends()) {
+            unSelectedFriends.add(user);
+        }
 
         getSupportActionBar().hide();
         titleTripEditText = findViewById(R.id.tripTitleEditText);
@@ -69,15 +80,23 @@ public class AddExtraActivity extends AppCompatActivity {
         addFriendBtn = findViewById(R.id.addFriendBtn);
         recyclerView = findViewById(R.id.selected_friend_recycler_view);
 
-        FriendAddAdapter friendAddAdapter = new FriendAddAdapter(context);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        friendAddAdapter = new FriendAddAdapter(context);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(friendAddAdapter);
 
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedFriends.add(new User());
-                spinnerNum++;
+                if (selectedFriendNum >= MainActivity.thisUser.getFriends().size()) {
+                    Toast.makeText(context, "더 이상 친구를 초대할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                User user = new User();
+                user.setProfile("https://user-images.githubusercontent.com/68413811/148871066-6f08d53e-25b7-4f0d-bffb-098fe260213b.png");
+                user.setName("선택하기");
+                selectedFriends.add(user);
+
+                selectedFriendNum++;
                 friendAddAdapter.notifyDataSetChanged();
             }
         });

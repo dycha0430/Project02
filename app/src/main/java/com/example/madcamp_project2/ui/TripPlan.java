@@ -72,6 +72,7 @@ public class TripPlan implements Serializable {
         this.start_date = getTravel.getStart_date();
         this.end_date = getTravel.getEnd_date();
         this.destination = new Country(getTravel.getPlace_name());
+        this.participants = new ArrayList<>();
 
         // TODO: set schedules
         int duration = getDuration();

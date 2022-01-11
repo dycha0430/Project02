@@ -168,6 +168,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, friends.size());
             }
+
         });
     }
 
