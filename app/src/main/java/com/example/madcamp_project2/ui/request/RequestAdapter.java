@@ -89,7 +89,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 friendRequest.setStatus("IGNORE");
                 MyAPI myapi = LoginActivity.get_MyAPI();
 
-                Call<FriendRequest> post_friend_ignore = myapi.post_friend_request_ignore("Bearer " + token, friendRequest);
+                Call<FriendRequest> post_friend_ignore = myapi.post_friend_request_handle("Bearer " + token, friendRequest);
                 post_friend_ignore.enqueue(new Callback<FriendRequest>() {
                     @Override
                     public void onResponse(Call<FriendRequest> call, Response<FriendRequest> response) {
@@ -140,7 +140,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 friendRequest.setStatus("ACCEPT");
                 MyAPI myapi = LoginActivity.get_MyAPI();
 
-                Call<FriendRequest> post_friend_add = myapi.post_friend_request_ignore("Bearer " + token, friendRequest);
+                Call<FriendRequest> post_friend_add = myapi.post_friend_request_handle("Bearer " + token, friendRequest);
                 post_friend_add.enqueue(new Callback<FriendRequest>() {
                     @Override
                     public void onResponse(Call<FriendRequest> call, Response<FriendRequest> response) {

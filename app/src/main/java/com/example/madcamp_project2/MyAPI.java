@@ -7,6 +7,8 @@ import com.example.madcamp_project2.ui.friends.Friend.FriendRequest;
 import com.example.madcamp_project2.ui.friends.Friend.GetFriend;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.TravelRequest;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.TravelRequestSend;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.UpdateTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 
@@ -55,8 +57,14 @@ public interface MyAPI {
     Call<GetFriend> get_friend_requests(@Header("Authorization") String token, @Query("params1") String email);
 
     @POST("madcamp/friends/request/handle/")
-    Call<FriendRequest> post_friend_request_ignore(@Header("Authorization") String token, @Body FriendRequest friendRequest);
+    Call<FriendRequest> post_friend_request_handle(@Header("Authorization") String token, @Body FriendRequest friendRequest);
 
     @POST("madcamp/friends/delete/")
     Call<FriendRequest> post_friend_delete(@Header("Authorization") String token, @Body FriendRequest friendRequest);
+
+    @POST("madcamp/travels/request/")
+    Call<TravelRequestSend> post_travel_request(@Header("Authorization") String token, @Body TravelRequestSend travelRequestSend);
+
+    @POST("madcamp/travels/request/handle/")
+    Call<TravelRequest> post_travel_request_handle(@Header("Authorization") String token, @Body TravelRequest travelRequest);
 }
