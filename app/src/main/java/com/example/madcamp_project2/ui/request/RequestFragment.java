@@ -44,6 +44,8 @@ public class RequestFragment extends Fragment {
     private FragmentRequestBinding binding;
     RecyclerView recyclerView, travelRecyclerView;
     SwipeRefreshLayout requestSwipe, inviteSwipe;
+    RequestAdapter requestAdapter;
+    RequestTravelAdapter requestTravelAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -85,6 +87,8 @@ public class RequestFragment extends Fragment {
             public void onRefresh() {
                 // TODO DB에서 친구요청 목록 가져오기
                 get_friend_requests(finalEmail, finalToken);
+                requestAdapter.notifyDataSetChanged();
+                requestTravelAdapter.notifyDataSetChanged();
                 requestSwipe.setRefreshing(false);
             }
         });
@@ -154,11 +158,12 @@ public class RequestFragment extends Fragment {
                         thisUser.getPending_trips().add(new TripPlan(getTravel));
                     }
 
-                    RequestAdapter requestAdapter = new RequestAdapter(getActivity(), thisUser.getPending_requests());
+                    requestAdapter = new RequestAdapter(getActivity(), thisUser.getPending_requests());
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                     recyclerView.setAdapter(requestAdapter);
 
-                    RequestTravelAdapter requestTravelAdapter = new RequestTravelAdapter(getActivity(), thisUser.getPending_trips());
+
+                    requestTravelAdapter = new RequestTravelAdapter(getActivity(), thisUser.getPending_trips());
                     travelRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                     travelRecyclerView.setAdapter(requestTravelAdapter);
                 }
