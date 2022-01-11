@@ -60,6 +60,7 @@ Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도
 
 ### 여행 계획 추가 
 - 홈 화면에서 아래 floating button을 누르면 여행 계획을 새로 추가할 수 있다.
+
 장소 선택 화면 1             |  장소 선택 화면 2             
 :-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/68413811/148893309-9bf4766b-f265-489c-9dc9-166fb4d9da06.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893327-562a849f-1f7a-4148-b900-511694161072.jpg"  width="270" height="600"/> 
