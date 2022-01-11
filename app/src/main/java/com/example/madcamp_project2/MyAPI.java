@@ -12,6 +12,8 @@ import com.example.madcamp_project2.ui.home.addtrip.Travel.TravelRequestSend;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.UpdateTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.userTravel;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -70,4 +72,7 @@ public interface MyAPI {
 
     @GET("madcamp/travels/request/get/")
     Call<userTravel> get_travel_requests(@Header("Authorization") String token, @Query("params1") String email);
+
+    @GET("madcamp/schedules/get/")
+    Call<ArrayList<NewSchedule>> get_schedules(@Header("Authorization") String token, @Query("params1") int travel_id);
 }

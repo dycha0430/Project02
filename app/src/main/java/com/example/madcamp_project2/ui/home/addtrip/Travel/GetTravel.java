@@ -4,6 +4,7 @@ import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.example.madcamp_project2.ui.Country;
+import com.example.madcamp_project2.ui.friends.Friend.Friend;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ public class GetTravel {
     private int end_month;
     private int end_day;
     private ArrayList<NewSchedule> schedule_list;
+    private ArrayList<Friend> participant_list;
 
     public GetTravel(int id, String title, Date start_date, Date end_date, Country destination) {
         this.travel_id = id;

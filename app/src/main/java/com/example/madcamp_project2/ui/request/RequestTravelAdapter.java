@@ -1,5 +1,7 @@
 package com.example.madcamp_project2.ui.request;
 
+import static com.example.madcamp_project2.MainActivity.thisUser;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -111,6 +113,7 @@ public class RequestTravelAdapter extends RecyclerView.Adapter<RequestTravelAdap
                     public void onResponse(Call<TravelRequest> call, Response<TravelRequest> response) {
                         if(response.isSuccessful()) {
                             Log.d("TRAVEL REQUEST ACCEPT", "SUCCESS");
+                            tripPlan.getParticipants().add(thisUser);
                         }
                         else {
                             Log.d("TRAVEL REQUEST ACCEPT", "FAILED");
@@ -123,7 +126,7 @@ public class RequestTravelAdapter extends RecyclerView.Adapter<RequestTravelAdap
                     }
                 });
 
-                MainActivity.thisUser.getMyTrips().add(tripPlan);
+                thisUser.getMyTrips().add(tripPlan);
 
                 pending_trips.remove(position);
                 notifyItemRemoved(position);
@@ -164,7 +167,7 @@ public class RequestTravelAdapter extends RecyclerView.Adapter<RequestTravelAdap
 
     @Override
     public int getItemCount() {
-        return MainActivity.thisUser.getPending_trips().size();
+        return thisUser.getPending_trips().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

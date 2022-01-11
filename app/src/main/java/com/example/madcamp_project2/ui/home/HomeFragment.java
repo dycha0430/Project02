@@ -69,27 +69,6 @@ public class HomeFragment extends Fragment {
         this.context = getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
-        MainActivity.thisUser.setMyTrips(new ArrayList<>());
-        FloatingActionButton fab = rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddTripPlanActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.homeSwipe);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // TODO DB에서 tripPlanList 받아오기
-                planSummaryAdapter.setTripPlanList(MainActivity.thisUser.getMyTrips());
-                planSummaryAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
         String token = "";
         String email = "";
 
@@ -109,11 +88,47 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        // userTravel usertravel = new userTravel(email);
+        MainActivity.thisUser.setMyTrips(new ArrayList<>());
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddTripPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.homeSwipe);
+        String finalEmail = email;
+        String finalToken = token;
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO DB에서 tripPlanList 받아오기
+                get_travels(finalEmail, finalToken);
+
+                planSummaryAdapter.setTripPlanList(MainActivity.thisUser.getMyTrips());
+                planSummaryAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        get_travels(email, token);
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.homeRecyclerView);
+        planSummaryAdapter = new PlanSummaryAdapter(context, MainActivity.thisUser.getMyTrips());
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(planSummaryAdapter);
+
+        return rootView;
+    }
+
+    public void get_travels(String email, String token) {
         MyAPI myapi = LoginActivity.get_MyAPI();
         Call<userTravel> get_userTravel = myapi.get_userTravel("Bearer " + token, email);
 
         get_userTravel.enqueue(new Callback<userTravel>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<userTravel> call, Response<userTravel> response) {
                 if(response.isSuccessful()) {
@@ -139,12 +154,5 @@ public class HomeFragment extends Fragment {
                 Log.d("GET USER TRAVEL", "FAILED");
             }
         });
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.homeRecyclerView);
-        planSummaryAdapter = new PlanSummaryAdapter(context, MainActivity.thisUser.getMyTrips());
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(planSummaryAdapter);
-
-        return rootView;
     }
 }

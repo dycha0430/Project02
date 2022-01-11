@@ -17,13 +17,24 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.madcamp_project2.LoginActivity;
+import com.example.madcamp_project2.MainActivity;
+import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.Schedule;
 import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.home.ScheduleAdapter;
 import com.example.madcamp_project2.ui.home.ScheduleComparator;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -34,6 +45,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolderPage> {
 
@@ -101,6 +116,48 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
             @Override
             public void onRefresh() {
                 // TODO 데이터베이스에서 새로 스케줄 받아오는 것도 해야함
+                String token = "";
+
+                String file_path = MainActivity.get_filepath();
+                JSONParser parser = new JSONParser();
+
+                try {
+                    FileReader reader = new FileReader(file_path+"/userinfo.json");
+                    Object obj = parser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    reader.close();
+
+                    token = jsonObject.get("token").toString();
+                }
+                catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+                MyAPI myapi = LoginActivity.get_MyAPI();
+
+                Call<ArrayList<NewSchedule>> get_schedules = myapi.get_schedules("Bearer " + token, tripPlan.getTravel_id());
+                get_schedules.enqueue(new Callback<ArrayList<NewSchedule>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<NewSchedule>> call, Response<ArrayList<NewSchedule>> response) {
+                        if(response.isSuccessful()) {
+                            ArrayList<NewSchedule> newSchedules = response.body();
+                            for(NewSchedule newSchedule : newSchedules) {
+                                Schedule schedule_elem = new Schedule(newSchedule);
+                                tripPlan.getSchedules()[newSchedule.getDay()].add(schedule_elem);
+                            }
+                            Log.d("GET SCHEDULES", "SUCCESS");
+                        }
+                        else {
+                            Log.d("GET SCHEDULES", "FAILED");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<NewSchedule>> call, Throwable t) {
+                        Log.d("GET SCHEDULES", "FAILED");
+                    }
+                });
+
                 Collections.sort(schedule, new ScheduleComparator());
                 scheduleAdapters[position].setSchedules(schedule);
                 scheduleAdapters[position].notifyDataSetChanged();
