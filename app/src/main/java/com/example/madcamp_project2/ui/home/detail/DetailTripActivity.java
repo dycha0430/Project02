@@ -300,11 +300,35 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         placeSpinner.setAdapter(adapter1);
 
         placeSpinner.setSelection(0);
+        placeTypeIndex = 0;
+
         placeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 showPlaceInformation(getFromLocationName(tripPlan.getDestination().getName()), i);
                 placeTypeIndex = i;
+                int startIdx = 0;
+                ArrayList<Schedule> schedules = tripPlan.getSchedules()[0];
+                for (startIdx = 0; startIdx < schedules.size(); startIdx++) {
+                    Schedule thisSchedule = schedules.get(startIdx);
+                    LatLng latLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                    if (latLng != null) break;
+                }
+
+                Log.d("@@@@@@@@@@@@@2", schedules.size() + " " + startIdx);
+
+                if (schedules.size() > startIdx) {
+                    Schedule beforeSchedule = schedules.get(startIdx);
+                    for (int j = startIdx + 1; j < schedules.size(); j++) {
+                        Schedule thisSchedule = schedules.get(j);
+                        LatLng startLatLng = DetailTripActivity.getFromLocationName(beforeSchedule.getPlace().getAddress());
+                        LatLng endLatLng = DetailTripActivity.getFromLocationName(thisSchedule.getPlace().getAddress());
+                        if (endLatLng != null) {
+                            DetailTripActivity.drawPath(startLatLng, endLatLng);
+                            beforeSchedule = thisSchedule;
+                        }
+                    }
+                }
             }
 
             @Override

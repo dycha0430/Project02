@@ -237,6 +237,7 @@ public class AddBottomSheetDialog extends BottomSheetDialogFragment {
                             Collections.sort(tripPlan.getSchedule(day), new ScheduleComparator());
                             ViewPagerAdapter.scheduleAdapters[day].setSchedules(tripPlan.getSchedule(day));
                             ViewPagerAdapter.scheduleAdapters[day].notifyDataSetChanged();
+                            ViewPagerAdapter.scheduleAdapters[day].updateMap();
                         }
                         else {
                             Log.d("POST NEW SCHEDULE", "FAILED");

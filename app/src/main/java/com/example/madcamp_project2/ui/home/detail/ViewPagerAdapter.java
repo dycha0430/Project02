@@ -104,6 +104,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 Collections.sort(schedule, new ScheduleComparator());
                 scheduleAdapters[position].setSchedules(schedule);
                 scheduleAdapters[position].notifyDataSetChanged();
+                scheduleAdapters[position].updateMap();
                 holder.swipeRefreshLayout.setRefreshing(false);
             }
         });
