@@ -233,7 +233,12 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
         inviteFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddExtraActivity.unSelectedFriends = MainActivity.thisUser.getFriends();
+                AddExtraActivity.unSelectedFriends = new ArrayList<>();
+                for (User friend : MainActivity.thisUser.getFriends()) {
+
+                    AddExtraActivity.unSelectedFriends.add(friend);
+                }
+
                 for (User friend : tripPlan.getParticipants()) {
                     for (User another : AddExtraActivity.unSelectedFriends) {
                         if (friend.getEmail().equals(another.getEmail())) {
