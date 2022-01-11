@@ -18,6 +18,7 @@ public class User {
         this.email = email;
         this.profile = profile;
         friends = new ArrayList<>();
+        pending_requests = new ArrayList<>();
         myTrips = new ArrayList<>();
     }
 
@@ -27,6 +28,7 @@ public class User {
         this.email = "Test email";
         this.profile = "";
         friends = new ArrayList<>();
+        pending_requests = new ArrayList<>();
         myTrips = new ArrayList<>();
     }
 
@@ -44,6 +46,7 @@ public class User {
         this.email = user.email;
         this.profile = user.profile;
         this.friends = user.friends;
+        this.pending_requests = user.pending_requests;
         this.myTrips = user.myTrips;
     }
 
