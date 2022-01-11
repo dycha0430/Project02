@@ -77,6 +77,9 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
 
+        String withString = MainActivity.thisUser.getName() + "님 외" + (tripPlan.getParticipants().size()-1) + "명과 함께";
+        holder.withTextView.setText(withString);
+
         String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();
         Drawable drawable = context.getResources().getDrawable(context.getResources().getIdentifier(backName, "drawable", context.getPackageName()));
         holder.locImageView.setImageDrawable(drawable);
