@@ -73,8 +73,9 @@ Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도
 - 날짜 선택 화면에서는 Date Range Picker를 이용해서 시작 날짜와 종료 날짜를 선택할 수 있도록 함
 - 기타 선택 화면에서는 여행 제목을 입력하고 같이 여행에 참여할 친구를 초대할 수 있음
 
-지도 1             |  지도 2             |  지도 3
+친구 초대 기능 1             |  친구 초대 기능 2             |  친구 초대 기능 3
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/68413811/148893889-5a86c5ae-18f6-457d-8159-11ec8a035216.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893894-74c12bce-0d32-43f3-bba4-1bf4ae1a9227.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893900-0ace521a-cb6f-4acf-b869-a03ee2636334.jpg"  width="270" height="600"/>
-
+- 아래 추가 버튼을 누르면 사진1 처럼 친구를 초대할 수 있는 란이 생성됨.
+- 해당 칸을 누르면 사진 3과 같이 친구를 선택할 수 있는 다이얼로그가 뜨고 초대할 친구를 선택하면 사진3과 같이 추가가 완료됨.
 
