@@ -11,7 +11,7 @@ Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도
 - 카카오톡 sdk를 이용하여 별도의 회원가입 없이 바로 카카오톡으로 로그인 되는 기능을 구현하였다.
 - 한번 로그인한 이후에는 다시 카카오톡 인증창을 거치지 않는다. 
 
-### 여행 계획
+### 여행 계획 홈/상세
 홈 화면             |  계획 상세 화면             |  일정 넘기는 화면
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/68413811/148860452-6d1b7485-cdaa-49a5-bc13-48eb33a5b242.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148860805-9c988307-f7dd-47b8-a220-fd7d6b4e54da.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861327-cc0220f1-89df-4044-b632-b595daedab98.jpg"  width="270" height="600"/>
@@ -57,4 +57,23 @@ Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도
 :-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/68413811/148861830-c60a1a5c-5c53-4cc0-91d3-8f73983584d1.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861862-5469cc91-91a7-485f-9efe-ed7380b69a4f.jpg"  width="270" height="600"/> 
 - 롱 클릭을 통해 일정과 계획을 삭제할 수 있음
+
+### 여행 계획 추가 
+- 홈 화면에서 아래 floating button을 누르면 여행 계획을 새로 추가할 수 있다.
+장소 선택 화면 1             |  장소 선택 화면 2             
+:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/68413811/148893309-9bf4766b-f265-489c-9dc9-166fb4d9da06.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893327-562a849f-1f7a-4148-b900-511694161072.jpg"  width="270" height="600"/> 
+- 정해진 지역들 중 여행 갈 지역을 선택할 수 있음
+- 지역을 선택하면 아래의 날짜 선택 화면으로 이동함
+
+날짜 선택 화면             |  기타 선택 화면             
+:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/68413811/148893691-117c2109-c071-4e8b-afde-e9e803184ec4.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893721-da885514-c5e7-4a4b-90f3-890a53a481f5.jpg"  width="270" height="600"/> 
+- 날짜 선택 화면에서는 Date Range Picker를 이용해서 시작 날짜와 종료 날짜를 선택할 수 있도록 함
+- 기타 선택 화면에서는 여행 제목을 입력하고 같이 여행에 참여할 친구를 초대할 수 있음
+
+지도 1             |  지도 2             |  지도 3
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/68413811/148893889-5a86c5ae-18f6-457d-8159-11ec8a035216.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893894-74c12bce-0d32-43f3-bba4-1bf4ae1a9227.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148893900-0ace521a-cb6f-4acf-b869-a03ee2636334.jpg"  width="270" height="600"/>
+
 
