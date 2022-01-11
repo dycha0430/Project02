@@ -235,10 +235,15 @@ public class DetailTripActivity extends AppCompatActivity implements OnMapReadyC
             public void onClick(View view) {
                 AddExtraActivity.unSelectedFriends = MainActivity.thisUser.getFriends();
                 for (User friend : tripPlan.getParticipants()) {
-                    AddExtraActivity.unSelectedFriends.remove(friend);
+                    for (User another : AddExtraActivity.unSelectedFriends) {
+                        if (friend.getEmail().equals(another.getEmail())) {
+                            AddExtraActivity.unSelectedFriends.remove(another);
+                            break;
+                        }
+                    }
                 }
 
-                FriendBottomSheetDialog friendBottomSheetDialog = new FriendBottomSheetDialog(context);
+                FriendBottomSheetDialog friendBottomSheetDialog = new FriendBottomSheetDialog(context, tripPlan);
                 friendBottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
             }
         });

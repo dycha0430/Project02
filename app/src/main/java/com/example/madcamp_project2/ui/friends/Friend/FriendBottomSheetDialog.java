@@ -13,16 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_project2.R;
+import com.example.madcamp_project2.ui.TripPlan;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class FriendBottomSheetDialog extends BottomSheetDialogFragment {
     RecyclerView recyclerView;
     Context context;
     int selected_position;
+    TripPlan tripPlan;
 
-    public FriendBottomSheetDialog(Context context) {
+    public FriendBottomSheetDialog(Context context, TripPlan tripPlan) {
         this.context = context;
         selected_position = -1;
+        this.tripPlan = tripPlan;
     }
 
     public FriendBottomSheetDialog(Context context, int selected_position) {
@@ -36,7 +39,7 @@ public class FriendBottomSheetDialog extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.friend_bottom_sheet_dialog_layout, container, false);
 
         recyclerView = view.findViewById(R.id.selectFriendRecyclerView);
-        SelectFriendAdapter adapter = new SelectFriendAdapter(context, this, selected_position);
+        SelectFriendAdapter adapter = new SelectFriendAdapter(context, this, selected_position, tripPlan);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
 

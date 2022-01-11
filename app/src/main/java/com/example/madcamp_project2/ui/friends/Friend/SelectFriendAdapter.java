@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.madcamp_project2.R;
+import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.User;
 import com.example.madcamp_project2.ui.home.addtrip.AddExtraActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -20,6 +21,14 @@ public class SelectFriendAdapter extends RecyclerView.Adapter<SelectFriendAdapte
     Context context;
     BottomSheetDialogFragment bottomSheetDialogFragment;
     int selected_position;
+    TripPlan tripPlan;
+    public SelectFriendAdapter(Context context, BottomSheetDialogFragment bottomSheetDialogFragment, int selected_position, TripPlan tripPlan) {
+        this.context = context;
+        this.bottomSheetDialogFragment = bottomSheetDialogFragment;
+        this.selected_position = selected_position;
+        this.tripPlan = tripPlan;
+    }
+
     public SelectFriendAdapter(Context context, BottomSheetDialogFragment bottomSheetDialogFragment, int selected_position) {
         this.context = context;
         this.bottomSheetDialogFragment = bottomSheetDialogFragment;
