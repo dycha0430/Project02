@@ -90,6 +90,7 @@ public class AddExtraActivity extends AppCompatActivity {
                     return;
                 }
                 User user = new User();
+                user.setEmail("");
                 user.setProfile("https://user-images.githubusercontent.com/68413811/148871066-6f08d53e-25b7-4f0d-bffb-098fe260213b.png");
                 user.setName("선택하기");
                 selectedFriends.add(user);
@@ -114,9 +115,11 @@ public class AddExtraActivity extends AppCompatActivity {
                 TripPlan tripPlan = new TripPlan(-1, titleTripEditText.getText().toString(), startDate, endDate, country);
                 MainActivity.thisUser.getMyTrips().add(tripPlan);
 
-                // TODO 비동기 알림 보낼지 말지 설정
-                // 안보내고 다 추가할거면 아래꺼하구 유저들의 tripPlanList에도 이 tripPlan 추가
-                // 보낼거면 현재 유저만/에만 추가
+                for (User friend : selectedFriends) {
+                    if (friend.getEmail().equals("")) {
+                        selectedFriends.remove(friend);
+                    }
+                }
                 tripPlan.setParticipants(selectedFriends);
 
                 String token = "";
