@@ -1,5 +1,7 @@
 package com.example.madcamp_project2.ui.friends;
 
+import static com.example.madcamp_project2.MainActivity.thisUser;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +35,9 @@ import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.databinding.FragmentFriendsBinding;
 import com.example.madcamp_project2.ui.User;
+import com.example.madcamp_project2.ui.friends.Friend.Friend;
 import com.example.madcamp_project2.ui.friends.Friend.FriendRequest;
+import com.example.madcamp_project2.ui.friends.Friend.GetFriend;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -65,17 +69,41 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        String token = "";
+        String email = "";
+
+        String file_path = MainActivity.get_filepath();
+        JSONParser parser = new JSONParser();
+
+        try {
+            FileReader reader = new FileReader(file_path+"/userinfo.json");
+            Object obj = parser.parse(reader);
+            JSONObject jsonObject = (JSONObject) obj;
+            reader.close();
+
+            token = jsonObject.get("token").toString();
+            email = jsonObject.get("email").toString();
+        }
+        catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        get_friends(email, token);
+
         SwipeRefreshLayout refreshLayout = root.findViewById(R.id.friendsSwipe);
+        String finalEmail = email;
+        String finalToken = token;
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // TODO 친구 목록 가져오기..? 바로 가져와지는지 아닌지 보고 하기
+                get_friends(finalEmail, finalToken);
                 refreshLayout.setRefreshing(false);
             }
         });
 
         recyclerView = root.findViewById(R.id.friend_recycler_view);
-        friendsAdapter = new FriendsAdapter(getActivity(), MainActivity.thisUser.getFriends());
+        friendsAdapter = new FriendsAdapter(getActivity(), thisUser.getFriends());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(friendsAdapter);
 
@@ -203,5 +231,32 @@ public class FriendsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void get_friends(String email, String token) {
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        Call<GetFriend> get_friends = myapi.get_friends("Bearer " + token, email);
+        get_friends.enqueue(new Callback<GetFriend>() {
+            @Override
+            public void onResponse(Call<GetFriend> call, Response<GetFriend> response) {
+                if(response.isSuccessful()) {
+                    Log.d("GET FRIENDS", "SUCCESS");
+                    GetFriend getFriend = response.body();
+
+                    thisUser.getFriends().clear();
+                    for(Friend friend : getFriend.getFriend_list()) {
+                        thisUser.getFriends().add(new User(friend.getUsername(), friend.getEmail(), friend.getPhoto()));
+                    }
+                }
+                else {
+                    Log.d("GET FRIENDS", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFriend> call, Throwable t) {
+                Log.d("GET FRIENDS", "FAILED");
+            }
+        });
     }
 }
