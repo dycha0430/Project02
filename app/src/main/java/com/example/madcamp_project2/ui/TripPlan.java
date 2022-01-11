@@ -139,6 +139,9 @@ public class TripPlan implements Serializable {
     }
 
     public void setParticipants(ArrayList<User> participants) {
+//        for (User participant : participants) {
+//            this.participants.add(participant);
+//        }
         this.participants = participants;
     }
 

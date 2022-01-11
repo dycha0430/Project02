@@ -20,6 +20,11 @@ public class FriendBottomSheetDialog extends BottomSheetDialogFragment {
     Context context;
     int selected_position;
 
+    public FriendBottomSheetDialog(Context context) {
+        this.context = context;
+        selected_position = -1;
+    }
+
     public FriendBottomSheetDialog(Context context, int selected_position) {
         this.context = context;
         this.selected_position = selected_position;
