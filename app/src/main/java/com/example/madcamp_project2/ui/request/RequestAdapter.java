@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.MyAPI;
@@ -58,12 +59,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         Log.e("BindViewHolder Debug", friend.getName());
         holder.nameTextView.setText(friend.getName());
         holder.emailTextView.setText(friend.getEmail());
-        // TODO profile 도 설정
+        Glide.with(context).load(friend.getProfile()).into(holder.friendProfile);
 
         holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO pending 목록에서 해당 요청 그냥 삭제
                 User friend = friends.get(position);
 
                 String token = "";
@@ -95,6 +95,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     public void onResponse(Call<FriendRequest> call, Response<FriendRequest> response) {
                         if (response.isSuccessful()) {
                             Log.d("FRIEND REQUEST IGNORE", "SUCCESS");
+                            friends.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, friends.size());
                         }
                         else {
                             Log.d("FRIEND REQUEST IGNORE", "FAILED");
@@ -106,17 +109,12 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         Log.d("FRIEND ADD", "FAILED");
                     }
                 });
-
-                friends.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, friends.size());
             }
         });
 
         holder.acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO DB) pending 목록에서 해당 요청 삭제하고 서로의 친구목록에 추가
                 User friend = friends.get(position);
 
                 String token = "";
@@ -148,6 +146,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     public void onResponse(Call<FriendRequest> call, Response<FriendRequest> response) {
                         if (response.isSuccessful()) {
                             Log.d("FRIEND ADD", "SUCCESS");
+
+                            // TODO Front) 서로의 친구목록에 추가
+                            thisUser.getFriends().add(friend);
+                            friend.getFriends().add(thisUser);
+
+                            friends.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, friends.size());
                         }
                         else {
                             Log.d("FRIEND ADD", "FAILED");
@@ -159,14 +165,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         Log.d("FRIEND ADD", "FAILED");
                     }
                 });
-
-                // TODO Front) 서로의 친구목록에 추가
-                thisUser.getFriends().add(friend);
-                friend.getFriends().add(thisUser);
-
-                friends.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, friends.size());
             }
 
         });
