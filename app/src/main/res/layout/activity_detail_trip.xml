@@ -116,9 +116,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/blue_outline"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
+                    android:layout_marginRight="10dp"
                     android:padding="10dp"
                     android:text="22.01.02 ~ 22.01.03"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/inviteFriendButton"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_outline"
+                    android:textSize="13sp"
+                    android:padding="10dp"
+                    android:text="친구 초대"
                     />
 
 

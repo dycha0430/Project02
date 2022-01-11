@@ -45,6 +45,12 @@ public class SelectFriendAdapter extends RecyclerView.Adapter<SelectFriendAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (selected_position == -1) {
+                    // TODO 해당 친구에게 요청 보내기
+                    bottomSheetDialogFragment.dismiss();
+                    return;
+                }
                 AddExtraActivity.selectedFriends.get(selected_position).setUser(user);
                 AddExtraActivity.unSelectedFriends.remove(user);
 

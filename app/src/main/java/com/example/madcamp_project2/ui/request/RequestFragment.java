@@ -87,8 +87,8 @@ public class RequestFragment extends Fragment {
             public void onRefresh() {
                 // TODO DB에서 친구요청 목록 가져오기
                 get_friend_requests(finalEmail, finalToken);
-                requestAdapter.notifyDataSetChanged();
-                requestTravelAdapter.notifyDataSetChanged();
+//                requestAdapter.notifyDataSetChanged();
+//                requestTravelAdapter.notifyDataSetChanged();
                 requestSwipe.setRefreshing(false);
             }
         });
@@ -156,6 +156,10 @@ public class RequestFragment extends Fragment {
                     thisUser.getPending_trips().clear();
                     for(GetTravel getTravel : userTravel.getTravel_list()) {
                         thisUser.getPending_trips().add(new TripPlan(getTravel));
+                    }
+                    Log.d("######PPPP", thisUser.getPending_trips().size() + "");
+                    if (thisUser.getPending_trips().size() > 0) {
+                        Log.d("^^^^^", thisUser.getPending_trips().get(0).getParticipants().size() + "");
                     }
 
                     requestAdapter = new RequestAdapter(getActivity(), thisUser.getPending_requests());
