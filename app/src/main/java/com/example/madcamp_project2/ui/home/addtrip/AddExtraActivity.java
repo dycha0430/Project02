@@ -27,6 +27,7 @@ import com.example.madcamp_project2.ui.User;
 import com.example.madcamp_project2.ui.friends.FriendAddAdapter;
 import com.example.madcamp_project2.ui.home.HomeFragment;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewTravel;
+import com.example.madcamp_project2.ui.home.addtrip.Travel.TravelRequestSend;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -116,7 +117,7 @@ public class AddExtraActivity extends AppCompatActivity {
                 // TODO 비동기 알림 보낼지 말지 설정
                 // 안보내고 다 추가할거면 아래꺼하구 유저들의 tripPlanList에도 이 tripPlan 추가
                 // 보낼거면 현재 유저만/에만 추가
-//                tripPlan.setParticipants(selectedFriends);
+                tripPlan.setParticipants(selectedFriends);
 
                 String token = "";
                 String email = "";
@@ -142,6 +143,8 @@ public class AddExtraActivity extends AppCompatActivity {
 
                 Call<NewTravel> post_travel = myapi.post_travel("Bearer " + token, newTravel);
 
+                String finalToken = token;
+                String finalEmail = email;
                 post_travel.enqueue(new Callback<NewTravel>() {
                     @Override
                     public void onResponse(Call<NewTravel> call, Response<NewTravel> response) {
@@ -150,6 +153,8 @@ public class AddExtraActivity extends AppCompatActivity {
                             Log.d("NEW TRAVEL", "SUCCESS");
                             Log.d("NEW TRAVEL Id", String.valueOf(response_travel.getTravel_id()));
                             tripPlan.setTravel_id(response_travel.getTravel_id());
+
+                            request_friends_ToJoin(tripPlan, finalToken, finalEmail);
                         }
                         else {
                             Log.d("NEW TRAVEL", "FAILED");
@@ -168,5 +173,28 @@ public class AddExtraActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void request_friends_ToJoin(TripPlan tripPlan, String token, String email) {
+        MyAPI myapi = LoginActivity.get_MyAPI();
+        TravelRequestSend travelRequestSend = new TravelRequestSend(email, tripPlan.getParticipants(), tripPlan.getTravel_id());
+
+        Call<TravelRequestSend> post_travel_request = myapi.post_travel_request("Bearer " + token, travelRequestSend);
+        post_travel_request.enqueue(new Callback<TravelRequestSend>() {
+            @Override
+            public void onResponse(Call<TravelRequestSend> call, Response<TravelRequestSend> response) {
+                if(response.isSuccessful()) {
+                    Log.d("REQUEST TO JOIN", "SUCCESS");
+                }
+                else {
+                    Log.d("REQUEST TO JOIN", "FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TravelRequestSend> call, Throwable t) {
+                Log.d("REQUEST TO JOIN", "FAILED");
+            }
+        });
     }
 }
