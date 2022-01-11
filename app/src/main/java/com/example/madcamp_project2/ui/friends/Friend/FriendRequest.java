@@ -11,6 +11,10 @@ public class FriendRequest {
         this.status = "True";
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getStatus() {
         return status;
     }
