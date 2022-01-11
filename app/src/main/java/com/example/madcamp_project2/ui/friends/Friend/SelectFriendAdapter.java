@@ -16,6 +16,7 @@ import com.example.madcamp_project2.LoginActivity;
 import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.MyAPI;
 import com.example.madcamp_project2.R;
+import com.example.madcamp_project2.ui.TripPlan;
 import com.example.madcamp_project2.ui.User;
 import com.example.madcamp_project2.ui.home.addtrip.AddExtraActivity;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.TravelRequestSend;
@@ -37,6 +38,14 @@ public class SelectFriendAdapter extends RecyclerView.Adapter<SelectFriendAdapte
     Context context;
     BottomSheetDialogFragment bottomSheetDialogFragment;
     int selected_position;
+    TripPlan tripPlan;
+    public SelectFriendAdapter(Context context, BottomSheetDialogFragment bottomSheetDialogFragment, int selected_position, TripPlan tripPlan) {
+        this.context = context;
+        this.bottomSheetDialogFragment = bottomSheetDialogFragment;
+        this.selected_position = selected_position;
+        this.tripPlan = tripPlan;
+    }
+
     public SelectFriendAdapter(Context context, BottomSheetDialogFragment bottomSheetDialogFragment, int selected_position) {
         this.context = context;
         this.bottomSheetDialogFragment = bottomSheetDialogFragment;
