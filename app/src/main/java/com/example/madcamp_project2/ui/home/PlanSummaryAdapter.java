@@ -80,8 +80,10 @@ public class PlanSummaryAdapter extends RecyclerView.Adapter<PlanSummaryAdapter.
         String withString = "";
         if (tripPlan.getParticipants().size() == 1) {
             withString = "나 혼자 여행";
+        } else {
+            withString = MainActivity.thisUser.getName() + "님 외 " + (tripPlan.getParticipants().size()-1) + "명과 함께";
         }
-        withString = MainActivity.thisUser.getName() + "님 외" + (tripPlan.getParticipants().size()-1) + "명과 함께";
+
         holder.withTextView.setText(withString);
 
         String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();

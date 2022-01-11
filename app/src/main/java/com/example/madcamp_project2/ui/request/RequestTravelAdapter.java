@@ -67,7 +67,7 @@ public class RequestTravelAdapter extends RecyclerView.Adapter<RequestTravelAdap
         String end_date = df.format(tripPlan.getEnd_date());
         holder.dateTextView.setText(start_date + " ~ " + end_date);
 
-        String inviteString = tripPlan.getParticipants().get(0) + "님의 초대입니다";
+        String inviteString = tripPlan.getParticipants().get(0).getName() + "님의 초대입니다";
         holder.inviteTextView.setText(inviteString);
 
         String backName = "back" + tripPlan.getDestination().getCountryEnum().ordinal();
