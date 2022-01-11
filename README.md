@@ -21,31 +21,40 @@ Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도
 - 내가 참여한 여행 계획들을 모아볼 수 있는 홈화면
 - 여행 제목, 장소, 날짜, 참여인원, 여행 상태를 볼 수 있음
 - 롱 클릭으로 여행 계획 삭제 가능
+- 오른쪽 아래 floating button을 통해 계획 추가 가능
 
 #### 계획 상세 화면
-- 홈 화면에서 특정 계획을 클릭하여 상세 화면을 띄울 수 있다. 
-- 상세 화면에서는 지도, 날짜 별 일정 목록을 볼 수 있다. 
+- 홈 화면에서 특정 계획을 클릭하여 상세 화면을 띄울 수 있음
+- 상세 화면에서는 지도, 날짜 별 일정 목록을 볼 수 있음
+- 일정 목록은 날짜 별로 페이지가 있어, 넘겨서 각 날짜의 일정을 따로 관리할 수 있음.
 
-
-지도 1             |  지도 2             |  지도 3
-:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/68413811/148862151-56bff3f5-7f69-4641-be40-6aad0225177e.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862355-a6a0254e-1a01-4d5e-be86-a0711e8640f2.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862415-b292f613-de88-4deb-82c5-e33a31b81ff3.jpg"  width="270" height="600"/>
-
-
-
-
+#### 계획 상세 화면 - 일정
 일정 추가 화면 1             |  일정 추가 화면 2             
 :-------------------------:|:-------------------------:
 <img src="https://user-images.githubusercontent.com/68413811/148861687-494414f2-81b0-482b-a441-df9581a092c6.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861712-e2ecaf31-db4d-4f4f-8cba-f3c837fb0376.jpg"  width="270" height="600"/>
+- 일정 추가하기 버튼을 누르면 화면 1과 같이 직접 제목과 주소를 입력하여 일정을 추가할 수 있음.
+- 지도의 마커를 누르면 화면 2와 같이 해당 위치에 대한 일정을 추가할 수 있음
 
-일정 추가 화면 3             |  일정 추가 화면 4
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/68413811/148862285-1e71492d-9332-4e0f-a76c-8e2f7bcef4b4.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862727-cb4f3a55-1174-4ae9-b98c-873d79496b3f.jpg"  width="270" height="600"/>
-
-시간 선택 화면             |일정 삭제 화면             |  계획 삭제 화면             
+일정 추가 화면 3             |  일정 추가 화면 4             |  시간 선택 화면
 :-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/68413811/148861735-c7cc40aa-d3d7-4f57-9ef0-be6fd93b72ca.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861830-c60a1a5c-5c53-4cc0-91d3-8f73983584d1.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861862-5469cc91-91a7-485f-9efe-ed7380b69a4f.jpg"  width="270" height="600"/> 
+<img src="https://user-images.githubusercontent.com/68413811/148862285-1e71492d-9332-4e0f-a76c-8e2f7bcef4b4.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862727-cb4f3a55-1174-4ae9-b98c-873d79496b3f.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861735-c7cc40aa-d3d7-4f57-9ef0-be6fd93b72ca.jpg"  width="270" height="600"/>
+- 이미 추가된 일정들과 시간이 겹치면 화면 3과 같이 토스트 메세지가 뜨고 해당 시간에는 일정을 추가할 수 없음.
+- 일정을 추가하거나 수정하면, 자동으로 그림 4와 같이 일정이 시간 순으로 정렬됨 (지도 3과 같은 일정에서 '이동하기' 일정을 추가한 것
+- 시간을 누르면 타임 피커를 통해 시간을 선택할 수 있고, 시작시간이 종료시간보다 늦도록 선택할 수 없음
 
+#### 계획 상세 화면 - 지도
+지도 1             |  지도 2             |  지도 3
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/68413811/148862151-56bff3f5-7f69-4641-be40-6aad0225177e.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862355-a6a0254e-1a01-4d5e-be86-a0711e8640f2.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148862415-b292f613-de88-4deb-82c5-e33a31b81ff3.jpg"  width="270" height="600"/>
+- 아래 일정 칸에 들어있는 파란색 마커를 누르면, 지도 1의 사진처럼 해당 위치로 지도가 이동하고 빨간색 마커가 찍힘.
+- 지도 2의 사진처럼 스피너에서 레스토랑, 카페 등 원하는 종류를 누르면 지도에 해당 종류의 위치들이 마커로 표시 됨.
+- 일정 
+
+
+
+일정 삭제 화면             |  계획 삭제 화면             
+:-------------------------:|:-------------------------:
+<img src="https://user-images.githubusercontent.com/68413811/148861830-c60a1a5c-5c53-4cc0-91d3-8f73983584d1.jpg"  width="270" height="600"/>  |  <img src="https://user-images.githubusercontent.com/68413811/148861862-5469cc91-91a7-485f-9efe-ed7380b69a4f.jpg"  width="270" height="600"/> 
 
 
 
