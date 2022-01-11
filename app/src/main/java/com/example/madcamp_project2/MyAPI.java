@@ -67,4 +67,7 @@ public interface MyAPI {
 
     @POST("madcamp/travels/request/handle/")
     Call<TravelRequest> post_travel_request_handle(@Header("Authorization") String token, @Body TravelRequest travelRequest);
+
+    @GET("madcamp/travels/request/get/")
+    Call<userTravel> get_travel_requests(@Header("Authorization") String token, @Query("params1") String email);
 }
