@@ -20,6 +20,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -46,10 +47,10 @@ public class AddDateActivity extends AppCompatActivity {
         MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builderRange = MaterialDatePicker.Builder.dateRangePicker();
         CalendarConstraints.Builder constraintsBuilderRange = new CalendarConstraints.Builder();
 
-        LocalDateTime min = LocalDateTime.now();
+        LocalDate min = LocalDate.now();
         min.minusDays(1);
 
-        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(min.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(min.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         ArrayList<CalendarConstraints.DateValidator> listValidators =
                 new ArrayList<CalendarConstraints.DateValidator>();
 
