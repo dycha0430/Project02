@@ -50,14 +50,13 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    public static ArrayList<TripPlan> tripPlanList;
     private PlanSummaryAdapter planSummaryAdapter;
     private Context context;
 
     @Override
     public void onResume() {
         super.onResume();
-        planSummaryAdapter.setTripPlanList(tripPlanList);
+        planSummaryAdapter.setTripPlanList(MainActivity.thisUser.getMyTrips());
         planSummaryAdapter.notifyDataSetChanged();
 
         Log.d("######", "On Resume");
@@ -70,8 +69,7 @@ public class HomeFragment extends Fragment {
         this.context = getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
-        tripPlanList = new ArrayList<>();
-
+        MainActivity.thisUser.setMyTrips(new ArrayList<>());
         FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +84,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 // TODO DB에서 tripPlanList 받아오기
-                planSummaryAdapter.setTripPlanList(tripPlanList);
+                planSummaryAdapter.setTripPlanList(MainActivity.thisUser.getMyTrips());
                 planSummaryAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -123,11 +121,11 @@ public class HomeFragment extends Fragment {
                     ArrayList<GetTravel> travelList = userTravelList.getTravel_list();
                     for(int i=0; i<travelList.size(); i++) {
                         GetTravel travel = travelList.get(i);
-                        tripPlanList.add(new TripPlan(travel));
+                        MainActivity.thisUser.getMyTrips().add(new TripPlan(travel));
                     }
                     Log.d("GET USER TRAVEL", "SUCCESS");
 
-                    planSummaryAdapter.setTripPlanList(tripPlanList);
+                    planSummaryAdapter.setTripPlanList(MainActivity.thisUser.getMyTrips());
                     planSummaryAdapter.notifyDataSetChanged();
 
                 }
@@ -143,7 +141,7 @@ public class HomeFragment extends Fragment {
         });
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.homeRecyclerView);
-        planSummaryAdapter = new PlanSummaryAdapter(context, tripPlanList);
+        planSummaryAdapter = new PlanSummaryAdapter(context, MainActivity.thisUser.getMyTrips());
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(planSummaryAdapter);
 
