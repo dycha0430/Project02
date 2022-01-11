@@ -132,6 +132,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<userTravel> call, Response<userTravel> response) {
                 if(response.isSuccessful()) {
+                    MainActivity.thisUser.getMyTrips().clear();
+
                     userTravel userTravelList = response.body();
                     ArrayList<GetTravel> travelList = userTravelList.getTravel_list();
                     for(int i=0; i<travelList.size(); i++) {

@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.madcamp_project2.ui.friends.Friend.Friend;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.GetTravel;
 import com.example.madcamp_project2.ui.home.addtrip.Travel.NewSchedule;
 
@@ -84,6 +85,11 @@ public class TripPlan implements Serializable {
         ArrayList<NewSchedule> schedule_list = getTravel.getSchedule_list();
         for (NewSchedule schedule : schedule_list) {
             schedules[schedule.getDay()].add(new Schedule(schedule));
+        }
+
+        ArrayList<Friend> participant_list = getTravel.getParticipant_list();
+        for(Friend friend : participant_list) {
+            this.participants.add(new User(friend.getUsername(), friend.getEmail(), friend.getPhoto()));
         }
      }
 

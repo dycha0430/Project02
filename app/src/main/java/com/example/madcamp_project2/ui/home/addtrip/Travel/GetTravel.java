@@ -41,6 +41,7 @@ public class GetTravel {
         this.end_year = calendar.get(Calendar.YEAR);
 
         this.schedule_list = new ArrayList<>();
+        this.participant_list = new ArrayList<>();
     }
 
     public int getTravel_id() {
@@ -68,4 +69,6 @@ public class GetTravel {
     public ArrayList<NewSchedule> getSchedule_list() {
         return schedule_list;
     }
+    
+    public ArrayList<Friend> getParticipant_list() { return participant_list; }
 }
