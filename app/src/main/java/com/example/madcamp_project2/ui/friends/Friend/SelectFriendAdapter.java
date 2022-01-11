@@ -1,45 +1,43 @@
-package com.example.madcamp_project2.ui.friends;
+package com.example.madcamp_project2.ui.friends.Friend;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.madcamp_project2.MainActivity;
 import com.example.madcamp_project2.R;
 import com.example.madcamp_project2.ui.User;
-import com.example.madcamp_project2.ui.friends.Friend.FriendBottomSheetDialog;
 import com.example.madcamp_project2.ui.home.addtrip.AddExtraActivity;
-import com.example.madcamp_project2.ui.home.detail.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.ViewHolder>{
-
+public class SelectFriendAdapter extends RecyclerView.Adapter<SelectFriendAdapter.ViewHolder> {
     Context context;
-    public FriendAddAdapter(Context context) {
+    BottomSheetDialogFragment bottomSheetDialogFragment;
+    int selected_position;
+    public SelectFriendAdapter(Context context, BottomSheetDialogFragment bottomSheetDialogFragment, int selected_position) {
         this.context = context;
+        this.bottomSheetDialogFragment = bottomSheetDialogFragment;
+        this.selected_position = selected_position;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend_small, parent, false);
-        FriendAddAdapter.ViewHolder viewHolder = new FriendAddAdapter.ViewHolder(view);
+        SelectFriendAdapter.ViewHolder viewHolder = new SelectFriendAdapter.ViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = AddExtraActivity.selectedFriends.get(position);
+        User user = AddExtraActivity.unSelectedFriends.get(position);
 
         Glide.with(context).load(user.getProfile()).into(holder.profileImage);
         holder.nameTextView.setText(user.getName());
@@ -47,16 +45,18 @@ public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FriendBottomSheetDialog bottomSheetDialog = new FriendBottomSheetDialog(context, position);
-                bottomSheetDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "bottomSheet");
+                AddExtraActivity.selectedFriends.get(position).setUser(user);
+                AddExtraActivity.unSelectedFriends.remove(user);
+
+                AddExtraActivity.friendAddAdapter.notifyDataSetChanged();
+                bottomSheetDialogFragment.dismiss();
             }
         });
     }
 
-
     @Override
     public int getItemCount() {
-        return AddExtraActivity.selectedFriendNum;
+        return AddExtraActivity.unSelectedFriends.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
