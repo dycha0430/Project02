@@ -137,9 +137,11 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
                 Call<ArrayList<NewSchedule>> get_schedules = myapi.get_schedules("Bearer " + token, tripPlan.getTravel_id());
                 get_schedules.enqueue(new Callback<ArrayList<NewSchedule>>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onResponse(Call<ArrayList<NewSchedule>> call, Response<ArrayList<NewSchedule>> response) {
                         if(response.isSuccessful()) {
+                            tripPlan.init_schedules();
                             ArrayList<NewSchedule> newSchedules = response.body();
                             for(NewSchedule newSchedule : newSchedules) {
                                 Schedule schedule_elem = new Schedule(newSchedule);

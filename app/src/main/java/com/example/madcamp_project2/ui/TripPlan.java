@@ -178,4 +178,12 @@ public class TripPlan implements Serializable {
     public int getTravel_id() {
         return travel_id;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void init_schedules() {
+        int duration = getDuration();
+        for (int i = 0; i < duration; i++) {
+            schedules[i].clear();
+        }
+    }
 }
