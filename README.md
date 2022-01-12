@@ -6,6 +6,7 @@
 Traveler는 여러 사람이 함께 여행 계획을 편리하게 짤 수 있도록 도와주는 앱이다.
 
 ## Backend
+> Link: https://github.com/MadCamp-Week2/Project02_backend
 > #### Server framework : Django
 > #### Database : Sqlite (Django에서 기본 제공)
 >> 어플리케이션에서 사용하는 다음 항목에 대하여 모델을 구축함
